@@ -12,13 +12,13 @@
       <h1>Georgia Tech Tutor Application</h1>
 
       <ul class="nav nav-tabs" role="tablist" style="margin-top: 50px">
-        <li class="active"><a href="#">Personal Information</a></li>
-        <li><a href="#">Courses for Tutoring</a></li>
-        <li><a href="#">Available Days/Times</a></li>
+        <li class="active" id="personalInfoTab"><a href="#">Personal Information</a></li>
+        <li id="courseTab"><a href="#">Courses for Tutoring</a></li>
+        <li id="timeTab"><a href="#">Available Days/Times</a></li>
       </ul>
 
       <form class="form-inline" role="form">
-        <div class="well col col-md-12">
+        <div class="well col col-md-12" id="personalInfoWell" style="border: 1px rgb(204, 204, 204) solid">
           <div class="form-group" style="width: 100%; display: inline-block">
             <div class="row" >
               <div style="float: left">
@@ -110,8 +110,8 @@
           </div>
         </div>
 
-        <div class="well col col-md-12">
-          <table class="table table-bordered">
+        <div class="well col col-md-12" id="courseWell" style="border: 1px rgb(204, 204, 204) solid; display: none">
+          <table class="table table-bordered" style="overflow: auto">
             <thead>
               <tr>
                 <td>School</td>
@@ -119,13 +119,101 @@
                 <td>GTA</td>
               </tr>
             </thead>
+            <tbody>
+              <tr>
+                <td>Test</td>
+                <td>Test</td>
+                <td>
+                  <div class="checkbox">
+                    <input type="checkbox" value="">
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
+        <div class="well col col-md-12" id="timeWell" style="border: 1px rgb(204, 204, 204) solid; display: none">
+          <legend style="font-size: 16px">Monday</legend>
+          <label>
+            <div class="checkbox">
+              <input type="checkbox" value="">
+              9am
+            </div>
+          </label>
+          <label style="margin-left: 5px">
+            <div class="checkbox">
+              <input type="checkbox" value="">
+              10am
+            </div>
+          </label>
+          <label style="margin-left: 5px">
+            <div class="checkbox">
+              <input type="checkbox" value="">
+              11am
+            </div>
+          </label>
+          <label style="margin-left: 5px">
+            <div class="checkbox">
+              <input type="checkbox" value="">
+              12pm
+            </div>
+          </label>
+          <label style="margin-left: 5px">
+            <div class="checkbox">
+              <input type="checkbox" value="">
+              1pm
+            </div>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-default">
+              OK
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
 
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="../js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+    var personalInfoTab = document.getElementById("personalInfoTab");
+    var personalInfoWell = document.getElementById("personalInfoWell");
+    var courseTab = document.getElementById("courseTab");
+    var courseWell = document.getElementById("courseWell");
+    var timeTab = document.getElementById("timeTab");
+    var timeWell = document.getElementById("timeWell");
+
+    personalInfoTab.addEventListener("click", function() {
+      courseWell.style.display = "none";
+      timeWell.style.display = "none";
+      personalInfoWell.style.display = "";
+      $(courseTab).removeClass("active");
+      $(timeTab).removeClass("active");
+      $(personalInfoTab).addClass("active");
+    });
+
+    courseTab.addEventListener("click", function() {
+      personalInfoWell.style.display = "none";
+      timeWell.style.display = "none";
+      courseWell.style.display = "";
+      $(personalInfoTab).removeClass("active");
+      $(timeTab).removeClass("active");
+      $(courseTab).addClass("active");
+    });
+
+    timeTab.addEventListener("click", function() {
+      personalInfoWell.style.display = "none";
+      courseWell.style.display = "none";
+      timeWell.style.display = "";
+      $(personalInfoTab).removeClass("active");
+      $(courseTab).removeClass("active");
+      $(timeTab).addClass("active");
+    });
+  </script>
 </body>
