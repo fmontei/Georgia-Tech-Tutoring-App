@@ -4,8 +4,8 @@
 }
 
 .inner {
-    position: absolute;
-    left: 20%;
+    width: 50%;
+    margin-left: 20%;
 }
 
 .center {
