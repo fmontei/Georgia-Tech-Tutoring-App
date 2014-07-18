@@ -1,0 +1,7 @@
+INSERT INTO Recommends (GTID_Tutor, GTID_Professor, Num_Evaluation, Desc_Evaluation) VALUES
+('000000004', '000000021', 3, 'Hard worker.'),
+('000000005', '000000021', 3, 'Nice worker.'),
+('000000007', '000000022', 3, 'Gentle worker.'),
+('000000008', '000000023', 3, 'Soft worker.'),
+('000000009', '000000024', 3, 'Real worker.'),
+('000000010', '000000024', 3, 'Caring worker.');
