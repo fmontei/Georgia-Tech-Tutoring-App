@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Georgia Tech Tutors Tutor Search</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="../css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="inner">
+    <div class="container-fluid" style="width: 800px">
+      <h1>Georgia Tech Tutor Application</h1>
+
+      <ul class="nav nav-tabs" role="tablist" style="margin-top: 50px">
+        <li class="active"><a href="#">Personal Information</a></li>
+        <li><a href="#">Courses for Tutoring</a></li>
+        <li><a href="#">Available Days/Times</a></li>
+      </ul>
+
+      <form class="form-inline" role="form">
+        <div class="well col col-md-12">
+          <div class="form-group" style="width: 100%; display: inline-block">
+            <div class="row" >
+              <div style="float: left">
+                <div class="col-md-2" style="width: 150px;">
+                  <span style="font-size: 16px">Georgia Tech ID</span>
+                </div>
+                <div class="col-md-3" style="width: 200px; margin-left: -20px">
+                  <input type="text" class="form-control" placeholder="Georgia Tech ID" />
+                </div>
+              </div>
+            </div>
+          </div><br /><br />
+          <div class="form-group" style="width: 100%; display: inline-block">
+            <div class="row" >
+              <div style="float: left">
+                <div class="col-md-2" style="width: 130px;">
+                  <span style="font-size: 16px">First Name</span>
+                </div>
+                <div class="col-md-3" style="width: 200px">
+                  <input type="text" class="form-control" placeholder="First Name" />
+                </div>
+              </div>
+              <div style="float: right">
+                <div class="col-md-2" style="width: 130px;">
+                  <span style="font-size: 16px">Last Name</span>
+                </div>
+                <div class="col-md-3" style="width: 200px">
+                  <input type="text" class="form-control" placeholder="Last Name" />
+                </div>
+              </div>
+            </div>
+          </div><br /><br />
+          <div class="form-group" style="width: 100%; display: inline-block">
+            <div class="row" >
+              <div style="float: left">
+                <div class="col-md-2" style="width: 130px;">
+                  <span style="font-size: 16px">Email</span>
+                </div>
+                <div class="col-md-3" style="width: 200px">
+                  <input type="text" class="form-control" placeholder="Email" />
+                </div>
+              </div>
+              <div style="float: right">
+                <div class="col-md-2" style="width: 130px;">
+                  <span style="font-size: 16px">Telephone</span>
+                </div>
+                <div class="col-md-3" style="width: 200px">
+                  <input type="text" class="form-control" placeholder="Telephone" />
+                </div>
+              </div>
+            </div>
+          </div><br /><br />
+          <div class="form-group" style="width: 100%; display: inline-block">
+            <div class="row" >
+              <div style="float: left">
+                <div class="col-md-2" style="width: 130px;">
+                  <span style="font-size: 16px">GPA</span>
+                </div>
+                <div class="col-md-3" style="width: 200px">
+                  <input type="number" min="0" max="4"
+                         class="form-control" placeholder="GPA" />
+                </div>
+              </div>
+              <div style="float: right;">
+                <div class="col-md-2" style="width: 200px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="">
+                      Undergraduate
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="width: 100%; display: inline-block">
+            <div class="row" >
+              <div style="float: right;">
+                <div class="col-md-2" style="width: 200px;">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" value="">
+                      Graduate
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="well col col-md-12">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td>School</td>
+                <td>Number</td>
+                <td>GTA</td>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+</body>

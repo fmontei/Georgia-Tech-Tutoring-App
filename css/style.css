@@ -1,0 +1,14 @@
+.outer {
+    position: absolute;
+    left: 50%;
+}
+
+.inner {
+    position: absolute;
+    left: 20%;
+}
+
+.center {
+    position: absolute;
+    width: 100%;
+}
