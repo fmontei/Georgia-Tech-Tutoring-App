@@ -1,0 +1,2 @@
+INSERT INTO 'Adminstrator' ('GTID', 'Password')
+('000000000', '000000000');
