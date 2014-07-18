@@ -1,2 +1,2 @@
-INSERT INTO Adminstrator (GTID, Password) VALUES
+INSERT INTO Administrator (GTID, Password) VALUES
 ('000000020', '000000020');
