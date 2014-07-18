@@ -1,0 +1,2 @@
+INSERT INTO Professor (GTID, Password)
+('000000001', '000000001');
