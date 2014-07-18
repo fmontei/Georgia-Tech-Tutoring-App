@@ -1,0 +1,2 @@
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000011', '000000004', 'ECE', 1000, '9am', 'FALL', 'Monday');
