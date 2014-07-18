@@ -1,4 +1,4 @@
-INSERT INTO 'Student' ('GTID', 'Password', 'Email', 'Name') VALUES
+INSERT INTO Student (GTID, Password, Email, Name) VALUES
 ('000000000', '000000000', 'ssans@gmail.com', 'September Sans'),
 ('000000001', '000000001', 'jsauer@gmail.com', 'Jerome Sauer'),
 ('000000002', '000000002', 'emachin@gmail.com', 'Elodia Machin'),
