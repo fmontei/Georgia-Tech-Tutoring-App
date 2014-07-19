@@ -1,0 +1,98 @@
+<project name="4400Project" default="compile" basedir=".">
+
+    <property environment="env"/>
+    <property name="app.name"      value="4400Project"/>
+    <property name="app.path"      value="/${app.name}"/>
+    <property name="app.version"   value="0.1-dev"/>
+    <property name="build.home"    value="${basedir}/target"/>
+    <property name="catalina.home" value="E:\CPSC\apache-tomcat-8.0.9"/>
+    <property name="src"           value="${basedir}/src/"/>
+    <property name="dir.reports"   value="${basedir}/target/reports/"/>
+    <property name="web.home"      value="${basedir}/web"/>
+
+    <path id="compile.classpath">
+        <!-- Include all elements that Tomcat exposes to applications -->
+        <fileset dir="${catalina.home}/bin">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${catalina.home}/lib"/>
+        <fileset dir="${catalina.home}/lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+        <pathelement path="${build.home}/WEB-INF/classes" />
+    </path>
+
+    <target name="clean"
+            description="Delete old build and dist directories">
+        <delete dir="${build.home}"/>
+    </target>
+
+    <target name="compile" description="Compile Java sources">
+
+        <!-- Compile Java classes as necessary -->
+        <mkdir    dir="${build.home}/WEB-INF/classes"/>
+        <javac srcdir="${src}"
+               destdir="${build.home}/WEB-INF/classes">
+            <classpath refid="compile.classpath"/>
+        </javac>
+
+    </target>
+
+    <target name="compile-tests" depends="compile" description="Compile tests">
+
+        <!-- Compile Java classes as necessary -->
+        <mkdir    dir="${build.home}/WEB-INF/classes"/>
+        <javac srcdir="${src}"
+               destdir="${build.home}/WEB-INF/classes">
+            <classpath refid="compile.classpath"/>
+        </javac>
+
+    </target>
+
+    <target name="prepare" depends="compile">
+        <copy  todir="${build.home}">
+            <fileset dir="${src}"/>
+        </copy>
+    </target>
+
+    <target name="copy-other-files"
+            description="Sends web.xml and .jsp and .css files to tomcat directory"
+            depends="prepare">
+        <copy file="${basedir}/web.xml" todir="${basedir}/target/WEB-INF" />
+        <copy file="${basedir}/context.xml" todir="${basedir}/target/META-INF" />
+        <copy file="${basedir}/lib/mysql-connector-java-5.0.8-bin.jar" todir="${catalina.home}/lib" />
+        <copy file="${basedir}/lib/mysql-connector-java-5.0.8-bin.jar" todir="${basedir}/target/WEB-INF/lib" />
+        <copy todir="${basedir}/target/css">
+            <fileset dir="${basedir}/css"></fileset>
+        </copy>
+        <copy todir="${basedir}/target/jsp">
+            <fileset dir="${basedir}/jsp"></fileset>
+        </copy>
+        <copy todir="${basedir}/target/js">
+            <fileset dir="${basedir}/js"></fileset>
+        </copy>
+        <copy todir="${basedir}/target/fonts">
+            <fileset dir="${basedir}/fonts"></fileset>
+        </copy>
+    </target>
+
+    <target name="clean-deploy" depends="clean, copy-other-files"
+            description="clean webapps folder and deploy files">
+        <mkdir dir="${catalina.home}/webapps/${app.name}"/>
+        <copy  todir="${catalina.home}/webapps/${app.name}">
+            <fileset dir="${build.home}"/>
+        </copy>
+    </target>
+
+    <target name="deploy" depends="copy-other-files"
+            description="deploy files to tomcat server">
+        <mkdir dir="${catalina.home}/webapps/${app.name}"/>
+        <copy  todir="${catalina.home}/webapps/${app.name}">
+            <fileset dir="${build.home}"/>
+        </copy>
+    </target>
+
+</project>
