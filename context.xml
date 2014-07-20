@@ -1,8 +1,8 @@
 <Context>
-    <Resource name="jdbc/trip_planner_db_simple"
+    <Resource name="jdbc/cs_4400_project_db2"
               auth="Container"
               type="javax.sql.DataSource"
-              username="Joseph"
+              username="root"
               password="password"
               driverClassName="com.mysql.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/4400Project"

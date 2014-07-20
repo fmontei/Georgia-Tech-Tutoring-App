@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
     private static ConnectionManager instance = new ConnectionManager();
-    public static final String URL = "jdbc:mysql://localhost:3306/cs4400_project_db";
+    public static final String URL = "jdbc:mysql://localhost:3306/cs_4400_project_db2";
     public static final String USER = "root";
     public static final String PASSWORD = "password";
     public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver";

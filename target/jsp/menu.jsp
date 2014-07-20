@@ -1,3 +1,9 @@
+<%@ page import="model.User" %>
+<%  User currentUser = (User) session.getAttribute("currentUser");
+    if (currentUser == null) response.sendRedirect("jsp/login.jsp");
+    final String userType = currentUser != null ? currentUser.getType() : "unknown";
+%>
+
 <!DOCTYPE html>
 <html>
   <head lang="en">
@@ -5,6 +11,10 @@
     <title>Georgia Tech Tutors Menu</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
+
+    <script>
+      alert(<%=userType%>);
+    </script>
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -46,6 +56,7 @@
             <li><a href="login.jsp">&laquo; Back to Login</a></li>
           </ul>
         </div>
+        <%  if (userType.equals("student") || userType.equals("tutor")) { %>
         <div class="row">
           <h3>Student Options</h3>
           <ul class="pagination">
@@ -53,6 +64,8 @@
             <li><a href="../jsp/student_eval.html">Rate a Tutor</a></li>
           </ul>
         </div>
+        <%  } %>
+        <%  if (userType.equals("tutor")) { %>
         <div class="row">
           <h3>Tutor Options</h3>
           <ul class="pagination">
@@ -60,16 +73,19 @@
             <li><a href="../jsp/tutor_schedule.html">Find My Schedule</a></li>
           </ul>
         </div>
+        <%  } else if (userType.equals("professor")) { %>
         <div class="row">
           <h3>Professor Options</h3>
           <ul class="pagination">
             <li><a href="../jsp/professor_eval.html">Add Recommendation</a></li>
           </ul>
+          <%  } else if (userType.equals("admin")) { %>
           <h3>Administrator Options</h3>
           <ul class="pagination">
             <li><a href="../jsp/course_list.html">Tutor Course List</a></li>
             <li><a href="../jsp/tutor_summary.html">Tutor Summary Data</a></li>
           </ul>
+          <%  } %>
         </div>
       </div>
     </div>

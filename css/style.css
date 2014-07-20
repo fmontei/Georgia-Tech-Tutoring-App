@@ -23,16 +23,18 @@
 .custom-alert {
     text-align: center;
     min-width: 100px;
-    margin-left: 350px;
-    background-color: darkred;
-    color: white;
+    margin-left: 300px;
+    background-color: rgb(242, 222, 222);
+    color: rgb(184, 68, 100);
     font-size: 16px;
     display: inline-block;
-    border: solid 1px;
+    border: 1px solid rgb(184, 68, 100);
     border-radius: 4px;
     height: 50px;
     position: relative;
     padding: 5px;
+    margin-top: -5px;
+    font-weight: bold;
 }
 
 .custom-alert span {

@@ -15,7 +15,7 @@
       <div class="row">
         <h1>Tutor Search</h1>
         <ul class="pagination">
-          <li><a href="../jsp/menu.html">&laquo; Back to Login</a></li>
+          <li><a href="menu.jsp">&laquo; Back to Main Menu</a></li>
         </ul>
       </div>
       <div class="row">
@@ -94,7 +94,7 @@
       </div><br />
       <div class="row">
         <div class="col-md-12">
-          <h4 style="margin-left: 50%">Available Tutors</h4>
+          <h4 style="margin-left: 40%">Available Tutors</h4>
           <table class="table table-bordered" style="width: 100%">
             <thead>
               <tr>
@@ -130,7 +130,7 @@
               Schedule a Tutor
             </div>
             <div class="btn btn-default" style="margin-left: 50px">
-              <a href="menu.html">Cancel</a>
+              <a href="menu.jsp">Cancel</a>
             </div>
           </div>
         </div>

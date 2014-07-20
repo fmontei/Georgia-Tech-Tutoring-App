@@ -3,6 +3,7 @@ package controller;
 import database.SQLLoginQuery;
 import database.SQLTutorSearchQuery;
 import model.Course;
+import model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,12 +32,13 @@ public class LoginServlet extends HttpServlet {
             final String password = request.getParameter("password");
             try {
                 SQLLoginQuery loginQuery = new SQLLoginQuery();
-                loginQuery.getUserByGTID(gtid, password);
+                final User user = loginQuery.getUserByGTID(gtid, password);
                 SQLTutorSearchQuery tutorSearchQuery = new SQLTutorSearchQuery();
                 List<Course> courses = tutorSearchQuery.getAvailableStudentCourses(gtid);
+                session.setAttribute("currentUser", user);
                 session.setAttribute("studentCourses", courses);
                 session.removeAttribute("loginError");
-                response.sendRedirect("jsp/menu.html");
+                response.sendRedirect("jsp/menu.jsp");
             } catch (SQLException ex) {
                 session.setAttribute("loginError", ex.getMessage());
                 response.sendRedirect("jsp/login.jsp");
