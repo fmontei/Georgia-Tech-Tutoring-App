@@ -18,80 +18,88 @@
           <li><a href="menu.jsp">&laquo; Back to Main Menu</a></li>
         </ul>
       </div>
-      <div class="row">
-        <div class="col col-md-2">
-          <h4>Course</h4>
-        </div>
-        <div class="col col-md-7">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>School</th>
-                <th>Number</th>
-              </tr>
-            </thead>
-            <tbody>
-            <%  List<Course> courses = (List<Course>) session.getAttribute("studentCourses");
-                if (courses == null) courses = new ArrayList<Course>();
-                for (Course course : courses) { %>
+      <form action="/4400Project" method="post">
+        <div class="row">
+          <div class="col col-md-2">
+            <h4>Course</h4>
+          </div>
+          <div class="col col-md-7">
+            <table class="table table-bordered">
+              <thead>
                 <tr>
-                  <td><%=course.getSchool()%></td>
-                  <td><%=course.getNumber()%></td>
+                  <th>School</th>
+                  <th>Number</th>
                 </tr>
-            <%  } %>
-            </tbody>
-            <tfoot>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input class="form-control" type="text" name="schoolName"
+                             required="required" /></td>
+                  <td><input class="form-control" name="courseNumber"
+                             pattern="^[0-9]{4,4}$"
+                             title="Please enter a four-digit course number."
+                             required="required" /></td>
+                </tr>
+              </tbody>
+              <tfoot>
 
-            </tfoot>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="alert alert-danger" style="display: inline-block">
-          Availability. Note -- tutor sessions can only be scheduled
-          for 1 hour per week for a given course.
-        </div>
-      </div><br />
-      <div class="row">
-        <div class="col col-md-7 col-md-push-2">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>Day</th>
-              <th>Time</th>
-            </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>M</td>
-                <td>9</td>
-              </tr>
-              <tr>
-                <td>M</td>
-                <td>9</td>
-              </tr>
-              <tr>
-                <td>M</td>
-                <td>9</td>
-              </tr>
-              <tr>
-                <td>M</td>
-                <td>9</td>
-              </tr>
-            </tbody>
-            <tfoot>
-
-            </tfoot>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-2">
-          <div class="btn btn-default">
-            OK
+              </tfoot>
+            </table>
           </div>
         </div>
-      </div><br />
+        <div class="row">
+          <div class="alert alert-danger" style="display: inline-block">
+            Availability. Note -- tutor sessions can only be scheduled
+            for 1 hour per week for a given course.
+          </div>
+        </div><br />
+        <div class="row">
+          <div class="col col-md-7 col-md-push-2">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th>Day</th>
+                <th>Time</th>
+              </tr>
+              </thead>
+              <tbody id="dayTimeTable">
+                <tr>
+                  <td>
+                    <select name="preferredDay" required="required">
+                      <option selected></option>
+                      <option>Monday</option>
+                      <option>Tuesday</option>
+                      <option>Wednesday</option>
+                      <option>Thursday</option>
+                      <option>Friday</option>
+                      <option>Saturday</option>
+                      <option>Sunday</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input class="form-control" name="preferredTime" type="time"
+                           required="required" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="btn-group" style="width: 100%">
+              <div class="btn btn-default" id="newDayTimeBtn">
+                Add New Day/Time
+              </div>
+              <div class="btn btn-default" id="removeDayTimeBtn" style="float: right">
+                Remove Day/Time
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 20px">
+          <div class="col-md-2">
+            <input class="btn btn-default" type="submit" name="submitDayTimeBtn" value="OK" />
+          </div>
+        </div>
+      </form>
+      <br />
       <div class="row">
         <div class="col-md-12">
           <h4 style="margin-left: 40%">Available Tutors</h4>
@@ -179,5 +187,37 @@
 
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="../js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var newDayTimeBtn = document.getElementById("newDayTimeBtn");
+      newDayTimeBtn.addEventListener("click", function() {
+        var dayTimeTable = $("#dayTimeTable");
+        var rowCount = $("#dayTimeTable tr").length;
+        dayTimeTable.append('<tr><td>' +
+                '<select name="preferredDay" required="required">' +
+                '<option selected></option>' +
+                '<option>Monday</option>' +
+                '<option>Tuesday</option>' +
+                '<option>Wednesday</option>' +
+                '<option>Thursday</option>' +
+                '<option>Friday</option>' +
+                '<option>Saturday</option>' +
+                '<option>Sunday</option>' +
+                '</select>' +
+                '</td>' +
+                '<td><input class="form-control" name="preferredTime" type="time" ' +
+                'required="required" />' +
+                '</td></tr>)');
+      });
+      var removeDayTimeBtn = document.getElementById("removeDayTimeBtn");
+      removeDayTimeBtn.addEventListener("click", function() {
+        var rowCount = $("#dayTimeTable tr").length;
+        if (rowCount > 1) {
+          $("#dayTimeTable tr").last().remove();
+        }
+      });
+    });
+  </script>
   </body>
 </html>
