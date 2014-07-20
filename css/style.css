@@ -41,3 +41,8 @@
     vertical-align: middle;
     margin-top: 9px;
 }
+
+.activeRow {
+    background-color: cadetblue;
+    color: white;
+}

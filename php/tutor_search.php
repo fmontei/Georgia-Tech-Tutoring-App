@@ -17,7 +17,6 @@
   $formattedTimeArray = reformatTimeArray($preferredTimeArray);
   $query = getAvailableStudentCourses($school, $courseNumber, $preferredDayArray,
     $formattedTimeArray);
-  print($query);
 
   $result = executeQuery($query);
   $formattedResult = formatResult($result);
@@ -99,6 +98,9 @@
   }
 
   function executeQuery($query) {
+    print("<html><body>");
+    print("<h1>DEBUGGING MENU</h1>");
+    print("<p>Query:<br/>" . $query . "</p>");
     $database = "4400_project_db";
     $con = mysql_connect(localhost, "root", "mysql");
     @mysql_select_db($database) or die("Unable to select database");
@@ -112,6 +114,7 @@
   }
 
   function formatResult($result) {
+    print("<p>Results:<br/>");
     $formattedResult = array();
     while ($row = mysql_fetch_assoc($result)) {
       $name = $row["Name"];
@@ -124,7 +127,6 @@
       $pos = strrpos($name, " ");
       $firstName = substr($name, 0, $pos);
       $lastName = substr($name, $pos);
-      print($firstName);
       array_push($formattedResult, array("First" => $firstName,
                                          "Last" => $lastName,
                                          "Email" => $email,
@@ -132,14 +134,14 @@
                                          "NumProf" => $numProf,
                                          "StudentRating" => $studentRating,
                                          "NumStudent" => $numStudent));
+      print(implode(", ", $row) . "<br/>");
     }
+    print("</p></body></html>");
     return $formattedResult;
   }
 
   function redirectBack($formattedResult) {
     $_SESSION["tutorSearchResults"] = $formattedResult;
-    print("FORMATTED RESULTS: ");
-    print_r($_SESSION["tutorSearchResults"]);
     header("Location: ../html/tutor_search.html");
     die();
   }

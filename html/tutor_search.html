@@ -103,7 +103,7 @@
       <br />
       <div class="row">
         <div class="col-md-12">
-          <h4 style="margin-left: 40%">Available Tutors</h4>
+          <h4 style="margin-left: 40%; font-weight: bold">Available Tutors</h4>
           <table class="table table-bordered" style="width: 100%">
             <thead>
               <tr>
@@ -120,7 +120,7 @@
               <?php
                     $tutorResults = $_SESSION["tutorSearchResults"];
                     foreach ($tutorResults as $results) { ?>
-                <tr>
+                <tr class="tutorResultRow">
                   <td><?php echo $results["First"] ?></td>
                   <td><?php echo $results["Last"] ?></td>
                   <td><?php echo $results["Email"] ?></td>
@@ -226,6 +226,7 @@
                 'required="required" />' +
                 '</td></tr>)');
       });
+
       var removeDayTimeBtn = document.getElementById("removeDayTimeBtn");
       removeDayTimeBtn.addEventListener("click", function() {
         var rowCount = $("#dayTimeTable tr").length;
@@ -233,6 +234,18 @@
           $("#dayTimeTable tr").last().remove();
         }
       });
+
+      var tutorResultRows = document.getElementsByClassName("tutorResultRow");
+      for (var i = 0; i < tutorResultRows.length; i++) {
+        tutorResultRows[i].addEventListener("click", function () {
+          for (var i = 0; i < tutorResultRows.length; i++) {
+            if (tutorResultRows[i] == this)
+              $(tutorResultRows[i]).addClass("activeRow");
+            else
+              $(tutorResultRows[i]).removeClass("activeRow");
+          }
+        });
+      }
     });
   </script>
   </body>
