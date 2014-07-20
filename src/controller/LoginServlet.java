@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {""})
 public class LoginServlet extends HttpServlet {
@@ -34,9 +33,9 @@ public class LoginServlet extends HttpServlet {
                 SQLLoginQuery loginQuery = new SQLLoginQuery();
                 final User user = loginQuery.getUserByGTID(gtid, password);
                 SQLTutorSearchQuery tutorSearchQuery = new SQLTutorSearchQuery();
-                List<Course> courses = tutorSearchQuery.getAvailableStudentCourses(gtid);
+                //List<Course> courses = tutorSearchQuery.getAvailableStudentCourses(gtid);
                 session.setAttribute("currentUser", user);
-                session.setAttribute("studentCourses", courses);
+                //session.setAttribute("studentCourses", courses);
                 session.removeAttribute("loginError");
                 response.sendRedirect("jsp/menu.jsp");
             } catch (SQLException ex) {

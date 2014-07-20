@@ -18,7 +18,7 @@
           <li><a href="menu.jsp">&laquo; Back to Main Menu</a></li>
         </ul>
       </div>
-      <form action="/4400Project" method="post">
+      <form action="/4400Project/student_options" method="post">
         <div class="row">
           <div class="col col-md-2">
             <h4>Course</h4>
@@ -157,7 +157,7 @@
           </button>
           <h4 class="modal-title" id="myModalLabel">Select your Tutor for CS 4400</h4>
         </div>
-        <form action="" method="post" accept-charset="UTF-8">
+        <form action="/4400Project/student_options" method="post" accept-charset="UTF-8">
           <table class="table table-bordered" style="width: 100%; overflow: auto">
             <thead>
             <tr>
@@ -177,7 +177,7 @@
             </tfoot>
           </table>
           <div class="modal-footer">
-            <button type="submit" name="loginButton" class="btn btn-primary">OK</button>
+            <button type="submit" name="tutorSelectButton" class="btn btn-primary">OK</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </div>
         </form>
