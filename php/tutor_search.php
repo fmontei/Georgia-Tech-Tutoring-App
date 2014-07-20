@@ -15,12 +15,19 @@
   $preferredDayArray = findDays($params);
   $preferredTimeArray = findTimes($params);
   $formattedTimeArray = reformatTimeArray($preferredTimeArray);
-  $query = getAvailableStudentCourses($school, $courseNumber, $preferredDayArray,
+
+  $courseQuery = getAvailableStudentCourses($school, $courseNumber,
+    $preferredDayArray, $formattedTimeArray);
+  $tutorQuery = getAvailableTutors($school, $courseNumber, $preferredDayArray,
     $formattedTimeArray);
 
-  $result = executeQuery($query);
-  $formattedResult = formatResult($result);
-  redirectBack($formattedResult);
+  $courseResult = executeQuery($courseQuery);
+  $formattedCourseResult = formatCourseResult($courseResult);
+  $tutorResult = executeQuery($tutorQuery);
+  $formattedTutorResult = formatTutorResult($tutorResult);
+
+  redirectBack($formattedCourseResult, $formattedTutorResult, $school,
+    $courseNumber);
 
   function findDays($params) {
     $dayArray = array();
@@ -54,6 +61,9 @@
         $formattedSecond = "am";
       }
       $formattedTime = $formattedFirst . $formattedSecond;
+      // Omit "0" from "09am", for example
+      if (substr($formattedTime, 0, 1) === "0")
+        $formattedTime = substr($formattedTime, 1);
       array_push($formatted, $formattedTime);
     }
     return $formatted;
@@ -86,7 +96,6 @@
                                   mysql_real_escape_string($dayArray[$i]),
                                   mysql_real_escape_string($timeArray[$i]));
     }
-
     $query = $query . sprintf("Tutor_Time_Slot.GTID = Student.GTID AND\n" .
                               "Recommends.GTID_Tutor = Student.GTID AND\n" .
                               "Rates.GTID_Tutor = Student.GTID AND\n" .
@@ -96,6 +105,40 @@
                               "ORDER BY Avg_Prof_Rating DESC;");
     return $query;
   }
+
+  function getAvailableTutors($schoolName, $courseNumber, $dayArray,
+        $timeArray) {
+      $currentSemester = "FALL";
+      $query = sprintf("SELECT Student.Name, Student.Email, " .
+                       "Tutor_Time_Slot.Weekday, " .
+                       "Tutor_Time_Slot.Time " .
+                       "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot " .
+                       "WHERE Tutors.School = '%s' AND\n" .
+                       "Tutors.Number = '%s' AND\n" .
+                       "Tutor_Time_Slot.Semester = '%s'\nAND(",
+                       mysql_real_escape_string($schoolName),
+                       mysql_real_escape_string($courseNumber),
+                       mysql_real_escape_string($currentSemester));
+      for ($i = 0; $i < count($dayArray); $i++) {
+        if ($i <= count($dayArray) - 2)
+          $query = $query . sprintf("(Tutor_Time_Slot.WeekDay = '%s' AND " .
+                                    "Tutor_Time_Slot.Time = '%s') OR\n",
+                                    mysql_real_escape_string($dayArray[$i]),
+                                    mysql_real_escape_string($timeArray[$i]));
+        else
+          $query = $query . sprintf("(Tutor_Time_Slot.WeekDay = '%s' AND " .
+                                    "Tutor_Time_Slot.Time = '%s')) AND\n",
+                                    mysql_real_escape_string($dayArray[$i]),
+                                    mysql_real_escape_string($timeArray[$i]));
+      }
+      $query = $query . sprintf("Tutor_Time_Slot.GTID = Student.GTID AND\n" .
+                                "Recommends.GTID_Tutor = Student.GTID AND\n" .
+                                "Rates.GTID_Tutor = Student.GTID AND\n" .
+                                "Student.GTID IN\n" .
+                                "(SELECT DISTINCT Tutors.GTID_Tutor FROM Tutors)\n" .
+                                "GROUP BY Tutor_Time_Slot.Time");
+      return $query;
+    }
 
   function executeQuery($query) {
     print("<html><body>");
@@ -113,7 +156,7 @@
     return $result;
   }
 
-  function formatResult($result) {
+  function formatCourseResult($result) {
     print("<p>Results:<br/>");
     $formattedResult = array();
     while ($row = mysql_fetch_assoc($result)) {
@@ -140,8 +183,35 @@
     return $formattedResult;
   }
 
-  function redirectBack($formattedResult) {
-    $_SESSION["tutorSearchResults"] = $formattedResult;
+  function formatTutorResult($result) {
+      print("<p>Results:<br/>");
+      $formattedResult = array();
+      while ($row = mysql_fetch_assoc($result)) {
+        $name = $row["Name"];
+        $email = $row["Email"];
+        $day = $row["Weekday"];
+        $time = $row["Time"];
+
+        $pos = strrpos($name, " ");
+        $firstName = substr($name, 0, $pos);
+        $lastName = substr($name, $pos);
+        array_push($formattedResult, array("First" => $firstName,
+                                           "Last" => $lastName,
+                                           "Email" => $email,
+                                           "Day" => $day,
+                                           "Time" => $time));
+        print(implode(", ", $row) . "<br/>");
+      }
+      print("</p></body></html>");
+      return $formattedResult;
+    }
+
+  function redirectBack($formattedCourseResult, $formattedTutorResult, $school,
+    $courseNumber) {
+    $_SESSION["courseSearchResults"] = $formattedCourseResult;
+    $_SESSION["tutorSearchResults"] = $formattedTutorResult;
+    $_SESSION["school"] = $school;
+    $_SESSION["courseNumber"] = $courseNumber;
     header("Location: ../html/tutor_search.html");
     die();
   }

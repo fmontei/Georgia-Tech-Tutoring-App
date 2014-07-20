@@ -87,4 +87,55 @@ public class SQLTutorSearchQuery {
         }
         return preparedStatement;
     }
+
+    public void prepareTutorsQuery(final String schoolName,
+                                               final int courseNumber,
+                                               final String[] preferredDays,
+                                               final String[] preferredTimes)
+            throws SQLException {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT Student.Name, Student.Email, " +
+                "Tutor_Time_Slot.Weekday, Tutor_Time_Slot.Time\n" +
+                "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot\n" +
+                "WHERE Tutors.School = ? AND\n" +
+                "Tutors.Number = ? AND\n" +
+                "Tutor_Time_Slot.Semester = ? AND\n(");
+        for (int i = 0; i < preferredDays.length; i++) {
+            if (i <= preferredDays.length - 2)
+                queryBuilder.append("(Tutor_Time_Slot.WeekDay = ? AND\n" +
+                        "Tutor_Time_Slot.Time = ?) OR\n");
+            else
+                queryBuilder.append("(Tutor_Time_Slot.WeekDay = ? AND\n" +
+                        "Tutor_Time_Slot.Time = ?)) AND\n");
+        }
+        queryBuilder.append("Tutor_Time_Slot.GTID = Student.GTID AND\n" +
+                "Recommends.GTID_Tutor = Student.GTID AND\n" +
+                "Rates.GTID_Tutor = Student.GTID AND\n" +
+                "Student.GTID IN (SELECT DISTINCT Tutors.GTID_Tutor FROM Tutors)\n" +
+                "GROUP BY Tutor_Time_Slot.Time;");
+        final String query = queryBuilder.toString();
+        final String currentSemester = "FALL";
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(query);
+        preparedStatement.setString(1, schoolName);
+        preparedStatement.setInt(2, courseNumber);
+        preparedStatement.setString(3, currentSemester);
+        int i = 4, j = 0;
+        for ( ; i < (4 + preferredDays.length + preferredTimes.length); i++) {
+            if (i % 2 == 0) preparedStatement.setString(i, preferredDays[j++]);
+        }
+        for (i = 5, j = 0; i < (5 + preferredDays.length + preferredTimes.length); i++) {
+            if (i % 2 != 0) preparedStatement.setString(i, preferredTimes[j++]);
+        }
+        System.out.println(preparedStatement.toString());
+        final ResultSet tutors = preparedStatement.executeQuery();
+        while (tutors.next()) {
+            final String name = tutors.getString("Name");
+            final String email = tutors.getString("Email");
+            final String weekday = tutors.getString("Weekday");
+            final String time = tutors.getString("Time");
+            System.out.println(".\nName: " + name + "\nEmail: " + email
+                    + "\nWeekday: " + weekday
+                    + "\nTime: " + time + "\n\n");
+        }
+    }
 }
