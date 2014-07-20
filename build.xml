@@ -69,7 +69,7 @@
             <fileset dir="${basedir}/css"></fileset>
         </copy>
         <copy todir="${basedir}/target/jsp">
-            <fileset dir="${basedir}/jsp"></fileset>
+            <fileset dir="${basedir}/html"></fileset>
         </copy>
         <copy todir="${basedir}/target/js">
             <fileset dir="${basedir}/js"></fileset>

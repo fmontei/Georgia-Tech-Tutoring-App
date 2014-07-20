@@ -24,8 +24,6 @@ public class main {
             tutorSearchQuery.getAvailableStudentCourses("ECE", 1000,
                     new String[] {"Friday", "Thursday", "Monday", "Tuesday", "Wednesday"},
                     new String[] {"3pm", "9am", "10am", "2pm", "2pm"});
-
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

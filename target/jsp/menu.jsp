@@ -1,6 +1,6 @@
 <%@ page import="model.User" %>
 <%  User currentUser = (User) session.getAttribute("currentUser");
-    if (currentUser == null) response.sendRedirect("jsp/login.jsp");
+    if (currentUser == null) response.sendRedirect("jsp/login.html");
     final String userType = currentUser != null ? currentUser.getType() : "unknown";
 %>
 

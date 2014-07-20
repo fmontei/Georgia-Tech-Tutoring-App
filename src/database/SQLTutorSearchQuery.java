@@ -21,6 +21,7 @@ public class SQLTutorSearchQuery {
             throw new SQLException("Database error: the values were invalid");
         PreparedStatement execute = prepareCourseSearchQuery(schoolName,
                 courseNumber, preferredDays, preferredTimes);
+        System.out.println(execute.toString());
         ResultSet courses = execute.executeQuery();
         List<Course> foundCourses = new ArrayList<Course>();
         while (courses.next()) {
@@ -33,6 +34,11 @@ public class SQLTutorSearchQuery {
             final Course course = new Course(name, email, avgProfRating,
                     avgStudentRating, numProf, numStudents);
             foundCourses.add(course);
+            System.out.println(".\nName: " + name + "\nEmail: " + email
+                    + "\nAvg Prof Rating: " + avgProfRating
+                    + "\n#Professors: " + numProf
+                    + "\nAvg Student Rating: " + avgStudentRating
+                    + "\n#Students: " + numStudents + "\n\n");
         }
         return foundCourses;
     }

@@ -18,7 +18,7 @@ public class StudentOptionsServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        //response.sendRedirect("jsp/login.jsp");
+        //response.sendRedirect("jsp/login.html");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class StudentOptionsServlet extends HttpServlet {
             request.getSession().setAttribute("foundCourses", foundCourses);
         } catch (SQLException ex) {
         } finally {
-            response.sendRedirect("jsp/tutor_search.jsp");
+            response.sendRedirect("jsp/tutor_search.html");
         }
     }
 

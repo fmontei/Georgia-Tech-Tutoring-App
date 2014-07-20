@@ -17,7 +17,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
-        response.sendRedirect("jsp/login.jsp");
+        response.sendRedirect("jsp/login.html");
     }
 
     @Override
@@ -32,10 +32,10 @@ public class LoginServlet extends HttpServlet {
                 final User user = loginQuery.getUserByGTID(gtid, password);
                 session.setAttribute("currentUser", user);
                 session.removeAttribute("loginError");
-                response.sendRedirect("jsp/menu.jsp");
+                response.sendRedirect("jsp/menu.html");
             } catch (SQLException ex) {
                 session.setAttribute("loginError", ex.getMessage());
-                response.sendRedirect("jsp/login.jsp");
+                response.sendRedirect("jsp/login.html");
             }
         }
     }
