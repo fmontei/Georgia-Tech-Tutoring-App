@@ -2,12 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9fec2a0-5a3e-4e26-93c9-3b03e73ad546" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/controller/StudentOptionsServlet.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/WEB-INF/classes/model/Course.class" afterPath="$PROJECT_DIR$/target/WEB-INF/classes/model/Course.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/WEB-INF/classes/controller/LoginServlet.class" afterPath="$PROJECT_DIR$/target/WEB-INF/classes/controller/LoginServlet.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/WEB-INF/classes/database/SQLTutorSearchQuery.class" afterPath="$PROJECT_DIR$/target/WEB-INF/classes/database/SQLTutorSearchQuery.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/WEB-INF/classes/main.class" afterPath="$PROJECT_DIR$/target/WEB-INF/classes/main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/model/Course.java" afterPath="$PROJECT_DIR$/src/model/Course.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/model/Course.java" afterPath="$PROJECT_DIR$/target/model/Course.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/controller/LoginServlet.java" afterPath="$PROJECT_DIR$/src/controller/LoginServlet.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/controller/LoginServlet.java" afterPath="$PROJECT_DIR$/target/controller/LoginServlet.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java" afterPath="$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/database/SQLTutorSearchQuery.java" afterPath="$PROJECT_DIR$/target/database/SQLTutorSearchQuery.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/controller/StudentOptionsServlet.java" afterPath="$PROJECT_DIR$/src/controller/StudentOptionsServlet.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.java" afterPath="$PROJECT_DIR$/src/main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/main.java" afterPath="$PROJECT_DIR$/target/main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jsp/tutor_search.jsp" afterPath="$PROJECT_DIR$/jsp/tutor_search.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web.xml" afterPath="$PROJECT_DIR$/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsp/tutor_search.jsp" afterPath="$PROJECT_DIR$/target/jsp/tutor_search.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/target/WEB-INF/web.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="4400Project.iws" />
@@ -30,11 +40,11 @@
       <content type="file-editors">
         <state>
           <leaf>
-            <file leaf-file-name="tutor_search.jsp" pinned="false" current="false" current-in-tab="true">
+            <file leaf-file-name="tutor_search.jsp" pinned="false" current="true" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/jsp/tutor_search.jsp">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="1.7626169" vertical-offset="400" max-vertical-offset="3876">
-                    <caret line="79" column="55" selection-start-line="79" selection-start-column="54" selection-end-line="79" selection-end-column="55" />
+                  <state vertical-scroll-proportion="0.47663552" vertical-offset="0" max-vertical-offset="4097">
+                    <caret line="15" column="58" selection-start-line="15" selection-start-column="58" selection-end-line="15" selection-end-column="58" />
                     <folding />
                   </state>
                 </provider>
@@ -51,23 +61,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="StudentOptionsServlet.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="StudentOptionsServlet.java" pinned="false" current="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/controller/StudentOptionsServlet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="326" max-vertical-offset="833">
-              <caret line="40" column="11" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginServlet.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/controller/LoginServlet.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="417" max-vertical-offset="901">
-              <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.81005585" vertical-offset="381" max-vertical-offset="1326">
+              <caret line="48" column="12" selection-start-line="48" selection-start-column="12" selection-end-line="48" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -78,21 +76,41 @@
       <file leaf-file-name="SQLTutorSearchQuery.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="844" max-vertical-offset="1564">
-              <caret line="62" column="51" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
+            <state vertical-scroll-proportion="-13.357142" vertical-offset="204" max-vertical-offset="1530">
+              <caret line="34" column="37" selection-start-line="34" selection-start-column="37" selection-end-line="34" selection-end-column="37" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <marker date="1405830569837" expanded="true" signature="30:68" placeholder="SELECT Tutor..Tutors..." />
+                <element signature="e#1064#1072#0" expanded="true" />
+                <marker date="1405834784984" expanded="true" signature="17:68" placeholder="SELECT Tutor..Tutors..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Course.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/model/Course.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="663">
+              <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConnectionManager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/database/ConnectionManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
+              <caret line="21" column="37" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7060703" vertical-offset="204" max-vertical-offset="629">
-              <caret line="25" column="53" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="7" max-vertical-offset="697">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -103,7 +121,7 @@
       <file leaf-file-name="SQLLoginQuery.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/database/SQLLoginQuery.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="702" max-vertical-offset="1989">
+            <state vertical-scroll-proportion="0.0" vertical-offset="753" max-vertical-offset="1989">
               <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -137,7 +155,6 @@
         <option value="$PROJECT_DIR$/build.xml" />
         <option value="$PROJECT_DIR$/jsp/login.jsp" />
         <option value="$PROJECT_DIR$/src/database/SQLTutorSearch.java" />
-        <option value="$PROJECT_DIR$/src/model/Course.java" />
         <option value="$PROJECT_DIR$/src/database/ConnectionManager.java" />
         <option value="$PROJECT_DIR$/context.xml" />
         <option value="$PROJECT_DIR$/css/style.css" />
@@ -145,11 +162,12 @@
         <option value="$PROJECT_DIR$/src/database/SQLLoginQuery.java" />
         <option value="$PROJECT_DIR$/jsp/menu.jsp" />
         <option value="$PROJECT_DIR$/web.xml" />
-        <option value="$PROJECT_DIR$/jsp/tutor_search.jsp" />
-        <option value="$PROJECT_DIR$/src/controller/StudentOptionsServlet.java" />
         <option value="$PROJECT_DIR$/src/controller/LoginServlet.java" />
-        <option value="$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java" />
+        <option value="$PROJECT_DIR$/src/model/Course.java" />
+        <option value="$PROJECT_DIR$/src/controller/StudentOptionsServlet.java" />
         <option value="$PROJECT_DIR$/src/main.java" />
+        <option value="$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java" />
+        <option value="$PROJECT_DIR$/jsp/tutor_search.jsp" />
       </list>
     </option>
   </component>
@@ -636,12 +654,12 @@
       <updated>1405803216590</updated>
       <workItem from="1405803218882" duration="2202000" />
       <workItem from="1405805433648" duration="9091000" />
-      <workItem from="1405814821019" duration="14247000" />
+      <workItem from="1405814821019" duration="18447000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25540000" />
+    <option name="totallyTimeSpent" value="29740000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1608" y="-8" width="1616" height="876" extended-state="6" />
@@ -668,7 +686,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.213125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5554107" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26336375" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -748,8 +766,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="680">
           <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1405830569837" expanded="true" signature="30:68" placeholder="SELECT Tutor..Tutors..." />
+            <element signature="e#1064#1072#0" expanded="true" />
+            <marker date="1405834784984" expanded="true" signature="17:68" placeholder="SELECT Tutor..Tutors..." />
           </folding>
         </state>
       </provider>
@@ -774,9 +792,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="527">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -804,19 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Course.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51224107" vertical-offset="0" max-vertical-offset="531">
-          <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
-          <folding>
-            <element signature="e#246#247#0" expanded="false" />
-            <element signature="e#275#276#0" expanded="false" />
-            <element signature="e#305#306#0" expanded="false" />
-            <element signature="e#334#335#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/context.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272">
@@ -829,14 +832,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="268" max-vertical-offset="833">
           <caret line="35" column="20" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/database/ConnectionManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -881,31 +876,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jsp/tutor_search.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.7626169" vertical-offset="400" max-vertical-offset="3876">
-          <caret line="79" column="55" selection-start-line="79" selection-start-column="54" selection-end-line="79" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/StudentOptionsServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="300" max-vertical-offset="833">
-          <caret line="40" column="11" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/controller/LoginServlet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="417" max-vertical-offset="901">
-          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.046008117" vertical-offset="0" max-vertical-offset="816">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -927,24 +902,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java">
+    <entry file="file://$PROJECT_DIR$/src/model/Course.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="844" max-vertical-offset="1564">
-          <caret line="62" column="51" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1405830569837" expanded="true" signature="30:68" placeholder="SELECT Tutor..Tutors..." />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="109" max-vertical-offset="663">
+          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/database/ConnectionManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
+          <caret line="21" column="37" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7060703" vertical-offset="204" max-vertical-offset="629">
-          <caret line="25" column="53" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="160" max-vertical-offset="697">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/database/SQLTutorSearchQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.357142" vertical-offset="204" max-vertical-offset="1530">
+          <caret line="34" column="37" selection-start-line="34" selection-start-column="37" selection-end-line="34" selection-end-column="37" />
+          <folding>
+            <element signature="e#1064#1072#0" expanded="true" />
+            <marker date="1405834784984" expanded="true" signature="17:68" placeholder="SELECT Tutor..Tutors..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/StudentOptionsServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.81005585" vertical-offset="381" max-vertical-offset="1326">
+          <caret line="48" column="12" selection-start-line="48" selection-start-column="12" selection-end-line="48" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jsp/tutor_search.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47663552" vertical-offset="0" max-vertical-offset="4097">
+          <caret line="15" column="58" selection-start-line="15" selection-start-column="58" selection-end-line="15" selection-end-column="58" />
+          <folding />
         </state>
       </provider>
     </entry>

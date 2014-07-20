@@ -40,4 +40,13 @@ limitations under the License.
         <url-pattern></url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>StudentOptionsServlet</servlet-name>
+        <servlet-class>controller.StudentOptionsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StudentOptionsServlet</servlet-name>
+        <url-pattern>/student_options</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -1,6 +1,9 @@
 <%@ page import="model.Course" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%  List<Course> foundCourses = (List<Course>) session.getAttribute("foundCourses");
+    if (foundCourses == null) foundCourses = new ArrayList<Course>();
+%>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -10,7 +13,7 @@
   <link href="../css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-bottom: 100px">
     <div class="inner">
       <div class="row">
         <h1>Tutor Search</h1>
@@ -18,7 +21,7 @@
           <li><a href="menu.jsp">&laquo; Back to Main Menu</a></li>
         </ul>
       </div>
-      <form action="/4400Project" method="post">
+      <form action="/4400Project/student_options" method="post">
         <div class="row">
           <div class="col col-md-2">
             <h4>Course</h4>
@@ -116,7 +119,17 @@
               </tr>
             </thead>
             <tbody>
-
+              <%  for (Course result : foundCourses) { %>
+                <tr>
+                  <td><%=result.getFirstName()%></td>
+                  <td><%=result.getLastName()%></td>
+                  <td><%=result.getEmail()%></td>
+                  <td><%=result.getAvgProfRating()%></td>
+                  <td><%=result.getNumProf()%></td>
+                  <td><%=result.getAvgStudentRating()%></td>
+                  <td><%=result.getNumStudent()%></td>
+                </tr>
+              <%  } %>
             </tbody>
             <tfoot>
 
@@ -157,7 +170,7 @@
           </button>
           <h4 class="modal-title" id="myModalLabel">Select your Tutor for CS 4400</h4>
         </div>
-        <form action="" method="post" accept-charset="UTF-8">
+        <form action="/4400Project/student_options" method="post" accept-charset="UTF-8">
           <table class="table table-bordered" style="width: 100%; overflow: auto">
             <thead>
             <tr>
@@ -177,7 +190,7 @@
             </tfoot>
           </table>
           <div class="modal-footer">
-            <button type="submit" name="loginButton" class="btn btn-primary">OK</button>
+            <button type="submit" name="tutorSelectButton" class="btn btn-primary">OK</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </div>
         </form>

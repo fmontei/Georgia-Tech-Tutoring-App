@@ -6,12 +6,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQLTutorSearchQuery {
     private Connection dbConnection = ConnectionManager.getConnection();
 
-    public void getAvailableStudentCourses(final String schoolName,
+    public List<Course> getAvailableStudentCourses(final String schoolName,
                                                    final int courseNumber,
                                                    final String[] preferredDays,
                                                    final String[] preferredTimes)
@@ -20,10 +21,8 @@ public class SQLTutorSearchQuery {
             throw new SQLException("Database error: the values were invalid");
         PreparedStatement execute = prepareCourseSearchQuery(schoolName,
                 courseNumber, preferredDays, preferredTimes);
-        System.out.println("\n\n" + execute.toString());
         ResultSet courses = execute.executeQuery();
-        System.out.println("\n\n----------RESULTS-------------\n\n");
-        int count = 0;
+        List<Course> foundCourses = new ArrayList<Course>();
         while (courses.next()) {
             final String name = courses.getString("Name");
             final String email = courses.getString("Email");
@@ -31,12 +30,11 @@ public class SQLTutorSearchQuery {
             final int numProf = courses.getInt("Num_Professors");
             final double avgStudentRating = courses.getDouble("Avg_Student_Rating");
             final int numStudents = courses.getInt("Num_Students");
-            System.out.println(count++ + ".\nName: " + name + "\nEmail: " + email
-                    + "\nAvg Prof Rating: " + avgProfRating
-                    + "\n#Professors: " + numProf
-                    + "\nAvg Student Rating: " + avgStudentRating
-                    + "\n#Students: " + numStudents + "\n\n");
+            final Course course = new Course(name, email, avgProfRating,
+                    avgStudentRating, numProf, numStudents);
+            foundCourses.add(course);
         }
+        return foundCourses;
     }
 
     private PreparedStatement prepareCourseSearchQuery(final String schoolName,
@@ -50,9 +48,9 @@ public class SQLTutorSearchQuery {
                 "COUNT(Recommends.Num_Evaluation) AS Num_Professors, " +
                 "AVG(Rates.Num_Evaluation) AS Avg_Student_Rating, " +
                 "COUNT(Rates.Num_Evaluation) AS Num_Students\n" +
-                "FROM Student, Recommends, Rates, Course, Tutor, Tutor_Time_Slot\n" +
-                "WHERE Course.School = ? AND\n" +
-                "Course.Number = ? AND\n" +
+                "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot\n" +
+                "WHERE Tutors.School = ? AND\n" +
+                "Tutors.Number = ? AND\n" +
                 "Tutor_Time_Slot.Semester = ? AND\n(");
         for (int i = 0; i < preferredDays.length; i++) {
             if (i <= preferredDays.length - 2)
@@ -65,7 +63,7 @@ public class SQLTutorSearchQuery {
         queryBuilder.append("Tutor_Time_Slot.GTID = Student.GTID AND\n" +
                 "Recommends.GTID_Tutor = Student.GTID AND\n" +
                 "Rates.GTID_Tutor = Student.GTID AND\n" +
-                "Student.GTID IN (SELECT DISTINCT Tutor.GTID FROM Tutor)\n" +
+                "Student.GTID IN (SELECT DISTINCT Tutors.GTID_Tutor FROM Tutors)\n" +
                 "GROUP BY Student.Email\n" +
                 "ORDER BY Avg_Prof_Rating DESC;");
         final String query = queryBuilder.toString();

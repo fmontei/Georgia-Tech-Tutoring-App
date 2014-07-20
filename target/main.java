@@ -21,9 +21,15 @@ public class main {
             System.out.println("User gtid: " + user.getGTID());
             System.out.println("User type (should be professor): " + user.getType());
             SQLTutorSearchQuery tutorSearchQuery = new SQLTutorSearchQuery();
-            tutorSearchQuery.getAvailableStudentCourses("000000020");
+            tutorSearchQuery.getAvailableStudentCourses("ECE", 1000,
+                    new String[] {"Friday", "Thursday", "Monday", "Tuesday", "Wednesday"},
+                    new String[] {"3pm", "9am", "10am", "2pm", "2pm"});
+
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
+
+
 }

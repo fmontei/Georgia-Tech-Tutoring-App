@@ -1,6 +1,9 @@
 <%@ page import="model.Course" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%  List<Course> foundCourses = (List<Course>) session.getAttribute("foundCourses");
+    if (foundCourses == null) foundCourses = new ArrayList<Course>();
+%>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -10,7 +13,7 @@
   <link href="../css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <div class="container-fluid">
+  <div class="container-fluid" style="margin-bottom: 100px">
     <div class="inner">
       <div class="row">
         <h1>Tutor Search</h1>
@@ -116,7 +119,17 @@
               </tr>
             </thead>
             <tbody>
-
+              <%  for (Course result : foundCourses) { %>
+                <tr>
+                  <td><%=result.getFirstName()%></td>
+                  <td><%=result.getLastName()%></td>
+                  <td><%=result.getEmail()%></td>
+                  <td><%=result.getAvgProfRating()%></td>
+                  <td><%=result.getNumProf()%></td>
+                  <td><%=result.getAvgStudentRating()%></td>
+                  <td><%=result.getNumStudent()%></td>
+                </tr>
+              <%  } %>
             </tbody>
             <tfoot>
 
