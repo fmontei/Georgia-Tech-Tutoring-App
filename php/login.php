@@ -12,9 +12,10 @@
   $count = getProfessorByGTID($gtid, $password);
   if ($count == 0) $count = getAdministratorByGTID($gtid, $password);
   if ($count == 0) $count = getTutorByGTID($gtid, $password);
-  if ($count == 0) $count = getStudentByGTID($gtid, $password);
+  if ($count == 0) $count = getUndergradByGTID($gtid, $password);
+  if ($count == 0) $count = getGradByGTID($gtid, $password);
   if ($count == 0) createLoginErrorMsg();
-  else redirectToMenu();
+  else redirectToMenu($gtid );
 
   function getProfessorByGTID($gtid, $password) {
     $query = sprintf("SELECT GTID, Password FROM Professor AS P " .
@@ -81,13 +82,42 @@
       $rowCount = $rowCount + 1;
     }
 
-    if ($rowCount != 0) $_SESSION['userType'] = 'tutor';
+    if ($rowCount != 0) {
+      $_SESSION['userType'] = 'tutor';
+      $count = getUndergradByGTID($gtid, $password);
+      if ($count == 0) getGradByGTID($gtid, $password);
+    }
     return $rowCount;
   }
 
-  function getStudentByGTID($gtid, $password) {
-    $query = sprintf("SELECT GTID, Password FROM Student AS S " .
-                     "WHERE S.GTID = '%s' AND S.Password = '%s'",
+  function getUndergradByGTID($gtid, $password) {
+    $query = sprintf("SELECT GTID, Password\n" .
+                      "FROM Undergraduate AS U\n" .
+                      "WHERE U.GTID = '%s' AND U.Password = '%s';",
+                      mysql_real_escape_string($gtid),
+                      mysql_real_escape_string($password));
+
+    $result = mysql_query($query);
+
+    if (!$result) {
+      $message  = 'Invalid query: ' . mysql_error() . "\n";
+      $message .= 'Whole query: ' . $query;
+      die($message);
+    }
+
+    $rowCount = 0;
+    while ($row = mysql_fetch_assoc($result)) {
+      $rowCount = $rowCount + 1;
+    }
+
+    if ($rowCount != 0) $_SESSION['gradType'] = 'undergrad';
+    return $rowCount;
+  }
+
+  function getGradByGTID($gtid, $password) {
+    $query = sprintf("SELECT GTID, Password\n" .
+                     "FROM Graduate AS G\n" .
+                     "WHERE G.GTID = '%s' AND G.Password = '%s';",
                      mysql_real_escape_string($gtid),
                      mysql_real_escape_string($password));
 
@@ -104,7 +134,7 @@
       $rowCount = $rowCount + 1;
     }
 
-    if ($rowCount != 0) $_SESSION['userType'] = 'student';
+    if ($rowCount != 0) $_SESSION['gradType'] = 'grad';
     return $rowCount;
   }
 
@@ -115,8 +145,9 @@
     die();
   }
 
-  function redirectToMenu() {
+  function redirectToMenu($gtid ) {
     unset($_SESSION['loginError']);
+    $_SESSION['user_gtid'] = $gtid;
     header("Location: ../html/menu.html");
     die();
   }

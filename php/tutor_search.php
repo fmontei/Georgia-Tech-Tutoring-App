@@ -109,7 +109,7 @@
   function getAvailableTutors($schoolName, $courseNumber, $dayArray,
         $timeArray) {
       $currentSemester = "FALL";
-      $query = sprintf("SELECT Student.Name, Student.Email, " .
+      $query = sprintf("SELECT Student.Name, Student.Email, Student.GTID, " .
                        "Tutor_Time_Slot.Weekday, " .
                        "Tutor_Time_Slot.Time " .
                        "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot " .
@@ -191,6 +191,7 @@
         $email = $row["Email"];
         $day = $row["Weekday"];
         $time = $row["Time"];
+        $tutor_gtid = $row["GTID"];
 
         $pos = strrpos($name, " ");
         $firstName = substr($name, 0, $pos);
@@ -199,7 +200,8 @@
                                            "Last" => $lastName,
                                            "Email" => $email,
                                            "Day" => $day,
-                                           "Time" => $time));
+                                           "Time" => $time,
+                                           "GTID_Tutor" => $tutor_gtid));
         print(implode(", ", $row) . "<br/>");
       }
       print("</p></body></html>");

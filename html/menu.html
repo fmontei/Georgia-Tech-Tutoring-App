@@ -50,7 +50,8 @@
             <li><a href="login.html">&laquo; Back to Login</a></li>
           </ul>
         </div>
-        <?php if ($_SESSION['userType'] == 'tutor' or $_SESSION['userType'] == 'student') { ?>
+        <?php if ($_SESSION['gradType'] == 'undergrad' or
+          ($_SESSION['gradType'] == 'undergrad' and $_SESSION['userType'] == 'tutor')) { ?>
         <div class="row">
           <h3>Student Options</h3>
           <ul class="pagination">
@@ -59,7 +60,8 @@
           </ul>
         </div>
         <?php } ?>
-        <?php if ($_SESSION['userType'] == 'tutor') { ?>
+        <?php if ($_SESSION['gradType'] == 'undergrad' or $_SESSION['gradType'] == 'grad'
+          or $_SESSION['userType'] == 'tutor') { ?>
         <div class="row">
           <h3>Tutor Options</h3>
           <ul class="pagination">
