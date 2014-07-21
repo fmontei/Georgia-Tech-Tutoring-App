@@ -118,17 +118,19 @@
             </thead>
             <tbody>
               <?php
-                $tutorResults = $_SESSION["courseSearchResults"];
-                foreach ($tutorResults as $results) { ?>
-                <tr>
-                  <td><?php echo $results["First"] ?></td>
-                  <td><?php echo $results["Last"] ?></td>
-                  <td><?php echo $results["Email"] ?></td>
-                  <td><?php echo $results["ProfRating"] ?></td>
-                  <td><?php echo $results["NumProf"] ?></td>
-                  <td><?php echo $results["StudentRating"] ?></td>
-                  <td><?php echo $results["NumStudent"] ?></td>
-                </tr>
+                $courseResults = $_SESSION["courseSearchResults"];
+                if ($courseResults != null) {
+                  foreach ($courseResults as $results) { ?>
+                  <tr>
+                    <td><?php echo $results["First"] ?></td>
+                    <td><?php echo $results["Last"] ?></td>
+                    <td><?php echo $results["Email"] ?></td>
+                    <td><?php echo $results["ProfRating"] ?></td>
+                    <td><?php echo $results["NumProf"] ?></td>
+                    <td><?php echo $results["StudentRating"] ?></td>
+                    <td><?php echo $results["NumStudent"] ?></td>
+                  </tr>
+                <?php } ?>
               <?php } ?>
             </tbody>
             <tfoot>
@@ -140,13 +142,6 @@
           </h4>
         </div>
       </div><br />
-      <div class="row">
-        <div class="col-md-7">
-          <div class="alert alert-danger" style="display: inline-block">
-            Note: Only 1 row in the following table may be selected.
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="btn-group">
@@ -193,18 +188,27 @@
             <tbody>
             <?php
               $tutorResults = $_SESSION["tutorSearchResults"];
-              foreach ($tutorResults as $results) { ?>
-              <tr class="tutorResultRow">
-                <td><?php echo $results["First"] ?></td>
-                <td><?php echo $results["Last"] ?></td>
-                <td><?php echo $results["Email"] ?></td>
-                <td><?php echo $results["Day"] ?></td>
-                <td><?php echo $results["Time"] ?></td>
-                <td style="display: none"><?php echo $results["GTID_Tutor"] ?></td>
-              </tr>
+              if ($tutorResults != null) {
+                foreach ($tutorResults as $results) { ?>
+                <tr class="tutorResultRow">
+                  <td><?php echo $results["First"] ?></td>
+                  <td><?php echo $results["Last"] ?></td>
+                  <td><?php echo $results["Email"] ?></td>
+                  <td><?php echo $results["Day"] ?></td>
+                  <td><?php echo $results["Time"] ?></td>
+                  <td style="display: none"><?php echo $results["GTID_Tutor"] ?></td>
+                </tr>
+              <?php } ?>
             <?php } ?>
             </tbody>
           </table>
+          <div class="row">
+            <div class="col-md-7">
+              <div class="alert alert-danger" style="display: inline-block; margin-left: 9%">
+                Note: Only 1 row in the following table may be selected.
+              </div>
+            </div>
+          </div>
           <div class="modal-footer">
             <button type="submit" name="tutorSelectButton" class="btn btn-primary">
               OK

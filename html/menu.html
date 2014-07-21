@@ -56,7 +56,7 @@
           <h3>Student Options</h3>
           <ul class="pagination">
             <li><a href="tutor_search.html">Search/Schedule Tutor</a></li>
-            <li><a href="../jsp/student_eval.html">Rate a Tutor</a></li>
+            <li><a href="../html/student_eval.html">Rate a Tutor</a></li>
           </ul>
         </div>
         <?php } ?>
@@ -65,23 +65,23 @@
         <div class="row">
           <h3>Tutor Options</h3>
           <ul class="pagination">
-            <li><a href="../jsp/application.html">Apply</a></li>
-            <li><a href="../jsp/tutor_schedule.html">Find My Schedule</a></li>
+            <li><a href="../html/application.html">Apply</a></li>
+            <li><a href="../html/tutor_schedule.html">Find My Schedule</a></li>
           </ul>
         </div>
         <?php } else if ($_SESSION['userType'] == 'professor') { ?>
         <div class="row">
           <h3>Professor Options</h3>
           <ul class="pagination">
-            <li><a href="../jsp/professor_eval.html">Add Recommendation</a></li>
+            <li><a href="../html/professor_eval.html">Add Recommendation</a></li>
           </ul>
         </div>
         <?php } else if ($_SESSION['userType'] == 'admin') { ?>
         <div class="row">
           <h3>Administrator Options</h3>
           <ul class="pagination">
-            <li><a href="../jsp/course_list.html">Tutor Course List</a></li>
-            <li><a href="../jsp/tutor_summary.html">Tutor Summary Data</a></li>
+            <li><a href="../html/course_list.html">Tutor Course List</a></li>
+            <li><a href="../html/tutor_summary.html">Tutor Summary Data</a></li>
           </ul>
         </div>
         <?php } ?>
