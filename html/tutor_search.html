@@ -118,7 +118,10 @@
             </thead>
             <tbody>
               <?php
-                $courseResults = $_SESSION["courseSearchResults"];
+                $courseResults = null;
+                if (array_key_exists("courseSearchResults", $_SESSION)) {
+                  $courseResults = $_SESSION["courseSearchResults"];
+                }
                 if ($courseResults != null) {
                   foreach ($courseResults as $results) { ?>
                   <tr>
@@ -138,7 +141,11 @@
             </tfoot>
           </table>
           <h4 style="float: right">
-            (Number of Results: <?php echo count($_SESSION["tutorSearchResults"]) ?>)
+            <?php
+              if (array_key_exists("tutorSearchResults", $_SESSION)) {
+                echo "(Number of Results: " . count($_SESSION["tutorSearchResults"]) . ")";
+              }
+            ?>
           </h4>
         </div>
       </div><br />
@@ -187,6 +194,10 @@
             </thead>
             <tbody>
             <?php
+              $resultCount = null;
+              if (array_key_exists("tutorSearchResults", $_SESSION)) {
+                $tutorResults = $_SESSION["tutorSearchResults"];
+              }
               $tutorResults = $_SESSION["tutorSearchResults"];
               if ($tutorResults != null) {
                 foreach ($tutorResults as $results) { ?>
