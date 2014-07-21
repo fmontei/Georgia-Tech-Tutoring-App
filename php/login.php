@@ -4,7 +4,6 @@
   $gtid = htmlspecialchars($_POST["user_gtid"]);
   $password = htmlspecialchars($_POST["password"]);
 
-  // Create connection
   $database = "4400_project_db";
   $con = mysql_connect(localhost, "root", "mysql");
   @mysql_select_db($database) or die( "Unable to select database");
