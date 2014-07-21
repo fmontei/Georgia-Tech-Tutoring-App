@@ -56,7 +56,7 @@
           <h3>Student Options</h3>
           <ul class="pagination">
             <li><a href="tutor_search.html">Search/Schedule Tutor</a></li>
-            <li><a href="../php/student_eval.php">Rate a Tutor</a></li>
+            <li><a href="../php/student_eval.php?populate_table">Rate a Tutor</a></li>
           </ul>
         </div>
         <?php } ?>
@@ -66,7 +66,7 @@
           <h3>Tutor Options</h3>
           <ul class="pagination">
             <li><a href="../html/application.html">Apply</a></li>
-            <li><a href="../html/tutor_schedule.html">Find My Schedule</a></li>
+            <li><a href="../php/find_schedule.php">Find My Schedule</a></li>
           </ul>
         </div>
         <?php } else if ($_SESSION['userType'] == 'professor') { ?>

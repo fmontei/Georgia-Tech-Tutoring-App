@@ -194,11 +194,10 @@
             </thead>
             <tbody>
             <?php
-              $resultCount = null;
+              $resultCount = null, $tutorResults = null;
               if (array_key_exists("tutorSearchResults", $_SESSION)) {
                 $tutorResults = $_SESSION["tutorSearchResults"];
               }
-              $tutorResults = $_SESSION["tutorSearchResults"];
               if ($tutorResults != null) {
                 foreach ($tutorResults as $results) { ?>
                 <tr class="tutorResultRow">

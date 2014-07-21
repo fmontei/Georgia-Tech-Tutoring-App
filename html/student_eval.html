@@ -25,7 +25,7 @@
         </div>
         <div class="row">
           <div class="col-md-8">
-            <table class="table table-bordered"
+            <table class="table table-bordered" id="tutorResultTable"
                    style="min-width: 400px; max-width: 600px; overflow: auto">
               <thead>
                 <tr>
@@ -43,6 +43,7 @@
                   if ($courseRatingArray != null) {
                     foreach ($courseRatingArray as $courseResult) { ?>
                       <tr class="tutorResultRow">
+                        <td style="display: none"><?php echo $courseResult["TutorGTID"]; ?></td>
                         <td><?php echo $courseResult["TutorName"]; ?></td>
                         <td><?php echo $courseResult["School"]; ?></td>
                         <td><?php echo $courseResult["CourseNumber"]; ?></td>
@@ -53,55 +54,64 @@
             </table>
           </div>
         </div><br />
-        <div class="row">
-          <div class="col-md-5">
-            <h4>Descriptive Evaluation</h4>
+        <form id="studentEvalForm" action="../php/student_eval.php" method="get">
+          <div class="row">
+            <div class="col-md-5">
+              <h4>Descriptive Evaluation</h4>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <textarea class="form-control" rows="5" style="width: 100%; overflow: auto">
-            </textarea>
+          <div class="row">
+            <div class="col-md-12">
+              <textarea class="form-control" rows="5" style="width: 100%; overflow: auto">
+              </textarea>
+            </div>
+          </div><br />
+          <div class="row">
+            <div class="col-md-5">
+              <h4>Numeric Evaluation</h4>
+            </div>
           </div>
-        </div><br />
-        <div class="row">
-          <div class="col-md-5">
-            <h4>Numeric Evaluation</h4>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="well" style="width: 100%">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" value="">
-                  4 Highly Recommend
-                </label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" value="">
-                  3 Recommend
-                </label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" value="">
-                  2 Recommend With Reservations
-                </label>
-              </div>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" value="">
-                  1 Do Not Recommend
-                </label>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="well" style="width: 100%">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="">
+                    4 Highly Recommend
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="">
+                    3 Recommend
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="">
+                    2 Recommend With Reservations
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="">
+                    1 Do Not Recommend
+                  </label>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <input type="hidden" name="submit_review" />
+          <input type="hidden" id="tutorNameSelection" name="tutorNameSelection" />
+          <input type="hidden" id="tutorGTIDSelection" name="tutorGTIDSelection" />
+          <input type="hidden" id="tutorSchoolSelection" name="tutorSchoolSelection" />
+          <input type="hidden" id="tutorCourseSelection" name="tutorCourseSelection" />
+        </form>
         <div class="row">
-          <div class="col col-md-4">
+          <div class="col col-md-7">
             <ul class="pagination">
+              <li><a href="javascript:void(0)" id="submitFormBtn"
+                     style="margin-right: 15px">Submit Review</a></li>
               <li><a href="menu.html">&laquo; Back to Menu</a></li>
             </ul>
           </div>
@@ -118,6 +128,16 @@
           for (var i = 0; i < tutorResultRows.length; i++) {
             if (tutorResultRows[i] == this) {
               $(tutorResultRows[i]).addClass("activeRow");
+              var table = $("#tutorResultTable")[0];
+              var tutor_gtid = table.rows[i + 1].cells[0].innerHTML;
+              var name = table.rows[i + 1].cells[1].innerHTML;
+              var school = table.rows[i + 1].cells[2].innerHTML;
+              var courseNum = table.rows[i + 1].cells[3].innerHTML;
+              $("#tutorGTIDSelection").val(tutor_gtid);
+              $("#tutorNameSelection").val(name);
+              $("#tutorSchoolSelection").val(school);
+              $("#tutorCourseSelection").val(courseNum);
+              alert(tutor_gtid + ' ' + name + ' ' + school + ' ' + courseNum);
             }
             else {
               $(tutorResultRows[i]).removeClass("activeRow");
@@ -125,6 +145,11 @@
           }
         });
       }
+      var submitFormBtn = document.getElementById("submitFormBtn");
+      submitFormBtn.addEventListener("click", function () {
+        var form = document.getElementById("studentEvalForm");
+        form.submit();
+      });
     </script>
   </body>
 </html>

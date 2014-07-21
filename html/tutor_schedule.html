@@ -40,7 +40,17 @@
                   </tr>
                 </thead>
                 <tbody>
-
+                  <?php
+                    $tutor_schedule = null;
+                    if (array_key_exists("tutor_schedule", $_SESSION)) {
+                      $tutor_schedule = $_SESSION["tutor_schedule"];
+                    }
+                    if (tutor_schedule != null) {
+                      foreach ($tutor_schedule as $schedule => $entry) { ?>
+                        <tr><?php echo entry["Day"]; ?></tr>
+                        <tr><?php echo entry["Time"]; ?></tr>
+                    <?php } ?>
+                  <?php } ?>
                 </tbody>
                 <tfoot>
 
