@@ -55,8 +55,8 @@
 		$i = 0;
 		while(i < $numSemesters) {
 			if(isSemesterValid($semesterSelection[i]) {
-				$resultGTA = obtainTAEvaluations($semesterSelection[i], 1, $school, $number)
-				$row1 = mysql_fetch_assoc($resultGTA)
+				$resultGTA = obtainTAEvaluations($semesterSelection[i], 1, $school, $number);
+				$row1 = mysql_fetch_assoc($resultGTA);
 				$numGTA = $row["NUM_GTA"];
 				$avgRatingGTA = $row["AVG_Eval"];
 				if(is_null($avgRatingGTA)){
@@ -67,8 +67,8 @@
 					$AvgTA = $AvgTA + $AvgTA;
 				}
 				
-				$resultTA = obtainTAEvaluations($semesterSelection[i], 0, $school, $number)
-				$row1 = mysql_fetch_assoc($resultGTA)
+				$resultTA = obtainTAEvaluations($semesterSelection[i], 0, $school, $number);
+				$row1 = mysql_fetch_assoc($resultGTA);
 				$numTA = $row["NUM_GTA"];
 				$avgRatingTA = $row["AVG_Eval"];
 				if(is_null($avgRatingTA)){
