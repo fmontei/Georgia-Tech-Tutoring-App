@@ -2,7 +2,7 @@
   session_start();
 
   $database = "4400_project_db";
-  $con = mysql_connect(localhost, "root", "mysql");
+  $con = mysql_connect("localhost", "root", "mysql");
   @mysql_select_db($database) or die("Unable to select database");
 
   if (strpos($_SERVER["QUERY_STRING"], "populate_table") !== false) {
@@ -48,27 +48,27 @@
   }
 
   function processReview() {
+    $user_gtid = $_SESSION['user_gtid'];
     $tutor_gtid = $_GET["tutorGTIDSelection"];
     $tutor_name = $_GET["tutorNameSelection"];
     $school = $_GET["tutorSchoolSelection"];
-    $course_num = $_GET["tutorCourseSelection"];
+    $courseNum = $_GET["tutorCourseSelection"];
     $desc_eval = $_GET["desc_eval"];
-    $num_eval = $_GET["num_eval"];
-    print($tutor_gtid . " " . $tutor_name . " " . $school . " " . $courseNum . " " . $desc_eval . " " . $num_eval);
+    $num_eval = $_GET["final_num_eval_input"];
 
+    $query = sprintf("INSERT INTO Rates(GTID_Undergraduate, GTID_Tutor, School, " .
+      "Number, Num_Evaluation, Desc_Evaluation) VALUES('%s', '%s', '%s', '%s', '%s', '%s');",
+      mysql_real_escape_string($user_gtid), mysql_real_escape_string($tutor_gtid),
+      mysql_real_escape_string($school), mysql_real_escape_string($courseNum),
+      mysql_real_escape_string($num_eval), mysql_real_escape_string($desc_eval));
+    $result = mysql_query($query);
+    if (!$result) {
+      $message  = 'Invalid query: ' . mysql_error() . "\n";
+      $message .= 'Whole query: ' . $query;
+      die($message);
+    } else {
+      header("Location: ../html/menu.html");
+      die();
+    }
   }
-
-
-    $query = sprintf ("INSERT INTO Rates(GTID_Undergraduate, GTID_Tutor, " .
-                       "School, Number, Num_Evaluation, Desc_Evaluation) " .
-                       "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
-                       mysql_real_escape_string($user_gtid),
-                       mysql_real_escape_string($tutor_gtid),
-                       mysql_real_escape_string($school),
-                       mysql_real_escape_string($number),
-                       mysql_real_escape_string($time),
-                       mysql_real_escape_string($semester),
-                       mysql_real_escape_string($weekday));
-
-
 ?>

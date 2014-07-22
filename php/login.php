@@ -5,8 +5,18 @@
   $password = htmlspecialchars($_POST["password"]);
 
   $database = "4400_project_db";
-  $con = mysql_connect(localhost, "root", "mysql");
-  @mysql_select_db($database) or die( "Unable to select database");
+  $con = mysql_connect("localhost", "root", "mysql");
+  @mysql_select_db($database) or die("Unable to select database");
+
+  $name_query = sprintf("SELECT Student.Name FROM Student\n" .
+                        "WHERE Student.GTID = '%s'",
+                        mysql_real_escape_string($gtid));
+  $name_result = mysql_query($name_query);
+  $name = "";
+  while ($row = mysql_fetch_assoc($name_result)) {
+    $name = $row["Name"];
+    break;
+  }
 
   $count = getProfessorByGTID($gtid, $password);
   if ($count == 0) $count = getAdministratorByGTID($gtid, $password);
@@ -14,7 +24,7 @@
   if ($count == 0) $count = getUndergradByGTID($gtid, $password);
   if ($count == 0) $count = getGradByGTID($gtid, $password);
   if ($count == 0) createLoginErrorMsg();
-  else redirectToMenu($gtid );
+  else redirectToMenu($gtid, $name);
 
   function getProfessorByGTID($gtid, $password) {
     $query = sprintf("SELECT GTID, Password FROM Professor AS P " .
@@ -86,6 +96,7 @@
       $count = getUndergradByGTID($gtid, $password);
       if ($count == 0) getGradByGTID($gtid, $password);
     }
+
     return $rowCount;
   }
 
@@ -144,9 +155,10 @@
     die();
   }
 
-  function redirectToMenu($gtid ) {
+  function redirectToMenu($gtid, $name) {
     unset($_SESSION['loginError']);
     $_SESSION['user_gtid'] = $gtid;
+    $_SESSION['user_name'] = $name;
     header("Location: ../html/menu.html");
     die();
   }

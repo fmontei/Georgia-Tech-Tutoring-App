@@ -1,2 +1,29 @@
 INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
-('000000011', '000000004', 'ECE', 1000, '9am', 'FALL', 'Monday');
+('000000011', '000000007', 'ECE', 3000, '1pm', 'SPRING', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000012', '000000007', 'ECE', 3000, '1pm', 'SPRING', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000013', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000011', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000009', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000014', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000018', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000015', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000006', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000019', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
