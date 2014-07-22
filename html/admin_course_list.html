@@ -1,3 +1,7 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html>
   <head lang="en">
@@ -49,6 +53,21 @@
                   <td># Tutors</td>
                 </tr>
               </thead>
+              <tbody>
+                <?php
+                  $admin_course_list = array();
+                  if (array_key_exists("admin_course_list", $_SESSION)) {
+                    $admin_course_list = $_SESSION["admin_course_list"];
+                  }
+                  foreach ($admin_course_list as $row) { ?>
+                    <tr>
+                      <td><?php echo $row["Course"]; ?></td>
+                      <td><?php echo $row["Semester"]; ?></td>
+                      <td><?php echo $row["NumStudent"]; ?></td>
+                      <td><?php echo $row["NumTutor"]; ?></td>
+                    </tr>
+                  <?php } ?>
+              </tbody>
             </table>
           </div>
         </div>
