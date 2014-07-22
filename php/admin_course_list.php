@@ -12,7 +12,7 @@
                     "from Hires NATURAL JOIN Course\n" .
                     "where Hires.Semester = 'SPRING'\n" .
                     "GROUP BY Hires.School, Hires.Number)\n" .
-                    "ORDER BY School, Number;");
+                    "ORDER BY School, Number, Semester;");
 
 
   print("<html><body>");
@@ -74,14 +74,14 @@
     }
   }
 
-  // Splice total rows into the formatted result array
+  // Splice total rows into the final result array
   $finalResult = array();
   $row = array();
-  $lastRow = $formattedResult[0]["Course"];
+  $lastCourse = $formattedResult[0]["Course"];
   $i = $j = 0;
   while ($i < count($formattedResult)) {
     $row = $formattedResult[$i];
-    if ($lastRow != $row["Course"]) {
+    if ($lastCourse != $row["Course"]) {
       $prev = $formattedResult[$i - 1];
       $finalResult[$j] =  array("Course" => "",
                                 "Semester" => "Total",
@@ -89,15 +89,15 @@
                                 "NumTutor" => $num_tutor_total[$prev["Course"]]);
       $j += 1;
       $finalResult[$j] = $row;
-     } else {
-       $finalResult[$j] = $row;
-     }
+   } else {
+     $finalResult[$j] = $row;
+   }
 
-
-    $lastRow = $row["Course"];
+    $lastCourse = $row["Course"];
     $i++; $j++;
   }
-  // Splice final row total into bottom of final result array
+
+  // Splice FINAL row total into bottom of final result array
   array_push($finalResult, array("Course" => "",
                                 "Semester" => "Total",
                                 "NumStudent" => $num_student_total[$row["Course"]],
