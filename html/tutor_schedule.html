@@ -15,22 +15,23 @@
     <div class="inner">
       <div class="container-fluid">
         <h1>Look Up Tutor Schedule</h1><br />
-        <form class="form-inline" role="form">
+        <form action = "../php/find_schedule.php" method="post" class="form-inline" role="form">
           <div class="row">
             <div class="col col-md-12">
               <?php if (array_key_exists("userType", $_SESSION)) { ?>
                 <?php if ($_SESSION["userType"] == "admin") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
-                  <input class="form-control" type="text" />
-                  <input class="form-control" type="submit" value="OK" />
+                  <input name="tutor_id" class="form-control" type="text" />
+                  <input class="form-control" name="find_schedule" type="submit" value="OK" />
                 <?php } else if ($_SESSION["userType"] == "tutor") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
-                  <select>
+                  <select class="form-control" name="tutor_id">
                     <option><?php echo $_SESSION["user_gtid"]; ?></option>
                   </select>
-                  <input class="form-control" type="submit" value="OK" />
+                  <input class="form-control" name="find_schedule" type="submit" value="OK" />
                   <div class="alert alert-warning pull-right"
                        style="display: inline-block; margin-right: 30px">
+                    Press 'OK' to retrieve your schedule.<br />
                     Note: Your GTID has been already selected for you.
                   </div>
                 <?php } ?>
@@ -40,7 +41,18 @@
         </form>
         <div class="well" style="margin-top: 50px; width: 900px; min-height: 400px">
           <div align="center">
-            <h3>Tutor Schedule for Name_Goes_Here</h3>
+            <?php
+              $tutor_schedule_name = "";
+              if (array_key_exists("tutor_schedule_name", $_SESSION)) {
+                $tutor_schedule_name = $_SESSION["tutor_schedule_name"];
+              }
+              if ($tutor_schedule_name == "") { ?>
+                <h3>Tutor Schedule</h3>
+              <?php } else { ?>
+                <h3>Tutor Schedule for
+                  <b><?php echo $_SESSION["tutor_schedule_name"]; ?></b>
+                </h3>
+              <?php } ?>
           </div>
           <div class="row">
             <div class="col-md-12">
@@ -57,16 +69,23 @@
                 </thead>
                 <tbody>
                   <?php
-                    $tutor_schedule = null;
-                    if (array_key_exists("tutor_schedule", $_SESSION)) {
-                      $tutor_schedule = $_SESSION["tutor_schedule"];
-                    }
-                    if ($tutor_schedule != null) {
-                      foreach ($tutor_schedule as $schedule) { ?>
-                        <tr><?php echo $schedule["Day"]; ?></tr>
-                        <tr><?php echo $schedule["Time"]; ?></tr>
+                      $resultCount = $tutorResults = null;
+                      if (array_key_exists("tutor_schedule", $_SESSION)) {
+                        $tutorResults = $_SESSION["tutor_schedule"];
+                      }
+                      if ($tutorResults != null) {
+                        foreach ($tutorResults as $results) { ?>
+                        <tr class="tutorResultRow">
+                          <td><?php echo $results["Day"] ?></td>
+                          <td><?php echo $results["Time"] ?></td>
+                          <td><?php echo $results["First"] ?></td>
+                          <td><?php echo $results["Last"] ?></td>
+                          <td><?php echo $results["Email"] ?></td>
+                          <td><?php echo $results["Course"] ?></td>
+                          <td style="display: none"><?php echo $results["GTID_Tutor"] ?></td>
+                        </tr>
+                      <?php } ?>
                     <?php } ?>
-                  <?php } ?>
                 </tbody>
                 <tfoot>
 
@@ -77,7 +96,7 @@
           <div class="row">
             <div class="col col-md-4" style="position: absolute; bottom: 0; margin-bottom: 20px">
               <ul class="pagination">
-                <li><a href="menu.html">&laquo; Back to Menu</a></li>
+                <li><a href="../php/find_schedule.php?clear_results">&laquo; Back to Menu</a></li>
               </ul>
             </div>
           </div>

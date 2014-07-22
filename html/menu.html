@@ -50,9 +50,17 @@
             <li><a href="../php/logout.php">&laquo; Back to Login</a></li>
           </ul>
         </div>
-        <?php if ($_SESSION['gradType'] == 'undergrad' or
-          ($_SESSION['gradType'] == 'undergrad' and $_SESSION['userType'] == 'tutor')) { ?>
-          <script>alert("<?php echo $_SESSION['userType']; ?>");</script>
+        <?php
+          $gradType = $userType = "";
+          if (array_key_exists("gradType", $_SESSION)) {
+            $gradType = $_SESSION["gradType"];
+          }
+          if (array_key_exists("userType", $_SESSION)) {
+            $userType = $_SESSION["userType"];
+          }
+        ?>
+        <?php if ($gradType == 'undergrad' or
+          ($gradType == 'undergrad' and $userType == 'tutor')) { ?>
         <div class="row">
           <h3>Student Options</h3>
           <ul class="pagination">
@@ -61,26 +69,29 @@
           </ul>
         </div>
         <?php } ?>
-        <?php if ($_SESSION['gradType'] == 'undergrad' or $_SESSION['gradType'] == 'grad'
-          or $_SESSION['userType'] == 'tutor') { ?>
+        <?php if ($gradType == 'undergrad' or $gradType == 'grad' or $userType == 'tutor' or $userType == 'admin') { ?>
         <div class="row">
           <h3>Tutor Options</h3>
           <ul class="pagination">
-            <li><a href="../html/application.html">Apply</a></li>
-            <?php if (array_key_exists("userType", $_SESSION) and
-              $_SESSION['userType'] == 'tutor') { ?>
-            <li><a href="../html/tutor_schedule.html">Find My Schedule</a></li>
+            <?php if ($gradType == 'undergrad' or $gradType == 'grad' or $userType == 'tutor') { ?>
+              <li><a href="../html/application.html">Apply</a></li>
+            <?php } ?>
+            <?php if ($userType == 'tutor') { ?>
+              <li><a href="../html/tutor_schedule.html">Find My Schedule</a></li>
+            <?php } ?>
+            <?php if ($userType == 'admin') { ?>
+              <li><a href="../html/tutor_schedule.html">Find a Tutor's Schedule</a></li>
             <?php } ?>
           </ul>
         </div>
-        <?php } else if ($_SESSION['userType'] == 'professor') { ?>
+        <?php } else if ($userType == 'professor') { ?>
         <div class="row">
           <h3>Professor Options</h3>
           <ul class="pagination">
             <li><a href="../html/professor_eval.html">Add Recommendation</a></li>
           </ul>
         </div>
-        <?php } else if ($_SESSION['userType'] == 'admin') { ?>
+        <?php } else if ($userType == 'admin') { ?>
         <div class="row">
           <h3>Administrator Options</h3>
           <ul class="pagination">
