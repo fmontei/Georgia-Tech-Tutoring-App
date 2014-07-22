@@ -11,7 +11,8 @@
                     "COUNT(DISTINCT Hires.GTID_Undergraduate) As NumStudent, Count(DISTINCT Hires.GTID_Tutor) As NumTutor\n" .
                     "from Hires NATURAL JOIN Course\n" .
                     "where Hires.Semester = 'SPRING'\n" .
-                    "GROUP BY Hires.School, Hires.Number)");
+                    "GROUP BY Hires.School, Hires.Number)\n" .
+                    "ORDER BY School, Number;");
 
 
   print("<html><body>");
@@ -34,6 +35,8 @@
   $num_student_total = array();
   $num_tutor_total = array();
   while ($row = mysql_fetch_assoc($result)) {
+     print(implode(", ", $row) . "<br />");
+
     $school = $row["School"];
     $number = $row["Number"];
     $course = $school . " " . $number;
@@ -52,6 +55,8 @@
     $num_student_grand_total += $num_student;
     $num_tutor_grand_total += $num_tutor;
   }
+
+  print("<br />");
 
   function calculateStudentTotalPerCourse(&$num_student_total, $course, $num_student) {
     if (!isset($num_student_total[$course])) {
