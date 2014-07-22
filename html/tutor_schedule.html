@@ -1,3 +1,7 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -11,11 +15,11 @@
     <div class="inner">
       <div class="container-fluid">
         <h1>Look Up Tutor Schedule</h1><br />
-        <form class="form-inline" role="form">
+        <form action = "../php/find_schedule.php" method="get" class="form-inline" role="form">
           <div class="row">
             <div class="col col-md-12">
               <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
-              <input class="form-control" type="text" />
+              <input name="tutor_id" class="form-control" type="text" />
               <input class="form-control" type="submit" value="OK" />
             </div>
           </div>
@@ -40,17 +44,25 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?php
-                    $tutor_schedule = null;
-                    if (array_key_exists("tutor_schedule", $_SESSION)) {
-                      $tutor_schedule = $_SESSION["tutor_schedule"];
-                    }
-                    if (tutor_schedule != null) {
-                      foreach ($tutor_schedule as $schedule => $entry) { ?>
-                        <tr><?php echo entry["Day"]; ?></tr>
-                        <tr><?php echo entry["Time"]; ?></tr>
-                    <?php } ?>
-                  <?php } ?>
+					<?php
+              $resultCount = null;
+              if (array_key_exists("tutor_schedule", $_SESSION)) {
+                $tutorResults = $_SESSION["tutor_schedule"];
+              }
+              $tutorResults = $_SESSION["tutor_schedule"];
+              if ($tutorResults != null) {
+                foreach ($tutorResults as $results) { ?>
+                <tr class="tutorResultRow">
+                  <td><?php echo $results["Day"] ?></td>
+                  <td><?php echo $results["Time"] ?></td>
+                  <td><?php echo $results["First"] ?></td>
+                  <td><?php echo $results["Last"] ?></td>
+                  <td><?php echo $results["Email"] ?></td>
+				  <td><?php echo $results["Course"] ?></td>
+                  <td style="display: none"><?php echo $results["GTID_Tutor"] ?></td>
+                </tr>
+              <?php } ?>
+            <?php } ?>
                 </tbody>
                 <tfoot>
 
@@ -61,7 +73,7 @@
           <div class="row">
             <div class="col col-md-4" style="position: absolute; bottom: 0; margin-bottom: 20px">
               <ul class="pagination">
-                <li><a href="menu.html">&laquo; Back to Menu</a></li>
+                <li><a href="../php/find_schedule.php?clear_results">&laquo; Back to Menu</a></li>
               </ul>
             </div>
           </div>
