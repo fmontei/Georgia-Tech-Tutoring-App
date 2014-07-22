@@ -51,9 +51,24 @@
     $tutor_gtid = $_GET["tutorGTIDSelection"];
     $tutor_name = $_GET["tutorNameSelection"];
     $school = $_GET["tutorSchoolSelection"];
-    $courseNum = $_GET["tutorCourseSelection"];
+    $course_num = $_GET["tutorCourseSelection"];
+    $desc_eval = $_GET["desc_eval"];
+    $num_eval = $_GET["num_eval"];
+    print($tutor_gtid . " " . $tutor_name . " " . $school . " " . $courseNum . " " . $desc_eval . " " . $num_eval);
 
-    print($tutor_gtid . " " . $tutor_name . " " . $school . " " . $courseNum);
   }
+
+
+    $query = sprintf ("INSERT INTO Rates(GTID_Undergraduate, GTID_Tutor, " .
+                       "School, Number, Num_Evaluation, Desc_Evaluation) " .
+                       "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+                       mysql_real_escape_string($user_gtid),
+                       mysql_real_escape_string($tutor_gtid),
+                       mysql_real_escape_string($school),
+                       mysql_real_escape_string($number),
+                       mysql_real_escape_string($time),
+                       mysql_real_escape_string($semester),
+                       mysql_real_escape_string($weekday));
+
 
 ?>

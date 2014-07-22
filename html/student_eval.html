@@ -62,7 +62,8 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <textarea class="form-control" rows="5" style="width: 100%; overflow: auto">
+              <textarea name="desc_eval" class="form-control" rows="5"
+                        style="width: 100%; overflow: auto">
               </textarea>
             </div>
           </div><br />
@@ -76,25 +77,25 @@
               <div class="well" style="width: 100%">
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" value="">
+                    <input name="num_eval" type="checkbox" value="">
                     4 Highly Recommend
                   </label>
                 </div>
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" value="">
+                    <input name="num_eval" type="checkbox" value="">
                     3 Recommend
                   </label>
                 </div>
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" value="">
+                    <input name="num_eval" type="checkbox" value="">
                     2 Recommend With Reservations
                   </label>
                 </div>
                 <div class="checkbox">
                   <label>
-                    <input type="checkbox" value="">
+                    <input name="num_eval" type="checkbox" value="">
                     1 Do Not Recommend
                   </label>
                 </div>
@@ -137,7 +138,6 @@
               $("#tutorNameSelection").val(name);
               $("#tutorSchoolSelection").val(school);
               $("#tutorCourseSelection").val(courseNum);
-              alert(tutor_gtid + ' ' + name + ' ' + school + ' ' + courseNum);
             }
             else {
               $(tutorResultRows[i]).removeClass("activeRow");
