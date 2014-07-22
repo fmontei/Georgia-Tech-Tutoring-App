@@ -70,31 +70,45 @@
   }
 
   // Splice total rows into the formatted result array
-  /*$lastRow = $formattedResult[0];
-  $count = 0;
-  foreach ($formattedResult as $row) {
-    if ($lastRow != $row) {
-
-      $formattedResult[$count] =  array("Course" => "",
-                                        "Semester" => "Total",
-                                        "NumStudent" => $num_student_total[$row["Course"]],
-                                        "NumTutor" => $num_tutor_total[$row["Course"]]);
+  $finalResult = array();
+  $row = array();
+  $lastRow = $formattedResult[0]["Course"];
+  $i = $j = 0;
+  while ($i < count($formattedResult)) {
+    $row = $formattedResult[$i];
+    if ($lastRow != $row["Course"]) {
+      $prev = $formattedResult[$i - 1];
+      $finalResult[$j] =  array("Course" => "",
+                                "Semester" => "Total",
+                                "NumStudent" => $num_student_total[$prev ["Course"]],
+                                "NumTutor" => $num_tutor_total[$prev["Course"]]);
+      $j += 1;
+      $finalResult[$j] = $row;
+     } else {
+       $finalResult[$j] = $row;
      }
-    $lastRow = $row;
-    $count++;
-  }*/
 
-  // Splice grand totals into bottom of formatted result array
-  array_push($formattedResult, array("Course" => "",
+
+    $lastRow = $row["Course"];
+    $i++; $j++;
+  }
+  // Splice final row total into bottom of final result array
+  array_push($finalResult, array("Course" => "",
+                                "Semester" => "Total",
+                                "NumStudent" => $num_student_total[$row["Course"]],
+                                "NumTutor" => $num_tutor_total[$row["Course"]]));
+
+  // Splice grand total into bottom of final result array
+  array_push($finalResult, array("Course" => "",
                                      "Semester" => "Grand Total",
                                      "NumStudent" => $num_student_grand_total,
                                      "NumTutor" => $num_tutor_grand_total));
 
-  foreach ($formattedResult as $row) {
-      print(implode(", ", $row) . "<br />");
+  foreach ($finalResult as $row) {
+    print(implode(", ", $row) . "<br />");
   }
 
-  $_SESSION["admin_course_list"] = $formattedResult;
+  $_SESSION["admin_course_list"] = $finalResult;
   header("Location: ../html/admin_course_list.html");
   die();
 ?>
