@@ -84,14 +84,16 @@
             <?php } ?>
           </ul>
         </div>
-        <?php } else if ($userType == 'professor') { ?>
+        <?php } ?>
+        <?php if ($userType == 'professor') { ?>
         <div class="row">
           <h3>Professor Options</h3>
           <ul class="pagination">
             <li><a href="../html/professor_eval.html">Add Recommendation</a></li>
           </ul>
         </div>
-        <?php } else if ($userType == 'admin') { ?>
+        <?php } ?>
+        <?php if ($userType == 'admin') { ?>
         <div class="row">
           <h3>Administrator Options</h3>
           <ul class="pagination">
