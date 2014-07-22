@@ -62,7 +62,17 @@
                   foreach ($admin_course_list as $row) { ?>
                     <tr>
                       <td><?php echo $row["Course"]; ?></td>
-                      <td><?php echo $row["Semester"]; ?></td>
+                      <?php if ($row["Semester"] === "Total") { ?>
+                        <td style="background-color: cornflowerblue; color: white">
+                          <?php echo $row["Semester"]; ?>
+                        </td>
+                      <?php } else if ($row["Semester"] === "Grand Total") { ?>
+                        <td style="background-color: cadetblue; color: white">
+                          <?php echo $row["Semester"]; ?>
+                        </td>
+                      <?php } else { ?>
+                        <td><?php echo $row["Semester"]; ?></td>
+                      <?php } ?>
                       <td><?php echo $row["NumStudent"]; ?></td>
                       <td><?php echo $row["NumTutor"]; ?></td>
                     </tr>
