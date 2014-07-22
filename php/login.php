@@ -86,6 +86,7 @@
       $count = getUndergradByGTID($gtid, $password);
       if ($count == 0) getGradByGTID($gtid, $password);
     }
+
     return $rowCount;
   }
 

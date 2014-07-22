@@ -1,3 +1,7 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -14,18 +18,30 @@
         <form class="form-inline" role="form">
           <div class="row">
             <div class="col col-md-12">
-              <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
-              <input class="form-control" type="text" />
-              <input class="form-control" type="submit" value="OK" />
+              <?php if (array_key_exists("userType", $_SESSION)) { ?>
+                <?php if ($_SESSION["userType"] == "admin") { ?>
+                  <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
+                  <input class="form-control" type="text" />
+                  <input class="form-control" type="submit" value="OK" />
+                <?php } else if ($_SESSION["userType"] == "tutor") { ?>
+                  <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
+                  <select>
+                    <option><?php echo $_SESSION["user_gtid"]; ?></option>
+                  </select>
+                  <input class="form-control" type="submit" value="OK" />
+                  <div class="alert alert-warning pull-right"
+                       style="display: inline-block; margin-right: 30px">
+                    Note: Your GTID has been already selected for you.
+                  </div>
+                <?php } ?>
+              <?php } ?>
             </div>
           </div>
         </form>
         <div class="well" style="margin-top: 50px; width: 900px; min-height: 400px">
-          <div class="row" style="position: absolute; left: 50%">
-            <div style="position:relative; left: -50%">
-              <h3>Tutor Schedule for Name_Goes_Here</h3>
-            </div>
-          </div><br /><br />
+          <div align="center">
+            <h3>Tutor Schedule for Name_Goes_Here</h3>
+          </div>
           <div class="row">
             <div class="col-md-12">
               <table class="table table-bordered" style="margin-top: 30px; overflow: auto">
@@ -45,10 +61,10 @@
                     if (array_key_exists("tutor_schedule", $_SESSION)) {
                       $tutor_schedule = $_SESSION["tutor_schedule"];
                     }
-                    if (tutor_schedule != null) {
-                      foreach ($tutor_schedule as $schedule => $entry) { ?>
-                        <tr><?php echo entry["Day"]; ?></tr>
-                        <tr><?php echo entry["Time"]; ?></tr>
+                    if ($tutor_schedule != null) {
+                      foreach ($tutor_schedule as $schedule) { ?>
+                        <tr><?php echo $schedule["Day"]; ?></tr>
+                        <tr><?php echo $schedule["Time"]; ?></tr>
                     <?php } ?>
                   <?php } ?>
                 </tbody>
