@@ -47,6 +47,10 @@
 		$number = $row["Number"];
 		$course = $school . " " . $number;
 		$temp = $course;
+		$AvgTA = 0;
+		$AvgNoNTA = 0;
+		$countTA = 0;
+		$countNonTA = 0;
 		
 		$i = 0;
 		while(i < $numSemesters) {
@@ -58,6 +62,10 @@
 				if(is_null($avgRatingGTA)){
 					$avgRatingGTA = "N/A";
 				}
+				else{
+					$countTA++;
+					$AvgTA = $AvgTA + $AvgTA;
+				}
 				
 				$resultTA = obtainTAEvaluations($semesterSelection[i], 0, $school, $number)
 				$row1 = mysql_fetch_assoc($resultGTA)
@@ -65,7 +73,11 @@
 				$avgRatingTA = $row["AVG_Eval"];
 				if(is_null($avgRatingTA)){
 					$avgRatingGTA = "N/A";
-				}			
+				}	
+				else{
+					$countNonTA++;
+					$AvgNoNTA = $AvgNoNTA + $AvgNoNTA;
+				}				
 				
 				array_push($formattedResult, array( "Course" => $temp,
 													"Semester" => $semesterSelection[i],
@@ -76,9 +88,22 @@
 				if($temp === $course) {
 					$temp = " ";
 				}
+				
 			}
 			$i++;
 		}
+		if($AvgTA > 0){
+			$AvgTA = $AvgTA / $countTA;
+		}
+		if($AvgNoNTA > 0){
+			$AvgNoNTA = $AvgNoNTA / $countNonTA;
+		}
+		array_push($formattedResult, array( "Course" => " ",
+													"Semester" => "Avg",
+													"TA" => " ",
+													"Avg Rating" => $AvgTA,
+													"non TA" => " ",
+													"Avg Rating" => $AvgNoNTA));
 	}
 	
 	//Check if there are courses return for semester
