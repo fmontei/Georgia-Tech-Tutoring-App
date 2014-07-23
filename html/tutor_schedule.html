@@ -17,7 +17,7 @@
         <h1>Look Up Tutor Schedule</h1><br />
         <form action = "../php/find_schedule.php" method="post" class="form-inline" role="form">
           <div class="row">
-            <div class="col col-md-12" style="min-width: 930px">
+            <div class="col col-md-12" style="width: 930px">
               <?php if (array_key_exists("userType", $_SESSION)) { ?>
                 <?php if ($_SESSION["userType"] == "admin") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
@@ -92,17 +92,18 @@
                 </tfoot>
               </table>
             </div>
-          </div><br /><br />
-          <div class="row">
-            <div class="col col-md-4" style="position: absolute; bottom: 0; margin-bottom: 20px">
-              <ul class="pagination">
-                <li><a href="../php/find_schedule.php?clear_results">&laquo; Back to Menu</a></li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col col-md-4" style="margin-top: 10px; margin-left: 15px">
+          <ul class="pagination">
+            <li><a href="../php/find_schedule.php?clear_results">&laquo; Back to Menu</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
+
 
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="../js/bootstrap.min.js"></script>

@@ -16,20 +16,26 @@
               <span style="margin-right: 20px"><b>Academic Year 2014</b></span>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" value="">
+                  <input name="fall_checkbox" id="fall_checkbox" type="checkbox" value="FALL">
                   Fall&nbsp;&nbsp;
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" value="">
+                  <input name="spring_checkbox" id="spring_checkbox" type="checkbox" value="SPRING">
                   Spring&nbsp;&nbsp;
                 </label>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" value="">
+                  <input name="summer_checkbox" id="summer_checkbox" type="checkbox" value="SUMMER">
                   Summer&nbsp;&nbsp;
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input id="all_checkbox" type="checkbox" value="SUMMER">
+                  All Semesters&nbsp;&nbsp;
                 </label>
               </div>
               <input style="margin-left: 20px" class="form-control" type="submit" value="OK" />
@@ -64,5 +70,33 @@
 
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+      function verifyForm() {
+        var fall_checkbox_val = document.getElementById("fall_checkbox").checked,
+                spring_checkbox_val = document.getElementById("spring_checkbox").checked,
+                summer_checkbox_val = document.getElementById("summer_checkbox").checked;
+        if (!fall_checkbox_val && !spring_checkbox_val && !summer_checkbox_val) {
+          alert("Please select at least one semester before clicking 'OK'.");
+          return false;
+        } else {
+          return true;
+        }
+      }
+      var all_checkbox = document.getElementById("all_checkbox");
+      all_checkbox.addEventListener("change", function() {
+        var checked = this.checked;
+        var fall_checkbox = document.getElementById("fall_checkbox"),
+                spring_checkbox = document.getElementById("spring_checkbox"),
+                summer_checkbox = document.getElementById("summer_checkbox");
+        if (checked) {
+          fall_checkbox.checked = spring_checkbox.checked =
+                  summer_checkbox.checked = true;
+        } else {
+          fall_checkbox.checked = spring_checkbox.checked =
+                  summer_checkbox.checked = false;
+        }
+      });
+    </script>
   </body>
 </html>
