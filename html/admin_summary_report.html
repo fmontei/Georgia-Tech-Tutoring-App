@@ -1,3 +1,7 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html>
   <head lang="en">
@@ -11,7 +15,8 @@
       <div class="container-fluid">
         <h1 style="margin-bottom: 50px">Tutor Summary for Academic Year 2014</h1>
         <div class="row">
-          <form class="form-inline" role="form">
+          <form class="form-inline" role="form" id="report_form"
+                action="../php/admin_generate_report_2.php" method="get">
             <div class="col-md-12" style="font-size: 16px">
               <span style="margin-right: 20px"><b>Academic Year 2014</b></span>
               <div class="checkbox">
@@ -46,15 +51,32 @@
           <div class="well col col-md-12" style="margin-top: 50px; margin-left: 20px; width: 120%;">
             <table class="table table-bordered" style="overflow: auto; width: 100%">
               <thead>
-              <tr>
-                <td>Course</td>
-                <td>Semester</td>
-                <td>TA</td>
-                <td>Avg Rating</td>
-                <td>Non-TA</td>
-                <td>Avg Rating</td>
-              </tr>
+                <tr>
+                  <td>Course</td>
+                  <td>Semester</td>
+                  <td>TA</td>
+                  <td>Avg Rating</td>
+                  <td>Non-TA</td>
+                  <td>Avg Rating</td>
+                </tr>
               </thead>
+              <tbody>
+                <?php
+                  $course_list = array();
+                  if (array_key_exists("result_summary_2_results", $_SESSION)) {
+                    $course_list = $_SESSION["result_summary_2_results"];
+                  }
+                  foreach ($course_list as $course) { ?>
+                    <tr>
+                      <td><?php echo $course["Course"]; ?></td>
+                      <td><?php echo $course["Semester"]; ?></td>
+                      <td><?php echo $course["TA"]; ?></td>
+                      <td><?php echo $course["AVG Rating"]; ?></td>
+                      <td><?php echo $course["non TA"]; ?></td>
+                      <td><?php echo $course["AVG Rating2"]; ?></td>
+                    </tr>
+                  <?php } ?>
+              </tbody>
             </table>
           </div>
         </div>
@@ -80,7 +102,8 @@
           alert("Please select at least one semester before clicking 'OK'.");
           return false;
         } else {
-          return true;
+          var form = document.getElementById("report_form");
+          form.submit();
         }
       }
       var all_checkbox = document.getElementById("all_checkbox");

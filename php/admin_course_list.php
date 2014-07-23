@@ -127,9 +127,9 @@
 
   // Splice grand total into bottom of final result array
   array_push($finalResult, array("Course" => "",
-                                     "Semester" => "Grand Total",
-                                     "NumStudent" => $num_student_grand_total,
-                                     "NumTutor" => $num_tutor_grand_total));
+                                 "Semester" => "Grand Total",
+                                 "NumStudent" => $num_student_grand_total,
+                                 "NumTutor" => $num_tutor_grand_total));
 
   foreach ($finalResult as $row) {
     print(implode(", ", $row) . "<br />");
