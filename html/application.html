@@ -45,7 +45,8 @@
         if (array_key_exists("tutor_app_info", $_SESSION)) {
           $tutor_app_info = $_SESSION["tutor_app_info"]; ?>
       <?php } ?>
-      <form class="form-inline" role="form">
+      <form class="form-inline" id="tutor_app_form" role="form"
+            action="../php/tutor_application.php?send_app" method="post">
         <div class="well col col-md-12" id="personalInfoWell" style="border: 1px rgb(204, 204, 204) solid">
           <div class="form-group" style="width: 100%; display: inline-block">
             <div class="row" >
@@ -56,7 +57,8 @@
                 <div class="col-md-3" style="width: 200px; margin-left: -20px">
                   <?php $gtid = isset($tutor_app_info["GTID"]) ? $tutor_app_info["GTID"] : ""; ?>
                   <input type="text" class="form-control" placeholder="Georgia Tech ID"
-                         value="<?php echo $gtid; ?>" />
+                         value="<?php echo $gtid; ?>"
+                         pattern="[0-9]{9,9}" maxlength="9" />
                 </div>
               </div>
             </div>
@@ -117,7 +119,7 @@
                 </div>
                 <div class="col-md-3" style="width: 200px">
                   <?php $gpa = isset($tutor_app_info["GPA"]) ? $tutor_app_info["GPA"] : ""; ?>
-                  <input type="number" min="0" max="4"
+                  <input type="number" min="0" max="4" step="0.1"
                          class="form-control" placeholder="GPA"
                          value="<?php echo $gpa; ?>" />
                 </div>
@@ -126,8 +128,8 @@
                 <div class="col-md-2" style="width: 200px; margin-right: 10px">
                   <div class="checkbox">
                     <label>
-                      <?php $gta = isset($tutor_app_info["GTA"]) ? $tutor_app_info["GTA"] : "";
-                      if ($gta === "Undergraduate") { ?>
+                      <?php $grad_status = isset($tutor_app_info["GradType"]) ? $tutor_app_info["GradType"] : "";
+                      if ($grad_status === "undergrad") { ?>
                         <input type="checkbox" checked>
                         Undergraduate
                       <?php } else { ?>
@@ -146,8 +148,8 @@
                 <div class="col-md-2" style="width: 200px;">
                   <div class="checkbox">
                     <label>
-                      <?php $gta = isset($tutor_app_info["GTA"]) ? $tutor_app_info["GTA"] : "";
-                      if ($gta === "Graduate") { ?>
+                      <?php $grad_status = isset($tutor_app_info["GradType"]) ? $tutor_app_info["GradType"] : "";
+                      if ($grad_status === "grad") { ?>
                         <input type="checkbox" checked>
                         Graduate
                       <?php } else { ?>
@@ -163,7 +165,7 @@
         </div>
 
         <div class="well col col-md-12" id="courseWell" style="border: 1px rgb(204, 204, 204) solid; display: none">
-          <table class="table table-bordered" style="overflow: auto">
+          <table class="table table-bordered" id="tutor_app_table" style="overflow: auto">
             <thead>
               <tr>
                 <td>School</td>
@@ -172,15 +174,31 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Test</td>
-                <td>Test</td>
-                <td>
-                  <div class="checkbox">
-                    <input type="checkbox" value="">
-                  </div>
-                </td>
-              </tr>
+              <?php
+                $tutor_course_info = array();
+                $id_count = 0;
+                if (array_key_exists("tutor_course_info", $_SESSION)) {
+                  $tutor_course_info = $_SESSION["tutor_course_info"];
+                }
+                foreach ($tutor_course_info as $course) { ?>
+                  <tr class="tutor_app_table_row">
+                    <td><?php echo $course["School"]; ?></td>
+                    <td><?php echo $course["Number"]; ?></td>
+                    <td>
+                      <div class="checkbox">
+                        <?php if ($course["GTA"] !== "0") { ?>
+                          <input type="checkbox" checked>
+                        <?php } else { ?>
+                          <input type="checkbox">
+                        <?php } ?>
+                      </div>
+                    </td>
+                  </tr>
+                  <input type="hidden"
+                         name="tutor_course_input"
+                         id="tutor_course_input_<?php echo $id_count; ?>" />
+                  <?php $id_count++; ?>
+                <?php } ?>
             </tbody>
           </table>
         </div>
@@ -194,48 +212,54 @@
               <legend style="font-size: 16px; text-decoration: underline"><?php echo $day; ?></legend>
               <label>
                 <div class="checkbox">
-                  <input type="checkbox" value="">
+                  <input class="day_time" type="checkbox" value="">
                   9am
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input type="checkbox" value="">
+                  <input class="day_time" type="checkbox" value="">
                   10am
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input type="checkbox" value="">
+                  <input class="day_time" type="checkbox" value="">
                   11am
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input type="checkbox" value="">
+                  <input class="day_time" type="checkbox" value="">
                   12pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input type="checkbox" value="">
+                  <input class="day_time" type="checkbox" value="">
                   1pm
                 </div>
               </label>
             </div>
           <?php } ?>
         </div>
-        <div class="row">
-          <div class="col-md-4">
-            <button type="submit" class="btn btn-default">
-              OK
-            </button>
-            <button class="btn btn-default">
-              <a href="../php/tutor_application.php?clear_form">Cancel</a>
-            </button>
+      </form>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-inline" role="form">
+            <div class="form-group">
+              <button type="submit" class="btn btn-default" onclick="verify_form_inputs()">
+                OK
+              </button>
+            </div>
+            <div class="form-group">
+              <form action="../php/tutor_application.php" method="get">
+                <input name="clear_form" class="btn btn-danger" type="submit" value="Cancel" />
+              </form>
+            </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -276,5 +300,54 @@
       $(courseTab).removeClass("active");
       $(timeTab).addClass("active");
     });
+
+    function verify_form_inputs() {
+      var day_time_inputs = document.getElementsByClassName("day_time");
+      var is_checked = false;
+      for (var i = 0; i < day_time_inputs.length; i++) {
+        if (day_time_inputs[i].checked) {
+          is_checked = true;
+          break;
+        }
+      }
+      if (!is_checked) {
+        alert("You must indicate your availability by checking one time slot " +
+                "in the Available Days/Times tab.");
+        return;
+      }
+      is_checked = false;
+      var tutorResultRows = document.getElementsByClassName("tutor_app_table_row");
+      for (var i = 0; i < tutorResultRows.length; i++) {
+        if ($(tutorResultRows[i]).hasClass("activeRow")) {
+          is_checked = true;
+          break;
+        }
+      }
+      if (is_checked) {
+        document.getElementById("tutor_app_form").submit();
+      } else {
+        alert("You must select at least one course from the table before" +
+                " submitting your application.");
+      }
+    }
+
+    var tutorResultRows = document.getElementsByClassName("tutor_app_table_row");
+    for (var i = 0; i < tutorResultRows.length; i++) {
+      tutorResultRows[i].addEventListener("click", function () {
+        for (var i = 0; i < tutorResultRows.length; i++) {
+          if (tutorResultRows[i] == this) {
+            if (!$(tutorResultRows[i]).hasClass("activeRow")) {
+              $(tutorResultRows[i]).addClass("activeRow");
+              var hidden_input = $("#tutor_course_input" + i);
+              hidden_input.value = i;
+            } else {
+              $(tutorResultRows[i]).removeClass("activeRow");
+              var hidden_input = $("#tutor_course_input" + i);
+              hidden_input.value = "";
+            }
+          }
+        }
+      });
+    }
   </script>
 </body>
