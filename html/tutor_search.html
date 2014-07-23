@@ -14,6 +14,16 @@
   <div class="container-fluid" style="margin-bottom: 100px">
     <div class="inner">
       <div class="row">
+        <?php
+          $error = "";
+          if (array_key_exists("redundant_time_error", $_SESSION)) {
+            $error = $_SESSION["redundant_time_error"];
+          }
+          if ($error !== "") { ?>
+          <div class="alert alert-danger" style="display: inline-block">
+            <?php echo $error; ?>
+          </div>
+          <?php } ?>
         <h1>Tutor Search</h1>
         <ul class="pagination">
           <li><a href="menu.html">&laquo; Back to Main Menu</a></li>
@@ -49,7 +59,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="alert alert-danger" style="display: inline-block; margin-left: 15px">
+          <div class="alert alert-info" style="display: inline-block; margin-left: 15px">
             Availability. Note -- tutor sessions can only be scheduled
             for 1 hour per week for a given course.
           </div>
@@ -102,10 +112,11 @@
       </form>
       <br />
       <div class="row">
-        <div class="col-md-12">
-          <h4 style="margin-left: 40%; font-weight: bold">Available Tutors</h4>
+        <div class="col-md-12" style="min-width: 900px">
+          <hr />
+          <h2 align="center">Available Tutors</h2>
           <table class="table table-bordered">
-            <thead>
+            <thead class="alert alert-success">
               <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -142,7 +153,7 @@
           </table>
         </div>
       </div>
-      <div class="row">
+      <div class="row" style="width: 900px">
         <div class="col-md-6">
           <div class="btn-group">
             <div class="btn btn-default" data-toggle="modal" data-target="#tutorModal" role="button">
@@ -154,16 +165,16 @@
           </div>
         </div>
         <div class="col col-md-6">
-          <div class="alert alert-info" style="display: inline-block">
-            <p>
-              <?php
-                if (array_key_exists("tutorSearchResults", $_SESSION)) {
-                  echo "(Number of Results: " . count($_SESSION["tutorSearchResults"]) . ")";
-                }
-              ?><br />
-              Note: Click on 'Schedule a Tutor' to see all the available time slots.
-            </p>
-          </div>
+          <?php
+            if (array_key_exists("tutorSearchResults", $_SESSION)) { ?>
+              <div class="alert alert-info" style="display: inline-block">
+                <p>
+                  <?php echo "(Number of Results: " . count($_SESSION["tutorSearchResults"]) . ")"; ?>
+                  <br />
+                  Note: Click on 'Schedule a Tutor' to see all the available time slots.
+                </p>
+              </div>
+            <?php } ?>
         </div>
       </div>
     </div>
@@ -188,14 +199,14 @@
                                   ' tutor schedule?')) { return false; }">
           <table class="table table-bordered" id="tutorResultTable"
                  style="width: 90%; overflow: auto; margin-left: 5%; margin-top: 2%">
-            <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email</th>
-              <th>Day</th>
-              <th>Time</th>
-            </tr>
+            <thead class="alert alert-success">
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Day</th>
+                <th>Time</th>
+              </tr>
             </thead>
             <tbody>
             <?php
@@ -219,8 +230,8 @@
           </table>
           <div class="row">
             <div class="col-md-7">
-              <div class="alert alert-danger" style="display: inline-block; margin-left: 9%">
-                Note: Only 1 row in the following table may be selected.
+              <div class="alert alert-warning" style="display: inline-block; margin-left: 9%">
+                Note: Only 1 row in the above table may be selected.
               </div>
             </div>
           </div>

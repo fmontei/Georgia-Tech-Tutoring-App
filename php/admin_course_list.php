@@ -67,7 +67,7 @@
     $num_tutor = $row["NumTutor"];
 
     $formattedRow = array("Course" => $course,
-                         "Semester" => $semester,
+                         "Semester" => strtoupper($semester),
                          "NumStudent" => $num_student,
                          "NumTutor" => $num_tutor);
     array_push($formattedResult, $formattedRow);
