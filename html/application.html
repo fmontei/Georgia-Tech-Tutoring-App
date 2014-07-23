@@ -1,3 +1,7 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -11,12 +15,26 @@
     <div class="container-fluid" style="width: 800px">
       <h1>Georgia Tech Tutor Application</h1>
 
-      <ul class="nav nav-tabs" role="tablist" style="margin-top: 50px">
+      <div class="alert alert-warning" style="margin-top: 20px; display: inline-block">
+        To auto-populate the fields below, click on 'Populate':<br/><br />
+        <div class="btn btn-warning">
+          <a href="../php/tutor_application.php?populate_form" style="color: white">
+            Populate
+          </a>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs" role="tablist" style="margin-top: 20px">
         <li class="active" id="personalInfoTab"><a href="#">Personal Information</a></li>
         <li id="courseTab"><a href="#">Courses for Tutoring</a></li>
         <li id="timeTab"><a href="#">Available Days/Times</a></li>
       </ul>
 
+      <?php
+        $tutor_app_info = array();
+        if (array_key_exists("tutor_app_info", $_SESSION)) {
+          $tutor_app_info = $_SESSION["tutor_app_info"]; ?>
+      <?php } ?>
       <form class="form-inline" role="form">
         <div class="well col col-md-12" id="personalInfoWell" style="border: 1px rgb(204, 204, 204) solid">
           <div class="form-group" style="width: 100%; display: inline-block">
@@ -26,7 +44,9 @@
                   <span style="font-size: 16px">Georgia Tech ID</span>
                 </div>
                 <div class="col-md-3" style="width: 200px; margin-left: -20px">
-                  <input type="text" class="form-control" placeholder="Georgia Tech ID" />
+                  <?php $gtid = isset($tutor_app_info["GTID"]) ? $tutor_app_info["GTID"] : ""; ?>
+                  <input type="text" class="form-control" placeholder="Georgia Tech ID"
+                         value="<?php echo $gtid; ?>" />
                 </div>
               </div>
             </div>
@@ -38,7 +58,9 @@
                   <span style="font-size: 16px">First Name</span>
                 </div>
                 <div class="col-md-3" style="width: 200px">
-                  <input type="text" class="form-control" placeholder="First Name" />
+                  <?php $first_name = isset($tutor_app_info["FirstName"]) ? $tutor_app_info["FirstName"] : ""; ?>
+                  <input type="text" class="form-control" placeholder="First Name"
+                         value="<?php echo $first_name; ?>" />
                 </div>
               </div>
               <div style="float: right">
@@ -46,7 +68,9 @@
                   <span style="font-size: 16px">Last Name</span>
                 </div>
                 <div class="col-md-3" style="width: 200px; margin-right: 10px">
-                  <input type="text" class="form-control" placeholder="Last Name" />
+                  <?php $last_name = isset($tutor_app_info["LastName"]) ? $tutor_app_info["LastName"] : ""; ?>
+                  <input type="text" class="form-control" placeholder="Last Name"
+                         value="<?php echo $last_name; ?>" />
                 </div>
               </div>
             </div>
@@ -58,7 +82,9 @@
                   <span style="font-size: 16px">Email</span>
                 </div>
                 <div class="col-md-3" style="width: 200px">
-                  <input type="text" class="form-control" placeholder="Email" />
+                  <?php $email = isset($tutor_app_info["Email"]) ? $tutor_app_info["Email"] : ""; ?>
+                  <input type="text" class="form-control" placeholder="Email"
+                         value="<?php echo $email; ?>" />
                 </div>
               </div>
               <div style="float: right">
@@ -66,7 +92,9 @@
                   <span style="font-size: 16px">Telephone</span>
                 </div>
                 <div class="col-md-3" style="width: 200px; margin-right: 10px">
-                  <input type="text" class="form-control" placeholder="Telephone" />
+                  <?php $phone = isset($tutor_app_info["Phone"]) ? $tutor_app_info["Phone"] : ""; ?>
+                  <input type="text" class="form-control" placeholder="Telephone"
+                         value="<?php echo $phone; ?>" />
                 </div>
               </div>
             </div>
@@ -78,8 +106,10 @@
                   <span style="font-size: 16px">GPA</span>
                 </div>
                 <div class="col-md-3" style="width: 200px">
+                  <?php $gpa = isset($tutor_app_info["GPA"]) ? $tutor_app_info["GPA"] : ""; ?>
                   <input type="number" min="0" max="4"
-                         class="form-control" placeholder="GPA" />
+                         class="form-control" placeholder="GPA"
+                         value="<?php echo $gpa; ?>" />
                 </div>
               </div>
               <div style="float: right;">
@@ -179,7 +209,7 @@
               OK
             </button>
             <button class="btn btn-default">
-              <a href="menu.html">Cancel</a>
+              <a href="../php/tutor_application.php?clear_form">Cancel</a>
             </button>
           </div>
         </div>
