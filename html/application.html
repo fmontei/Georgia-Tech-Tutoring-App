@@ -19,11 +19,9 @@
         <div class="col col-md-6">
           <div class="alert alert-warning" style="margin-top: 20px; display: inline-block">
             To auto-populate the fields below, click on 'Populate':<br/><br />
-            <div class="btn btn-warning">
-              <a href="../php/tutor_application.php?populate_form" style="color: white">
-                Populate
-              </a>
-            </div>
+            <form action="../php/tutor_application.php" method="get">
+              <input class="btn btn-warning" name="populate_form" type="submit" value="Populate" />
+            </form>
           </div>
         </div>
         <div class="col col-md-6" style="margin-top: 20px">
@@ -311,7 +309,7 @@
         }
       }
       if (!is_checked) {
-        alert("You must indicate your availability by checking one time slot " +
+        alert("You must indicate your availability by checking at least one time slot " +
                 "in the Available Days/Times tab.");
         return;
       }
