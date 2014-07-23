@@ -1,0 +1,170 @@
+# insert data into tables
+
+INSERT INTO Student (GTID, Password, Email, Name) VALUES
+('000000000', '000000000', 'ssans@gmail.com', 'September Sans'),
+('000000001', '000000001', 'jsauer@gmail.com', 'Jerome Sauer'),
+('000000002', '000000002', 'emachin@gmail.com', 'Elodia Machin'),
+('000000003', '000000003', 'smazzota@gmail.com', 'Spring Mazzota'),
+('000000004', '000000004', 'emcmaster@gmail.com', 'Elanor Mcmaster'),
+('000000005', '000000005', 'dvigna@gmail.com', 'Darcy Vigna'),
+('000000006', '000000006', 'csylvester@gmail.com', 'Cathi Sylvester'),
+('000000007', '000000007', 'tfiller@gmail.com', 'Temple Filler'),
+('000000008', '000000008', 'jcolosimo@gmail.com', 'Jen Colosimo'),
+('000000009', '000000009', 'twoodall@gmail.com', 'Tama Woodall'),
+('000000010', '000000010', 'tcammarata@gmail.com', 'Terra Cammarata'),
+('000000011', '000000011', 'nmcneeley@gmail.com', 'Naoma Mcneeley'),
+('000000012', '000000012', 'kduryea@gmail.com', 'Kandis Duryea'),
+('000000013', '000000013', 'rmariott@gmail.com', 'Renaldo Mariott'),
+('000000014', '000000014', 'cbeirne@gmail.com', 'Caryn Beirne'),
+('000000015', '000000015', 'sstack@gmail.com', 'Shan Stack'),
+('000000016', '000000016', 'hbolen@gmail.com', 'Hiedi Bolen'),
+('000000017', '000000017', 'mleavell@gmail.com', 'Malvina Leavell'),
+('000000018', '000000018', 'ldacosta@gmail.com', 'Lincoln Dacosta'),
+('000000019', '000000019', 'cvasconcellos@gmail.com', 'Carly Vasconcellos');
+
+INSERT INTO Administrator (GTID, Password) VALUES
+('000000020', '000000020');
+
+INSERT INTO Professor (GTID, Password) VALUES
+('000000021', '000000021'),
+('000000022', '000000022'),
+('000000023', '000000023'),
+('000000024', '000000024');
+
+INSERT INTO Undergraduate (GTID, Password) VALUES
+('000000000', '000000000'),
+('000000006', '000000006'),
+('000000007', '000000007'),
+('000000008', '000000008'),
+('000000009', '000000009'),
+('000000010', '000000010'),
+('000000011', '000000011'),
+('000000012', '000000012'),
+('000000013', '000000013'),
+('000000014', '000000014'),
+('000000015', '000000015'),
+('000000016', '000000016'),
+('000000017', '000000017'),
+('000000018', '000000018'),
+('000000019', '000000019');
+
+INSERT INTO Graduate (GTID, Password) VALUES
+('000000001', '000000001'),
+('000000002', '000000002'),
+('000000003', '000000003'),
+('000000004', '000000004'),
+('000000005', '000000005');
+
+INSERT INTO Course (School, Number) VALUES
+('ECE', 1000),
+('ECE', 2000),
+('ECE', 3000),
+('ECE', 4000),
+('ECE', 5000);
+
+INSERT INTO Tutor (GTID, Password, Phone, GPA) VALUES
+('000000004', '000000004', '4045555555', 3.5),
+('000000005', '000000005', '4046666666', 3.6),
+('000000007', '000000007', '4047777777', 3.7),
+('000000008', '000000008', '4048888888', 3.8),
+('000000009', '000000009', '4049999999', 3.9),
+('000000010', '000000010', '4041010101', 3.1);
+
+INSERT INTO Tutors (GTID_tutor, School, Number, GTA) VALUES
+('000000004', 'ECE', 1000, TRUE),
+('000000005', 'ECE', 2000, TRUE),
+('000000007', 'ECE', 3000, FALSE),
+('000000008', 'ECE', 4000, FALSE),
+('000000009', 'ECE', 5000, FALSE),
+('000000010', 'ECE', 5000, FALSE);
+
+INSERT INTO Tutor_Time_Slot (GTID, Time, Semester, Weekday) VALUES
+('000000004', '9am', 'FALL', 'Monday'),
+('000000004', '10am', 'FALL', 'Monday'),
+('000000004', '11am', 'FALL', 'Monday'),
+('000000005', '1pm', 'FALL', 'Tuesday'),
+('000000005', '2pm', 'FALL', 'Tuesday'),
+('000000005', '3pm', 'FALL', 'Tuesday'),
+('000000007', '1pm', 'FALL', 'Tuesday'),
+('000000007', '2pm', 'FALL', 'Tuesday'),
+('000000007', '3pm', 'FALL', 'Tuesday'),
+('000000008', '2pm', 'FALL', 'Wednesday'),
+('000000008', '3pm', 'FALL', 'Wednesday'),
+('000000008', '4pm', 'FALL', 'Wednesday'),
+('000000009', '9am', 'FALL', 'Thursday'),
+('000000009', '10am', 'FALL', 'Thursday'),
+('000000009', '11am', 'FALL', 'Thursday'),
+('000000010', '1pm', 'FALL', 'Friday'),
+('000000010', '2pm', 'FALL', 'Friday'),
+('000000010', '3pm', 'FALL', 'Friday'),
+('000000004', '9am', 'SPRING', 'Monday'),
+('000000004', '10am', 'SPRING', 'Monday'),
+('000000004', '11am', 'SPRING', 'Monday'),
+('000000005', '1pm', 'SPRING', 'Tuesday'),
+('000000005', '2pm', 'SPRING', 'Tuesday'),
+('000000005', '3pm', 'SPRING', 'Tuesday'),
+('000000007', '1pm', 'SPRING', 'Tuesday'),
+('000000007', '2pm', 'SPRING', 'Tuesday'),
+('000000007', '3pm', 'SPRING', 'Tuesday'),
+('000000008', '2pm', 'SPRING', 'Wednesday'),
+('000000008', '3pm', 'SPRING', 'Wednesday'),
+('000000008', '4pm', 'SPRING', 'Wednesday'),
+('000000009', '9am', 'SPRING', 'Thursday'),
+('000000009', '10am', 'SPRING', 'Thursday'),
+('000000009', '11am', 'SPRING', 'Thursday'),
+('000000010', '1pm', 'SPRING', 'Friday'),
+('000000010', '2pm', 'SPRING', 'Friday'),
+('000000010', '3pm', 'SPRING', 'Friday'),
+('000000005', '1pm', 'SUMMER', 'Tuesday'),
+('000000005', '2pm', 'SUMMER', 'Tuesday'),
+('000000005', '3pm', 'SUMMER', 'Tuesday'),
+('000000007', '1pm', 'SUMMER', 'Tuesday'),
+('000000007', '2pm', 'SUMMER', 'Tuesday'),
+('000000007', '3pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000011', '000000007', 'ECE', 3000, '1pm', 'SPRING', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000012', '000000007', 'ECE', 3000, '1pm', 'SPRING', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000013', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000011', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000009', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000014', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000018', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000015', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000006', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Hires (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, Weekday) VALUES
+('000000019', '000000007', 'ECE', 3000, '1pm', 'SUMMER', 'Tuesday');
+
+INSERT INTO Rates (GTID_Undergraduate, GTID_Tutor, School, Number, Num_Evaluation, Desc_Evaluation) VALUES
+('000000011', '000000004', 'ECE', 1000, 3, 'Nice guy.'),
+('000000012', '000000005', 'ECE', 2000, 1, 'Terrible.'),
+('000000013', '000000007', 'ECE', 3000, 2, 'Bad.'),
+('000000014', '000000008', 'ECE', 4000, 4, 'Very good.'),
+('000000015', '000000009', 'ECE', 5000, 1, 'Pretty Bad.'),
+('000000016', '000000010', 'ECE', 5000, 4, 'Excellent.');
+
+INSERT INTO Recommends (GTID_Tutor, GTID_Professor, Num_Evaluation, Desc_Evaluation) VALUES
+('000000004', '000000021', 3, 'Hard worker.'),
+('000000005', '000000021', 3, 'Nice worker.'),
+('000000007', '000000022', 3, 'Gentle worker.'),
+('000000008', '000000023', 3, 'Soft worker.'),
+('000000009', '000000024', 3, 'Real worker.'),
+('000000010', '000000024', 3, 'Caring worker.');
+
