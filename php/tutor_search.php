@@ -73,10 +73,10 @@
       $timeArray) {
     $currentSemester = "FALL";
     $query = sprintf("SELECT DISTINCT Student.Name, Student.Email, " .
-                     "AVG(Recommends.Num_Evaluation) AS Avg_Prof_Rating, " .
-                     "COUNT(Recommends.Num_Evaluation) AS Num_Professors, " .
-                     "AVG(Rates.Num_Evaluation) AS Avg_Student_Rating, " .
-                     "COUNT(Rates.Num_Evaluation) AS Num_Students " .
+                     "AVG(DISTINCT Recommends.Num_Evaluation) AS Avg_Prof_Rating, " .
+                     "COUNT(DISTINCT Recommends.Num_Evaluation) AS Num_Professors, " .
+                     "AVG(DISTINCT Rates.Num_Evaluation) AS Avg_Student_Rating, " .
+                     "COUNT(DISTINCT Rates.Num_Evaluation) AS Num_Students " .
                      "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot " .
                      "WHERE Tutors.School = '%s' AND\n" .
                      "Tutors.Number = '%s' AND\n" .
@@ -136,7 +136,8 @@
                                 "Rates.GTID_Tutor = Student.GTID AND\n" .
                                 "Student.GTID IN\n" .
                                 "(SELECT DISTINCT Tutors.GTID_Tutor FROM Tutors)\n" .
-                                "GROUP BY Tutor_Time_Slot.Time");
+                                "GROUP BY Tutor_Time_Slot.Time\n" .
+                                "ORDER BY Tutor_Time_Slot.Time ASC");
       return $query;
     }
 

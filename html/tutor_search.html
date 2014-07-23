@@ -140,24 +140,29 @@
 
             </tfoot>
           </table>
-          <h4 style="float: right">
-            <?php
-              if (array_key_exists("tutorSearchResults", $_SESSION)) {
-                echo "(Number of Results: " . count($_SESSION["tutorSearchResults"]) . ")";
-              }
-            ?>
-          </h4>
         </div>
-      </div><br />
+      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="btn-group">
             <div class="btn btn-default" data-toggle="modal" data-target="#tutorModal" role="button">
               Schedule a Tutor
             </div>
-            <div class="btn btn-default" style="margin-left: 50px">
+            <div class="btn btn-default" style="margin-left: 20px">
               <a href="menu.html">Cancel</a>
             </div>
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="alert alert-info" style="display: inline-block">
+            <p>
+              <?php
+                if (array_key_exists("tutorSearchResults", $_SESSION)) {
+                  echo "(Number of Results: " . count($_SESSION["tutorSearchResults"]) . ")";
+                }
+              ?><br />
+              Note: Click on 'Schedule a Tutor' to see all the available time slots.
+            </p>
           </div>
         </div>
       </div>
