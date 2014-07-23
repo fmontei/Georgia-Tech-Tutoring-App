@@ -7,3 +7,6 @@ work to be done
 - reports #1
 - reports #2
 
+
+//System description
+- current semester is set to "FALL"
