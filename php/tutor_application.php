@@ -142,10 +142,16 @@
     parseDayAndTime($params, $days, $times);
     $courses = array();
     parseCourses($params, $courses);
+    print("Courses:<br/>");
     foreach ($courses as $course_entry) {
       print_r($course_entry);
       print("<br/>");
     }
+
+    $semester = "FALL";
+    insertTutorTimeSlotTable($gtid, $semester, $days, $times);
+    insertTutorsTable($gtid, $courses);
+    updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa);
   }
 
   function parseDayAndTime($params, &$days, &$times) {
@@ -186,6 +192,55 @@
     foreach ($course_indices as $index) {
       if ($index !== "")
         array_push($courses, $tutor_course_info[$index]);
+    }
+  }
+
+  function updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa) {
+    print("<h2>Tutor Queries</h2>");
+    $tutor_query = sprintf("UPDATE Tutor\n" .
+      "SET Phone = '%s', GPA = '%s'\n" .
+      "WHERE GTID = '%s';",
+      mysql_real_escape_string($phone),
+      mysql_real_escape_string($gpa),
+      mysql_real_escape_string($gtid));
+    mysql_query($tutor_query);
+    print("Update tutor query: " . $tutor_query . "<br/>");
+
+    $student_query = sprintf("Update Student\n" .
+      "SET Email = '%s', Name = '%s'\n" .
+      "WHERE GTID = '%s';",
+      mysql_real_escape_string($email),
+      mysql_real_escape_string(trim($first_name . " " . $last_name)),
+      mysql_real_escape_string($gtid));
+    mysql_query($student_query);
+    print("Update tutor query: " . $student_query);
+  }
+
+  function insertTutorsTable($gtid, $courses) {
+    print("<h2>Tutors Slot Queries</h2>");
+    foreach($courses as $course) {
+      $query = sprintf("INSERT INTO Tutors(GTID_Tutor, School, Number, GTA)\n" .
+        "VALUES('%s', '%s', '%s', '%s')",
+        mysql_real_escape_string($gtid),
+        mysql_real_escape_string($course["School"]),
+        mysql_real_escape_string($course["Number"]),
+        mysql_real_escape_string($course["GTA"]));
+        mysql_query($query);
+        print("Query " . $i . ": " . $query . "<br/>");
+    }
+  }
+
+  function insertTutorTimeSlotTable($gtid, $semester, $dayArray, $timeArray) {
+    print("<h2>Tutor Time Slot Queries</h2>");
+    for ($i = 0; $i < count($dayArray); $i++) {
+      $query = sprintf("INSERT INTO Tutor_Time_Slot(GTID, Time, Semester, Weekday)\n" .
+        "VALUES('%s', '%s', '%s', '%s')",
+        mysql_real_escape_string($gtid),
+        mysql_real_escape_string($semester),
+        mysql_real_escape_string($dayArray[$i]),
+        mysql_real_escape_string($timeArray[$i]));
+      mysql_query($query);
+      print("Query " . $i . ": " . $query . "<br/>");
     }
   }
 ?>
