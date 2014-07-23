@@ -25,10 +25,10 @@
           </div>
         </div>
         <div class="col col-md-6" style="margin-top: 20px">
-          <div class="alert alert-success">
+          <div class="alert alert-danger">
             <p><b>Note:</b> All tutors are successful undergraduate or graduate students
-            who have made a grade of "A" in the course(s) they tutor and
-            have a minimum overall GPA of 3.0.</p>
+            who have made a <b>grade of "A"</b> in the course(s) they tutor and
+            have a <b>minimum overall GPA of 3.0.</b></p>
           </div>
         </div>
       </div>
@@ -207,7 +207,7 @@
                           "4" => "Thursday", "5" => "Friday");
             foreach($weekdays as $weekday => $day) { ?>
             <div style="margin-bottom: 10px">
-              <legend style="font-size: 16px; text-decoration: underline"><?php echo $day; ?></legend>
+              <legend style="font-size: 16px;"><i><?php echo $day; ?></i></legend>
               <label>
                 <div class="checkbox">
                   <input class="day_time" type="checkbox" value="">
@@ -236,6 +236,36 @@
                 <div class="checkbox">
                   <input class="day_time" type="checkbox" value="">
                   1pm
+                </div>
+              </label>
+              <label style="margin-left: 5px">
+                <div class="checkbox">
+                  <input class="day_time" type="checkbox" value="">
+                  2pm
+                </div>
+              </label>
+              <label style="margin-left: 5px">
+                <div class="checkbox">
+                  <input class="day_time" type="checkbox" value="">
+                  3pm
+                </div>
+              </label>
+              <label style="margin-left: 5px">
+                <div class="checkbox">
+                  <input class="day_time" type="checkbox" value="">
+                  4pm
+                </div>
+              </label>
+              <label style="margin-left: 5px">
+                <div class="checkbox">
+                  <input class="day_time" type="checkbox" value="">
+                  5pm
+                </div>
+              </label>
+              <label style="margin-left: 5px">
+                <div class="checkbox">
+                  <input class="day_time" type="checkbox" value="">
+                  6pm
                 </div>
               </label>
             </div>
