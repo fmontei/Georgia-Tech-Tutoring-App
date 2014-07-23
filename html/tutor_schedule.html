@@ -17,7 +17,7 @@
         <h1>Look Up Tutor Schedule</h1><br />
         <form action = "../php/find_schedule.php" method="post" class="form-inline" role="form">
           <div class="row">
-            <div class="col col-md-12">
+            <div class="col col-md-12" style="min-width: 930px">
               <?php if (array_key_exists("userType", $_SESSION)) { ?>
                 <?php if ($_SESSION["userType"] == "admin") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
@@ -30,7 +30,7 @@
                   </select>
                   <input class="form-control" name="find_schedule" type="submit" value="OK" />
                   <div class="alert alert-warning pull-right"
-                       style="display: inline-block; margin-right: 30px">
+                       style="display: inline-block;">
                     Press 'OK' to retrieve your schedule.<br />
                     Note: Your GTID has been already selected for you.
                   </div>
