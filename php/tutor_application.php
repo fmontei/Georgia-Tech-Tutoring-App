@@ -17,6 +17,8 @@
     populate_form($tutor_gtid, $grad_type);
   } else if (strpos($query_string, "clear_form") !== false) {
     clear_form();
+  } else if (strpos($query_string, "submit_tutor_app") !== false) {
+    parse_form();
   }
 
   function populate_form($tutor_gtid, $grad_type) {
@@ -111,5 +113,79 @@
     unset($_SESSION["tutor_app_info"]);
     header("Location: ../html/menu.html");
     die();
+  }
+
+  function parse_form() {
+    $query = explode('&', $_SERVER['QUERY_STRING']);
+    $params = array();
+    foreach($query as $param) {
+      list($name, $value) = explode('=', $param);
+      $params[urldecode($name)][] = urldecode($value);
+    }
+
+    print("<h1>Printing list of form parameters:</h1><br/>");
+    $gtid = $first_name = $last_name = $email = $phone = $gpa = $grad_status =
+      $gta = "";
+    foreach($params as $index => $param) {
+      print($index . ": " . implode(", ", $param) . "<br />");
+      if ($index === "gtid")             $gtid        = $param[0];
+      else if ($index === "first_name")  $first_name  = $param[0];
+      else if ($index === "last_name")   $last_name   = $param[0];
+      else if ($index === "email")       $email       = $param[0];
+      else if ($index === "phone")       $phone       = $param[0];
+      else if ($index === "gpa")         $gpa         = $param[0];
+      else if ($index === "grad_status") $grad_status = $param[0];
+      else if ($index === "gta")         $gta         = $param[0];
+    }
+
+    $days = array(); $times = array();
+    parseDayAndTime($params, $days, $times);
+    $courses = array();
+    parseCourses($params, $courses);
+    foreach ($courses as $course_entry) {
+      print_r($course_entry);
+      print("<br/>");
+    }
+  }
+
+  function parseDayAndTime($params, &$days, &$times) {
+    $day_times = array();
+    foreach($params as $index => $param) {
+      if (strpos($index, "day_time") !== FALSE) {
+        $day_times = $param; break;
+      }
+    }
+    foreach($day_times as $day_time) {
+      $day_pos = strrpos($day_time, " ");
+      $parsed_day = substr($day_time, 0, $day_pos);
+      $parsed_time = substr($day_time, $day_pos);
+      array_push($days, $parsed_day);
+      array_push($times, $parsed_time);
+    }
+    print("<br />" . "Parsed days: " . implode(" ", $days) . "<br />");
+    print("Parsed times: " . implode(" ", $times) . "<br />");
+  }
+
+  function parseCourses($params, &$courses) {
+    $course_input = array();
+    $course_indices = array();
+    foreach($params as $index => $param) {
+      if (strpos($index, "tutor_course_input") !== FALSE) {
+        $course_input = $param; break;
+      }
+    }
+    foreach($course_input as $course) {
+      array_push($course_indices, $course);
+    }
+
+    $tutor_course_info = array();
+    if (array_key_exists("tutor_course_info", $_SESSION)) {
+      $tutor_course_info = $_SESSION["tutor_course_info"];
+    }
+
+    foreach ($course_indices as $index) {
+      if ($index !== "")
+        array_push($courses, $tutor_course_info[$index]);
+    }
   }
 ?>

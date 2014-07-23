@@ -44,7 +44,8 @@
           $tutor_app_info = $_SESSION["tutor_app_info"]; ?>
       <?php } ?>
       <form class="form-inline" id="tutor_app_form" role="form"
-            action="../php/tutor_application.php?send_app" method="post">
+            action="../php/tutor_application.php?submit_tutor_app" method="get">
+        <input type="hidden" name="submit_tutor_app" />
         <div class="well col col-md-12" id="personalInfoWell" style="border: 1px rgb(204, 204, 204) solid">
           <div class="form-group" style="width: 100%; display: inline-block">
             <div class="row" >
@@ -55,7 +56,7 @@
                 <div class="col-md-3" style="width: 200px; margin-left: -20px">
                   <?php $gtid = isset($tutor_app_info["GTID"]) ? $tutor_app_info["GTID"] : ""; ?>
                   <input type="text" class="form-control" placeholder="Georgia Tech ID"
-                         value="<?php echo $gtid; ?>"
+                         value="<?php echo $gtid; ?>" name="gtid"
                          pattern="[0-9]{9,9}" maxlength="9" />
                 </div>
               </div>
@@ -69,7 +70,7 @@
                 </div>
                 <div class="col-md-3" style="width: 200px">
                   <?php $first_name = isset($tutor_app_info["FirstName"]) ? $tutor_app_info["FirstName"] : ""; ?>
-                  <input type="text" class="form-control" placeholder="First Name"
+                  <input type="text" class="form-control" placeholder="First Name" name="first_name"
                          value="<?php echo $first_name; ?>" />
                 </div>
               </div>
@@ -79,7 +80,7 @@
                 </div>
                 <div class="col-md-3" style="width: 200px; margin-right: 10px">
                   <?php $last_name = isset($tutor_app_info["LastName"]) ? $tutor_app_info["LastName"] : ""; ?>
-                  <input type="text" class="form-control" placeholder="Last Name"
+                  <input type="text" class="form-control" placeholder="Last Name" name="last_name"
                          value="<?php echo $last_name; ?>" />
                 </div>
               </div>
@@ -93,7 +94,7 @@
                 </div>
                 <div class="col-md-3" style="width: 200px">
                   <?php $email = isset($tutor_app_info["Email"]) ? $tutor_app_info["Email"] : ""; ?>
-                  <input type="text" class="form-control" placeholder="Email"
+                  <input type="text" class="form-control" placeholder="Email" name="email"
                          value="<?php echo $email; ?>" />
                 </div>
               </div>
@@ -103,7 +104,7 @@
                 </div>
                 <div class="col-md-3" style="width: 200px; margin-right: 10px">
                   <?php $phone = isset($tutor_app_info["Phone"]) ? $tutor_app_info["Phone"] : ""; ?>
-                  <input type="text" class="form-control" placeholder="Telephone"
+                  <input type="text" class="form-control" placeholder="Telephone" name="phone"
                          value="<?php echo $phone; ?>" />
                 </div>
               </div>
@@ -117,7 +118,7 @@
                 </div>
                 <div class="col-md-3" style="width: 200px">
                   <?php $gpa = isset($tutor_app_info["GPA"]) ? $tutor_app_info["GPA"] : ""; ?>
-                  <input type="number" min="0" max="4" step="0.1"
+                  <input type="number" min="0" max="4" step="0.1" name="gpa"
                          class="form-control" placeholder="GPA"
                          value="<?php echo $gpa; ?>" />
                 </div>
@@ -128,10 +129,10 @@
                     <label>
                       <?php $grad_status = isset($tutor_app_info["GradType"]) ? $tutor_app_info["GradType"] : "";
                       if ($grad_status === "undergrad") { ?>
-                        <input type="checkbox" checked>
+                        <input type="checkbox" name="grad_status" value="Undergraduate" checked>
                         Undergraduate
                       <?php } else { ?>
-                        <input type="checkbox">
+                        <input type="checkbox" name="grad_status" value="Undergraduate">
                         Undergraduate
                       <?php } ?>
                     </label>
@@ -148,10 +149,10 @@
                     <label>
                       <?php $grad_status = isset($tutor_app_info["GradType"]) ? $tutor_app_info["GradType"] : "";
                       if ($grad_status === "grad") { ?>
-                        <input type="checkbox" checked>
+                        <input type="checkbox" name="grad_status" value="Graduate" checked>
                         Graduate
                       <?php } else { ?>
-                        <input type="checkbox">
+                        <input type="checkbox" name="grad_status" value="Graduate">
                         Graduate
                       <?php } ?>
                     </label>
@@ -185,16 +186,17 @@
                     <td>
                       <div class="checkbox">
                         <?php if ($course["GTA"] !== "0") { ?>
-                          <input type="checkbox" checked>
+                          <input type="checkbox" name="gta" value="true" checked>
                         <?php } else { ?>
-                          <input type="checkbox">
+                          <input type="checkbox" name="gta" value="false">
                         <?php } ?>
                       </div>
                     </td>
                   </tr>
                   <input type="hidden"
                          name="tutor_course_input"
-                         id="tutor_course_input_<?php echo $id_count; ?>" />
+                         id="tutor_course_input_<?php echo $id_count; ?>"
+                         value = "" />
                   <?php $id_count++; ?>
                 <?php } ?>
             </tbody>
@@ -210,61 +212,71 @@
               <legend style="font-size: 16px;"><i><?php echo $day; ?></i></legend>
               <label>
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 9am">
                   9am
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 10am">
                   10am
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 11am">
                   11am
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 12pm">
                   12pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 1pm">
                   1pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 2pm">
                   2pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 3pm">
                   3pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 4pm">
                   4pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 5pm">
                   5pm
                 </div>
               </label>
               <label style="margin-left: 5px">
                 <div class="checkbox">
-                  <input class="day_time" type="checkbox" value="">
+                  <input class="day_time" name="day_time" type="checkbox"
+                         value="<?php echo $day; ?> 6pm">
                   6pm
                 </div>
               </label>
@@ -366,12 +378,12 @@
           if (tutorResultRows[i] == this) {
             if (!$(tutorResultRows[i]).hasClass("activeRow")) {
               $(tutorResultRows[i]).addClass("activeRow");
-              var hidden_input = $("#tutor_course_input" + i);
-              hidden_input.value = i;
+              var hidden_input = $("#tutor_course_input_" + i);
+              hidden_input.val(i);
             } else {
               $(tutorResultRows[i]).removeClass("activeRow");
-              var hidden_input = $("#tutor_course_input" + i);
-              hidden_input.value = "";
+              var hidden_input = $("#tutor_course_input_" + i);
+              hidden_input.val("");
             }
           }
         }
