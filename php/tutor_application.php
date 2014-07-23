@@ -17,9 +17,11 @@
   }
 
   function populate_form($tutor_gtid) {
-    $query = sprintf("SELECT DISTINCT GTID, Email, Name, Phone, GPA\n" .
-                     "FROM Student NATURAL JOIN Tutor\n" .
-                     "WHERE Student.GTID = '%s';",
+    $query = sprintf("SELECT DISTINCT Student.GTID, Email, Name, Phone, GPA, GTA\n" .
+                    "FROM Student, Tutor, Tutors\n" .
+                    "WHERE Student.GTID = '%s' AND\n" .
+                    "Student.GTID = Tutor.GTID AND\n" .
+                    "Student.GTID = Tutors.GTID_Tutor;",
                      mysql_real_escape_string($tutor_gtid));
 
     print("Query:<br/>" . $query . "<br/>");
@@ -40,10 +42,12 @@
       $last_name = trim(substr($name, $pos));
       $phone = trim($row["Phone"]);
       $gpa = trim($row["GPA"]);
+      $gta = trim($row["GTA"]);
+      $gta = ($gta == "1") ? "Graduate" : "Undergraduate";
 
       $tutor_app_info = array("GTID" => $gtid, "Email" => $email,
         "FirstName" => $first_name, "LastName" => $last_name, "Phone" => $phone,
-        "GPA" => $gpa);
+        "GPA" => $gpa, "GTA" => $gta);
       break;
     }
     print("<br />Tutor Array:<br />" . implode(", ", $row) . "<br />");

@@ -18,8 +18,6 @@
     $summer_checkbox = $_GET["summer_checkbox"];
   }
 
-  
-
   $query = "(SELECT Hires.School, Hires.Number, Hires.Semester, " .
             "COUNT(DISTINCT Hires.GTID_Undergraduate) As NumStudent, Count(DISTINCT Hires.GTID_Tutor) As NumTutor\n" .
             "from Hires NATURAL JOIN Course\n" .

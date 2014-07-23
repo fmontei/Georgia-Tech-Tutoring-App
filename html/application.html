@@ -15,15 +15,25 @@
     <div class="container-fluid" style="width: 800px">
       <h1>Georgia Tech Tutor Application</h1>
 
-      <div class="alert alert-warning" style="margin-top: 20px; display: inline-block">
-        To auto-populate the fields below, click on 'Populate':<br/><br />
-        <div class="btn btn-warning">
-          <a href="../php/tutor_application.php?populate_form" style="color: white">
-            Populate
-          </a>
+      <div class="row">
+        <div class="col col-md-6">
+          <div class="alert alert-warning" style="margin-top: 20px; display: inline-block">
+            To auto-populate the fields below, click on 'Populate':<br/><br />
+            <div class="btn btn-warning">
+              <a href="../php/tutor_application.php?populate_form" style="color: white">
+                Populate
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-6" style="margin-top: 20px">
+          <div class="alert alert-success">
+            <p><b>Note:</b> All tutors are successful undergraduate or graduate students
+            who have made a grade of "A" in the course(s) they tutor and
+            have a minimum overall GPA of 3.0.</p>
+          </div>
         </div>
       </div>
-
       <ul class="nav nav-tabs" role="tablist" style="margin-top: 20px">
         <li class="active" id="personalInfoTab"><a href="#">Personal Information</a></li>
         <li id="courseTab"><a href="#">Courses for Tutoring</a></li>
@@ -116,8 +126,14 @@
                 <div class="col-md-2" style="width: 200px; margin-right: 10px">
                   <div class="checkbox">
                     <label>
-                      <input type="checkbox" value="">
-                      Undergraduate
+                      <?php $gta = isset($tutor_app_info["GTA"]) ? $tutor_app_info["GTA"] : "";
+                      if ($gta === "Undergraduate") { ?>
+                        <input type="checkbox" checked>
+                        Undergraduate
+                      <?php } else { ?>
+                        <input type="checkbox">
+                        Undergraduate
+                      <?php } ?>
                     </label>
                   </div>
                 </div>
@@ -130,8 +146,14 @@
                 <div class="col-md-2" style="width: 200px;">
                   <div class="checkbox">
                     <label>
-                      <input type="checkbox" value="">
-                      Graduate
+                      <?php $gta = isset($tutor_app_info["GTA"]) ? $tutor_app_info["GTA"] : "";
+                      if ($gta === "Graduate") { ?>
+                        <input type="checkbox" checked>
+                        Graduate
+                      <?php } else { ?>
+                        <input type="checkbox">
+                        Graduate
+                      <?php } ?>
                     </label>
                   </div>
                 </div>
