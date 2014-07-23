@@ -90,8 +90,7 @@ CREATE TABLE Hires (
 	Time VARCHAR(8),
 	Semester VARCHAR(6),
 	Weekday VARCHAR(10), 
-	PRIMARY KEY (GTID_Undergraduate, GTID_Tutor, School, Number, Time, Semester, 
-	Weekday),
+	PRIMARY KEY (GTID_Tutor, Time, Semester, Weekday),
 	FOREIGN KEY (GTID_Undergraduate) REFERENCES Undergraduate (GTID),
 	FOREIGN KEY (GTID_Tutor, School, Number) REFERENCES Tutors (GTID_Tutor, School, Number),
 	FOREIGN KEY (GTID_Tutor, Time, Semester, Weekday) REFERENCES Tutor_Time_Slot (GTID, Time, Semester, Weekday) );
