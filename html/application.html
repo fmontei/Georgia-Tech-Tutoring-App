@@ -167,6 +167,7 @@
           <table class="table table-bordered" id="tutor_app_table" style="overflow: auto">
             <thead>
               <tr>
+                <td></td>
                 <td>School</td>
                 <td>Number</td>
                 <td>GTA</td>
@@ -181,6 +182,9 @@
                 }
                 foreach ($tutor_course_info as $course) { ?>
                   <tr class="tutor_app_table_row">
+                    <td class="tutor_app_table_cell" style="max-width: 50px">
+                      <button class="btn btn-default" onclick="return false;">Select</button>
+                    </td>
                     <td><?php echo $course["School"]; ?></td>
                     <td><?php echo $course["Number"]; ?></td>
                     <td>
@@ -357,7 +361,7 @@
       }
       is_checked = false;
       var tutorResultRows = document.getElementsByClassName("tutor_app_table_row");
-      for (var i = 0; i < tutorResultRows.length; i++) {
+      for (i = 0; i < tutorResultRows.length; i++) {
         if ($(tutorResultRows[i]).hasClass("activeRow")) {
           is_checked = true;
           break;
@@ -371,18 +375,19 @@
       }
     }
 
-    var tutorResultRows = document.getElementsByClassName("tutor_app_table_row");
-    for (var i = 0; i < tutorResultRows.length; i++) {
-      tutorResultRows[i].addEventListener("click", function () {
-        for (var i = 0; i < tutorResultRows.length; i++) {
-          if (tutorResultRows[i] == this) {
-            if (!$(tutorResultRows[i]).hasClass("activeRow")) {
-              $(tutorResultRows[i]).addClass("activeRow");
+    var tutorResultCells = document.getElementsByClassName("tutor_app_table_cell");
+    for (var i = 0; i < tutorResultCells.length; i++) {
+      tutorResultCells[i].addEventListener("click", function () {
+        for (var i = 0; i < tutorResultCells.length; i++) {
+          var tableRow = this.parentNode;
+          if (tutorResultCells[i] == this) {
+            if (!$(tableRow).hasClass("activeRow")) {
+              $(tableRow).addClass("activeRow");
               var hidden_input = $("#tutor_course_input_" + i);
               hidden_input.val(i);
             } else {
-              $(tutorResultRows[i]).removeClass("activeRow");
-              var hidden_input = $("#tutor_course_input_" + i);
+              $(tableRow).removeClass("activeRow");
+              hidden_input = $("#tutor_course_input_" + i);
               hidden_input.val("");
             }
           }
