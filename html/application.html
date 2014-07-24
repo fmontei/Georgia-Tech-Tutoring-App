@@ -273,20 +273,6 @@
                   4pm
                 </div>
               </label>
-              <label style="margin-left: 5px">
-                <div class="checkbox">
-                  <input class="day_time" name="day_time" type="checkbox"
-                         value="<?php echo $day; ?> 5pm">
-                  5pm
-                </div>
-              </label>
-              <label style="margin-left: 5px">
-                <div class="checkbox">
-                  <input class="day_time" name="day_time" type="checkbox"
-                         value="<?php echo $day; ?> 6pm">
-                  6pm
-                </div>
-              </label>
             </div>
           <?php } ?>
         </div>
@@ -365,9 +351,10 @@
           num_checked++;
         }
       }
-      if (num_checked !== (num_selected * 3)) {
-        alert("You must indicate your availability by checking 3 time slots " +
-                " per course you selected in the Available Days/Times tab.");
+      if (num_checked !== 5) {
+        alert("You must check 5 time slots to satisfy the requirement " +
+                " of having 5 hours of availability per week. Select your " +
+                " time slots in the Available Days/Times tab.");
         return;
       }
       var is_checked = false;
@@ -393,12 +380,10 @@
           var tableRow = this.parentNode;
           if (tutorResultCells[i] == this) {
             if (!$(tableRow).hasClass("activeRow")) {
-              num_selected++;
               $(tableRow).addClass("activeRow");
               var hidden_input = $("#tutor_course_input_" + i);
               hidden_input.val(i);
             } else {
-              if (num_selected > 0) num_selected--;
               $(tableRow).removeClass("activeRow");
               hidden_input = $("#tutor_course_input_" + i);
               hidden_input.val("");
@@ -408,10 +393,10 @@
         var alert_timeslot = $("#alert_timeslot");
         $(alert_timeslot).css("display", "inline-block");
         $(alert_timeslot).text("");
-        $(alert_timeslot).append("You have selected " + num_selected +
-                                " course(s). So you must select "
-                                + num_selected * 3 +
-                                " tutor time slots, 3 per each course.");
+        $(alert_timeslot).append("You have selected a " +
+                                " course. So you must select 5 tutor time slots, " +
+                                " because you must guarantee 5 hours of " +
+                                " availability per week.");
       });
     }
   </script>

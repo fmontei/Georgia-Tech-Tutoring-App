@@ -193,6 +193,9 @@
       if ($index !== "")
         array_push($courses, $tutor_course_info[$index]);
     }
+
+    header("Location: ../html/menu.html");
+    die();
   }
 
   function updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa) {
@@ -218,6 +221,7 @@
 
   function insertTutorsTable($gtid, $courses) {
     print("<h2>Tutors Slot Queries</h2>");
+    $i = 0;
     foreach($courses as $course) {
       $query = sprintf("INSERT INTO Tutors(GTID_Tutor, School, Number, GTA)\n" .
         "VALUES('%s', '%s', '%s', '%s')",
@@ -226,7 +230,7 @@
         mysql_real_escape_string($course["Number"]),
         mysql_real_escape_string($course["GTA"]));
         mysql_query($query);
-        print("Query " . $i . ": " . $query . "<br/>");
+        print("Query " . $i++ . ": " . $query . "<br/>");
     }
   }
 
