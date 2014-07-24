@@ -14,12 +14,11 @@
 
   $preferredDayArray = findDays($params);
   $preferredTimeArray = findTimes($params);
-  $formattedTimeArray = reformatTimeArray($preferredTimeArray);
 
   $courseQuery = getAvailableStudentCourses($school, $courseNumber,
-    $preferredDayArray, $formattedTimeArray);
+    $preferredDayArray, $preferredTimeArray);
   $tutorQuery = getAvailableTutors($school, $courseNumber, $preferredDayArray,
-    $formattedTimeArray);
+    $preferredTimeArray);
 
   $courseResult = executeQuery($courseQuery);
   $formattedCourseResult = formatCourseResult($courseResult);
@@ -45,28 +44,6 @@
         $timeArray = $param;
     }
     return $timeArray;
-  }
-
-  function reformatTimeArray($timeArray) {
-    $formatted = array();
-    $formattedFirst = $formattedSecond = $formattedTime = "";
-    foreach($timeArray as $array => $timeEntry) {
-      $firstPos = strrpos($timeEntry, ":");
-      $firstHalf = substr($timeEntry, 0, $firstPos);
-      if ($firstHalf > 12) {
-        $formattedFirst = $firstHalf - 12;
-        $formattedSecond = "pm";
-      } else {
-        $formattedFirst = $firstHalf;
-        $formattedSecond = "am";
-      }
-      $formattedTime = $formattedFirst . $formattedSecond;
-      // Omit "0" from "09am", for example
-      if (substr($formattedTime, 0, 1) === "0")
-        $formattedTime = substr($formattedTime, 1);
-      array_push($formatted, $formattedTime);
-    }
-    return $formatted;
   }
 
   function getAvailableStudentCourses($schoolName, $courseNumber, $dayArray,

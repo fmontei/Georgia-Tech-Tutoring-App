@@ -69,14 +69,14 @@
             <table class="table table-bordered">
               <thead>
               <tr>
-                <th>Day</th>
+                <th style="width: 50%">Day</th>
                 <th>Time</th>
               </tr>
               </thead>
               <tbody id="dayTimeTable">
                 <tr>
                   <td>
-                    <select name="preferredDay" required="required">
+                    <select name="preferredDay" class="form-control" required="required">
                       <option selected></option>
                       <option>Monday</option>
                       <option>Tuesday</option>
@@ -88,8 +88,17 @@
                     </select>
                   </td>
                   <td>
-                    <input class="form-control" name="preferredTime" type="time"
-                           required="required" />
+                    <select name="preferredTime" class="form-control"
+                            required="required">
+                      <option value="9am">9:00 AM</option>
+                      <option value="10am">10:00 AM</option>
+                      <option value="11am">11:00 AM</option>
+                      <option value="12pm">12:00 AM</option>
+                      <option value="1pm">1:00 PM</option>
+                      <option value="2pm">2:00 PM</option>
+                      <option value="3pm">3:00 PM</option>
+                      <option value="4pm">4:00 PM</option>
+                    </select>
                   </td>
                 </tr>
               </tbody>
@@ -258,7 +267,7 @@
       newDayTimeBtn.addEventListener("click", function() {
         var dayTimeTable = $("#dayTimeTable");
         dayTimeTable.append('<tr><td>' +
-                '<select name="preferredDay" required="required">' +
+                '<select name="preferredDay" class="form-control" required="required">' +
                 '<option selected></option>' +
                 '<option>Monday</option>' +
                 '<option>Tuesday</option>' +
@@ -269,8 +278,17 @@
                 '<option>Sunday</option>' +
                 '</select>' +
                 '</td>' +
-                '<td><input class="form-control" name="preferredTime" type="time" ' +
-                'required="required" />' +
+                '<td>' +
+                '<select name="preferredTime" class="form-control" required="required">' +
+                '<option value="9am">9:00 AM</option>' +
+                '<option value="10am">10:00 AM</option>' +
+                '<option value="11am">11:00 AM</option>' +
+                '<option value="12pm">12:00 AM</option>' +
+                '<option value="1pm">1:00 PM</option>' +
+                '<option value="2pm">2:00 PM</option>' +
+                '<option value="3pm">3:00 PM</option>' +
+                '<option value="4pm">4:00 PM</option>' +
+                '</select>' +
                 '</td></tr>)');
       });
 
