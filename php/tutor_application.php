@@ -238,10 +238,10 @@
     for ($i = 0; $i < count($dayArray); $i++) {
       $query = sprintf("INSERT INTO Tutor_Time_Slot(GTID, Time, Semester, Weekday)\n" .
         "VALUES('%s', '%s', '%s', '%s')",
-        mysql_real_escape_string($gtid),
-        mysql_real_escape_string($timeArray[$i]),
-        mysql_real_escape_string($semester),
-        mysql_real_escape_string($dayArray[$i]));
+        mysql_real_escape_string(trim($gtid)),
+        mysql_real_escape_string(trim($timeArray[$i])),
+        mysql_real_escape_string(trim($semester)),
+        mysql_real_escape_string(trim($dayArray[$i])));
       mysql_query($query);
       print("Query " . $i . ": " . $query . "<br/>");
     }
