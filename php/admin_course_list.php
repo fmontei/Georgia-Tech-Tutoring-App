@@ -57,8 +57,7 @@
   $num_student_total = array();
   $num_tutor_total = array();
   while ($row = mysql_fetch_assoc($result)) {
-     print(implode(", ", $row) . "<br />");
-
+    print(implode(", ", $row) . "<br />");
     $school = $row["School"];
     $number = $row["Number"];
     $course = $school . " " . $number;
@@ -131,11 +130,28 @@
                                  "NumStudent" => $num_student_grand_total,
                                  "NumTutor" => $num_tutor_grand_total));
 
+  $sexyResult = array();
+  $curr_course = $prev_course = "";
   foreach ($finalResult as $row) {
-    print(implode(", ", $row) . "<br />");
+    $curr_course = $row["Course"];
+    if ($curr_course !== $prev_course) {
+      array_push($sexyResult, $row);
+    } else {
+      $semester = $row["Semester"];
+      $num_student = $row["NumStudent"];
+      $num_tutor = $row["NumTutor"];
+      array_push($sexyResult, array("Course" => "", "Semester" => $semester,
+        "NumStudent" => $num_student, "NumTutor" => $num_tutor));
+    }
+    $prev_course = $curr_course;
   }
 
-  $_SESSION["admin_course_list"] = $finalResult;
+  foreach ($prettyResult as $row) {
+    print_r($row);
+    print("<br/>");
+  }
+
+  $_SESSION["admin_course_list"] = $sexyResult;
   header("Location: ../html/admin_course_list.html");
   die();
 ?>
