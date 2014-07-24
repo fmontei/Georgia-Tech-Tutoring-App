@@ -8,15 +8,23 @@
 
 	//obtain semester's desired from user
 	$semesterSelection = array();
-	array_push($semesterSelection, "FALL"); //$_GET["semesterSelection"];
-	$numSemesters = 1;//count($semesterSelection);
-	$formattedResult = array();
+	$fall_checkbox = $spring_checkbox = $summer_checkbox = "";
+	if (isset($_GET["fall_checkbox"])) {
+		array_push($semesterSelection, "FALL");
+	}
+	if (isset($_GET["spring_checkbox"])) {
+		array_push($semesterSelection, "SPRING");
+	}
+	if (isset($_GET["summer_checkbox"])) {
+		array_push($semesterSelection, "SUMMER");
+	}
+	$numSemesters = count($semesterSelection);
 	
-	//Find course school and number of semesters
+	//Find course school and number of semesters with graduate tutors
 	if( $numSemesters == 1 ) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
 					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE (Tutor_time_slot.GTID = Tutors.GTID_tutor = Graduate.GTID) "  .
+					"WHERE Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID "  .
 					"AND Tutor_time_slot.Semester = '%s';",
 					mysql_real_escape_string($semesterSelection[0]));	
 	}
@@ -24,7 +32,7 @@
 	else if( $numSemesters == 2 ) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
 					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE (Tutor_time_slot.GTID = Tutors.GTID_tutor = Graduate.GTID) "  .
+					"WHERE Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID "  .
 					"AND (Tutor_time_slot.Semester = '%s' " .
 					"OR Tutor_time_slot.Semester = '%s') ",
 					mysql_real_escape_string($semesterSelection[0]),	
@@ -33,7 +41,7 @@
 	else {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
 					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE (Tutor_time_slot.GTID = Tutors.GTID_tutor = Graduate.GTID) "  .
+					"WHERE Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID "  .
 					"AND (Tutor_time_slot.Semester = '%s' " .
 					"OR Tutor_time_slot.Semester = '%s' " .
 					"OR Tutor_time_slot.Semester = '%s') ",
@@ -43,6 +51,8 @@
 	}
 	
 	$result = mysql_query($query);
+	$row1 = array();
+	$formattedResult = array();
 	while($row = mysql_fetch_assoc($result)) {
 	  print(implode(", ", $row) . "<br/>");
 		$school = $row["School"];
@@ -56,8 +66,20 @@
 		
 		$i = 0;
 		while($i < $numSemesters) {
-			if(isSemesterValid($semesterSelection[i])) {
-				$resultGTA = obtainTAEvaluations("SPRING", 1, $school, $number);
+			if(isSemesterValid($semesterSelection[$i], $school, $number)) {
+				
+				$query = sprintf("SELECT COUNT( DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
+						"FROM Tutors, Rates, Graduate, Tutor_Time_Slot\n" .
+						"WHERE Tutors.GTA = 1 AND Tutors.GTID_Tutor = Graduate.GTID " .
+						"AND Tutors.school = '%s' AND Rates.school = '%s' " .
+						"AND Tutors.number = '%s' AND Rates.number = '%s'  " .
+						"AND Tutor_time_slot.Semester = '%s';",
+						mysql_real_escape_string($school),
+						mysql_real_escape_string($school),
+						mysql_real_escape_string($number),
+						mysql_real_escape_string($number),
+						mysql_real_escape_string($semesterSelection[$i]));
+				$resultGTA = mysql_query($query);
 				$row1 = mysql_fetch_assoc($resultGTA);
 				$numGTA = $row1["NUM_GTA"];
 				$avgRatingGTA = $row1["AVG_Eval"];
@@ -66,27 +88,38 @@
 				}
 				else{
 					$countTA++;
-					$AvgTA = $AvgTA + $AvgTA;
+					$AvgTA = $AvgTA + $avgRatingGTA;
 				}
 				
-				$resultGTA = obtainTAEvaluations($semesterSelection[i], 0, $school, $number);
+				$query = sprintf("SELECT COUNT( DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
+						"FROM Tutors, Rates, Graduate, Tutor_Time_Slot\n" .
+						"WHERE Tutors.GTA = 0 AND Tutors.GTID_Tutor = Graduate.GTID " .
+						"AND Tutors.school = '%s' AND Rates.school = '%s' " .
+						"AND Tutors.number = '%s' AND Rates.number = '%s'  " .
+						"AND Tutor_time_slot.Semester = '%s';",
+						mysql_real_escape_string($school),
+						mysql_real_escape_string($school),
+						mysql_real_escape_string($number),
+						mysql_real_escape_string($number),
+						mysql_real_escape_string($semesterSelection[$i]));
+				$resultGTA = mysql_query($query);
 				$row1 = mysql_fetch_assoc($resultGTA);
 				$numTA = $row1["NUM_GTA"];
 				$avgRatingTA = $row1["AVG_Eval"];
 				if(is_null($avgRatingTA)){
-					$avgRatingGTA = "N/A";
+					$avgRatingTA = "N/A";
 				}	
 				else{
 					$countNonTA++;
-					$AvgNoNTA = $AvgNoNTA + $AvgNoNTA;
+					$AvgNoNTA = $AvgNoNTA + $avgRatingTA;
 				}				
 				
 				array_push($formattedResult, array( "Course" => $temp,
-													"Semester" => $semesterSelection[i],
+													"Semester" => $semesterSelection[$i],
 													"TA" => $numGTA,
-													"Avg Rating" => $avgRatingGTA,
+													"AVG Rating" => $avgRatingGTA,
 													"non TA" => $numTA,
-													"Avg Rating" => $avgRatingTA));
+													"AVG Rating2" => $avgRatingTA));
 				if($temp === $course) {
 					$temp = " ";
 				}
@@ -96,15 +129,22 @@
 		if($AvgTA > 0){
 			$AvgTA = $AvgTA / $countTA;
 		}
+		else if($AvgTA == 0){
+			$AvgTA = "N/A";
+		}
+		
 		if($AvgNoNTA > 0){
 			$AvgNoNTA = $AvgNoNTA / $countNonTA;
 		}
+		else if($AvgNoNTA == 0){
+			$AvgNoNTA = "N/A"; 
+		}
 		array_push($formattedResult, array( "Course" => " ",
-													"Semester" => "Avg",
+													"Semester" => "AVG",
 													"TA" => " ",
-													"Avg Rating" => $AvgTA,
+													"AVG Rating" => $AvgTA,
 													"non TA" => " ",
-													"Avg Rating2" => $AvgNoNTA));
+													"AVG Rating2" => $AvgNoNTA));
 	}
 
   $_SESSION["result_summary_2_results"] = $formattedResult;
@@ -113,55 +153,24 @@
     print(implode(", ", $row) . "<br />");
   }
 
-  //header("Location: ../html/admin_summary_report.html");
-  //die();
+  header("Location: ../html/admin_summary_report.html");
+  die();
 	
 	//Check if there are courses return for semester
 	//Return true if yes, else false
-	function isSemesterValid($semesterSelection) {
+	function isSemesterValid($semesterSelection, $school, $number) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
 					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE (Tutor_time_slot.GTID = Tutors.GTID_tutor = Graduate.GTID) "  .
+					"WHERE (Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID) "  .
 					"AND Tutor_time_slot.Semester = '%s';",
 					mysql_real_escape_string($semesterSelection));	
 		$resultSem = mysql_query($query);
-		if($resultSem) {
-      print("SEMESTER VALID<br/>");
-      return true;
-    }
-    else {
-      print("SEMESTER NOT VALID<br/>");
-      return false;
-    }
-	}
-
-	function obtainTAEvaluations($semesterSelection, $GTA, $school, $number) {
-		//obtains average evaluation of TA tutors
-		$query = sprintf("SELECT COUNT(Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
-						"FROM Tutors, Rates, Graduate, Tutor_Time_Slot\n" .
-						"WHERE Tutors.GTA = '%s' AND Tutors.GTID_Tutor = Graduate.GTID " .
-						"AND Tutors.school = '%s' AND Rates.school = '%s' " .
-						"AND Tutors.number = '%s' AND Rates.number = '%s'  " .
-						"AND Tutor_time_slot.Semester = '%s';",
-						mysql_real_escape_string($GTA),
-						mysql_real_escape_string($school),
-						mysql_real_escape_string($school),
-						mysql_real_escape_string($number),
-						mysql_real_escape_string($number),
-						mysql_real_escape_string($semesterSelection));
-
-		if (!$query) print("error");
-
-	  $result = mysql_query($query);
-    if (!$result) {
-      $message  = 'Invalid query: ' . mysql_error() . "\n";
-      $message .= 'Whole query: ' . $query;
-      die($message);
-    } else {
-      while ($row = mysql_fetch_assoc($result)) {
-        print(implode(", ", $row) . "<br />");
-      }
-    }
-    return $result;
+		
+		while($row = mysql_fetch_assoc($resultSem)) {
+			if($row["School"] == $school AND $row["Number"] == $number) {
+				return true;
+			}
+		}
+			return false;
 	}
 ?>
