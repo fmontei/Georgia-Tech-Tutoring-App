@@ -8,11 +8,17 @@
 
 	//obtain semester's desired from user
 	$semesterSelection = array();
-	array_push($semesterSelection, "FALL");
-	array_push($semesterSelection, "SPRING");
-	//array_push($semesterSelection, "SUMMER"); //$_GET["semesterSelection"];
+	$fall_checkbox = $spring_checkbox = $summer_checkbox = "";
+	if (isset($_GET["fall_checkbox"])) {
+		array_push($semesterSelection, "FALL");
+	}
+	if (isset($_GET["spring_checkbox"])) {
+		array_push($semesterSelection, "SPRING");
+	}
+	if (isset($_GET["summer_checkbox"])) {
+		array_push($semesterSelection, "SUMMER");
+	}
 	$numSemesters = count($semesterSelection);
-	$formattedResult = array();
 	
 	//Find course school and number of semesters with graduate tutors
 	if( $numSemesters == 1 ) {
@@ -46,6 +52,7 @@
 	
 	$result = mysql_query($query);
 	$row1 = array();
+	$formattedResult = array();
 	while($row = mysql_fetch_assoc($result)) {
 	  print(implode(", ", $row) . "<br/>");
 		$school = $row["School"];
