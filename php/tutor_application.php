@@ -152,6 +152,8 @@
     insertTutorTimeSlotTable($gtid, $semester, $days, $times);
     insertTutorsTable($gtid, $courses);
     updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa);
+    header("Location: ../html/menu.html");
+    die();
   }
 
   function parseDayAndTime($params, &$days, &$times) {
@@ -193,9 +195,6 @@
       if ($index !== "")
         array_push($courses, $tutor_course_info[$index]);
     }
-
-    header("Location: ../html/menu.html");
-    die();
   }
 
   function updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa) {
