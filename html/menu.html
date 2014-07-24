@@ -69,11 +69,11 @@
           </ul>
         </div>
         <?php } ?>
-        <?php if ($gradType == 'undergrad' or $gradType == 'grad' or $userType == 'tutor' or $userType == 'admin') { ?>
+        <?php if ($userType == 'tutor' or $userType == 'admin') { ?>
         <div class="row">
           <h3>Tutor Options</h3>
           <ul class="pagination">
-            <?php if ($gradType == 'undergrad' or $gradType == 'grad' or $userType == 'tutor') { ?>
+            <?php if ($userType == 'tutor') { ?>
               <li><a href="../html/application.html">Apply</a></li>
             <?php } ?>
             <?php if ($userType == 'tutor') { ?>
