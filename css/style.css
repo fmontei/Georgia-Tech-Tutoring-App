@@ -1,3 +1,9 @@
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
+* {
+    font-family: 'Lato', sans-serif;
+}
+
 .outer {
     position: absolute;
     left: 50%;

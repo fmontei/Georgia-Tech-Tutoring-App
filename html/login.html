@@ -33,9 +33,12 @@
                 <div class="dropdown-menu" style="padding: 15px;">
                   <!--Login form-->
                   <form action="/4400Project/php/login.php" method="post" accept-charset="UTF-8">
-                    <input id="user_gtid" style="margin-bottom: 15px;" type="text" name="user_gtid" size="30" placeholder="GTID" required="required"/>
-                    <input id="user_password" style="margin-bottom: 15px;" type="password" name="password" size="30" placeholder="Password" required="required"/>
-                    <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="loginButton" value="Login" />
+                    <input class="form-control" id="user_gtid" style="margin-bottom: 15px; width: 170px" type="text"
+                           name="user_gtid" size="30" placeholder="GTID" required="required"/>
+                    <input class="form-control" id="user_password" style="margin-bottom: 15px; width: 170px" type="password"
+                           name="password" size="30" placeholder="Password" required="required"/>
+                    <input class="btn btn-primary" style="clear: left; width: 170px; height: 32px; font-size: 13px;"
+                           type="submit" name="loginButton" value="Login" />
                   </form>
                 </div>
               </li>
@@ -84,8 +87,10 @@
         </div>
         <form action="/4400Project/php/login.php" method="post" accept-charset="UTF-8">
           <div class="modal-body">
-            <input style="margin-bottom: 15px;" type="text" name="user_gtid" size="30" placeholder="GTID" required="required"/><br />
-            <input style="margin-bottom: 15px;" type="password" name="password" size="30" placeholder="Password" required="required"/>
+            <input class="form-control" style="margin-bottom: 15px; width: 200px !important;" type="text"
+                   name="user_gtid" placeholder="GTID" required="required" /><br />
+            <input class="form-control" style="margin-bottom: 15px; width: 200px !important;" type="password"
+                   name="password" placeholder="Password" required="required"/>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

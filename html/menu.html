@@ -17,12 +17,26 @@
           <a class="navbar-brand" href="#">Georgia Tech Tutors</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li><a>Welcome</a></li>
+          <?php
+            $gradType = $userType = "";
+            if (array_key_exists("gradType", $_SESSION)) {
+              $gradType = $_SESSION["gradType"];
+            }
+            if (array_key_exists("userType", $_SESSION)) {
+              $userType = $_SESSION["userType"];
+            }
+            if ($userType === "admin") {
+          ?>
+              <li><a>Welcome Admin</a></li>
+            <?php } else if ($userType === "professor") { ?>
+              <li><a>Welcome Professor</a></li>
+            <?php } else if ($gradType !== "") { ?>
+              <li><a>Welcome <?php echo $_SESSION["user_name"]; ?></a></li>
+            <?php } ?>
         </ul>
       </div>
     </div>
 
-    </div>
     <div class="about">
       <div class="well">
         <legend>About</legend>
@@ -50,15 +64,6 @@
             <li><a href="../php/logout.php">&laquo; Back to Login</a></li>
           </ul>
         </div>
-        <?php
-          $gradType = $userType = "";
-          if (array_key_exists("gradType", $_SESSION)) {
-            $gradType = $_SESSION["gradType"];
-          }
-          if (array_key_exists("userType", $_SESSION)) {
-            $userType = $_SESSION["userType"];
-          }
-        ?>
         <?php if ($gradType == 'undergrad' or
           ($gradType == 'undergrad' and $userType == 'tutor')) { ?>
         <div class="row">
