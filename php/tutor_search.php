@@ -15,13 +15,11 @@
   $preferredDayArray = findDays($params);
   $preferredTimeArray = findTimes($params);
 
-  $courseQuery = getAvailableStudentCourses($school, $courseNumber,
+  $formattedCourseResult = fetchAllAvailableTimeSlots($school, $courseNumber,
     $preferredDayArray, $preferredTimeArray);
   $tutorQuery = getAvailableTutors($school, $courseNumber, $preferredDayArray,
     $preferredTimeArray);
 
-  $courseResult = executeQuery($courseQuery);
-  $formattedCourseResult = formatCourseResult($courseResult);
   $tutorResult = executeQuery($tutorQuery);
   $formattedTutorResult = formatTutorResult($tutorResult);
 
@@ -46,41 +44,101 @@
     return $timeArray;
   }
 
-  function getAvailableStudentCourses($schoolName, $courseNumber, $dayArray,
+  function fetchAllAvailableTimeSlots($schoolName, $courseNumber, $dayArray,
       $timeArray) {
+    $database = "4400_project_db";
+    $con = mysql_connect(localhost, "root", "mysql");
+    @mysql_select_db($database) or die("Unable to select database");
+
     $currentSemester = "FALL";
-    $query = sprintf("SELECT DISTINCT Student.Name, Student.Email, " .
-                     "AVG(DISTINCT Recommends.Num_Evaluation) AS Avg_Prof_Rating, " .
-                     "COUNT(DISTINCT Recommends.Num_Evaluation) AS Num_Professors, " .
-                     "AVG(DISTINCT Rates.Num_Evaluation) AS Avg_Student_Rating, " .
-                     "COUNT(DISTINCT Rates.Num_Evaluation) AS Num_Students " .
-                     "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot " .
-                     "WHERE Tutors.School = '%s' AND\n" .
-                     "Tutors.Number = '%s' AND\n" .
-                     "Tutor_Time_Slot.Semester = '%s'\nAND(",
-                     mysql_real_escape_string($schoolName),
-                     mysql_real_escape_string($courseNumber),
-                     mysql_real_escape_string($currentSemester));
+    $tutors_query = sprintf("SELECT Student.GTID, Student.Name, Student.Email
+                    FROM Student, Tutors, Tutor_Time_Slot
+                    WHERE Student.GTID = Tutors.GTID_Tutor
+                    AND Tutor_Time_Slot.GTID = Tutors.GTID_Tutor
+                    AND Tutors.School = '%s'
+                    AND Tutors.Number = '%s'
+                    AND Tutor_Time_Slot.Semester = '%s'
+                    AND (",
+                    mysql_real_escape_string($schoolName),
+                    mysql_real_escape_string($courseNumber),
+                    mysql_real_escape_string($currentSemester));
+
     for ($i = 0; $i < count($dayArray); $i++) {
       if ($i <= count($dayArray) - 2)
-        $query = $query . sprintf("(Tutor_Time_Slot.WeekDay = '%s' AND " .
-                                  "Tutor_Time_Slot.Time = '%s') OR\n",
-                                  mysql_real_escape_string($dayArray[$i]),
-                                  mysql_real_escape_string($timeArray[$i]));
+        $tutors_query = $tutors_query . sprintf("(Tutor_Time_Slot.WeekDay = '%s' AND " .
+                                        "Tutor_Time_Slot.Time = '%s') OR\n",
+                                        mysql_real_escape_string($dayArray[$i]),
+                                        mysql_real_escape_string($timeArray[$i]));
       else
-        $query = $query . sprintf("(Tutor_Time_Slot.WeekDay = '%s' AND " .
-                                  "Tutor_Time_Slot.Time = '%s')) AND\n",
-                                  mysql_real_escape_string($dayArray[$i]),
-                                  mysql_real_escape_string($timeArray[$i]));
+        $tutors_query = $tutors_query . sprintf("(Tutor_Time_Slot.WeekDay = '%s' AND " .
+                                        "Tutor_Time_Slot.Time = '%s'));",
+                                        mysql_real_escape_string($dayArray[$i]),
+                                        mysql_real_escape_string($timeArray[$i]));
     }
-    $query = $query . sprintf("Tutor_Time_Slot.GTID = Student.GTID AND\n" .
-                              "Recommends.GTID_Tutor = Student.GTID AND\n" .
-                              "Rates.GTID_Tutor = Student.GTID AND\n" .
-                              "Student.GTID IN\n" .
-                              "(SELECT DISTINCT Tutors.GTID_Tutor FROM Tutors)\n" .
-                              "GROUP BY Student.Email\n" .
-                              "ORDER BY Avg_Prof_Rating DESC;");
-    return $query;
+
+    $result = mysql_query($tutors_query);
+    if (!$result) {
+      $message  = 'Invalid query: ' . mysql_error() . "\n";
+      $message .= 'Whole query: ' . $query;
+      print($message);
+    }
+
+    $tutors = array();
+    while ($row = mysql_fetch_assoc($result)) {
+      $GTID = $row['GTID'];
+      $name = $row['Name'];
+      $pos = strrpos($name, " ");
+      $firstName = substr($name, 0, $pos);
+      $lastName = substr($name, $pos);
+      $email = $row['Email'];
+      array_push($tutors, array("GTID" => $GTID,
+                                "FirstName" => $firstName,
+                                "LastName" => $lastName,
+                                "Email" => $email));
+    }
+
+    for ($i = 0; $i < count($tutors); $i++) {
+      $GTID = $tutors[$i]['GTID'];
+      $sql_prof_eval = sprintf("SELECT R.GTID_Tutor, AVG(R.Num_Evaluation) AS Avg_Prof_Rating,
+                       COUNT(R.Num_Evaluation) AS Num_Professors
+                       FROM Recommends R
+                       WHERE R.GTID_Tutor = '%s';",
+                       mysql_real_escape_string($GTID));
+      $result = mysql_query($sql_prof_eval);
+      while ($row = mysql_fetch_assoc($result)) {
+        $tutors[$i] = array_merge($tutors[$i],
+                                  array('Avg_Prof_Rating' => $row['Avg_Prof_Rating'],
+                                  'Num_Professors' => $row['Num_Professors']));
+      }
+    }
+
+    for ($i = 0; $i < count($tutors); $i++) {
+    	$GTID = $tutors[$i]['GTID'];
+    	$sql_student_eval = sprintf("SELECT R.GTID_Tutor, AVG(R.Num_Evaluation) AS Avg_Student_Rating,
+    							COUNT(R.Num_Evaluation) AS Num_Students
+    							FROM Rates R
+    							WHERE R.GTID_Tutor = '%s';",
+    							mysql_real_escape_string($GTID));
+
+    	$result = mysql_query($sql_student_eval);
+    	while ($row = mysql_fetch_assoc($result)) {
+    		$tutors[$i] = array_merge($tutors[$i],
+                      array('Avg_Student_Rating' => $row['Avg_Student_Rating'],
+                            'Num_Students' => $row['Num_Students']));
+    	}
+    }
+
+    $prev_row = array(); $curr_row = array(); $formatted_tutors = array();
+    for ($i = 0; $i < count($tutors); $i++) {
+      $curr_row = $tutors[$i];
+      if ($prev_row !== $curr_row) $formatted_tutors[$i] = $curr_row;
+      $prev_row = $curr_row;
+    }
+
+    print_r($tutors);
+    print("<br/><br/>Formatted:<br/>");
+    print_r($formatted_tutors);
+    return $formatted_tutors;
   }
 
   function getAvailableTutors($schoolName, $courseNumber, $dayArray,
@@ -92,7 +150,7 @@
                        "FROM Student, Recommends, Rates, Tutors, Tutor_Time_Slot " .
                        "WHERE Tutors.School = '%s' AND\n" .
                        "Tutors.Number = '%s' AND\n" .
-                       "Tutor_Time_Slot.Semester = '%s'\nAND(",
+                       "Tutor_Time_Slot.Semester = '%s'\nAND (",
                        mysql_real_escape_string($schoolName),
                        mysql_real_escape_string($courseNumber),
                        mysql_real_escape_string($currentSemester));
@@ -109,12 +167,13 @@
                                     mysql_real_escape_string($timeArray[$i]));
       }
       $query = $query . sprintf("Tutor_Time_Slot.GTID = Student.GTID AND\n" .
-                                "Recommends.GTID_Tutor = Student.GTID AND\n" .
-                                "Rates.GTID_Tutor = Student.GTID AND\n" .
-                                "Student.GTID IN\n" .
-                                "(SELECT DISTINCT Tutors.GTID_Tutor FROM Tutors)\n" .
-                                "GROUP BY Tutor_Time_Slot.Time\n" .
-                                "ORDER BY Tutor_Time_Slot.Time ASC");
+                                      "Recommends.GTID_Tutor = Student.GTID AND\n" .
+                                      "Rates.GTID_Tutor = Student.GTID AND\n" .
+                                      "Tutors.GTID_Tutor = Student.GTID\n" .
+                                      "GROUP BY Student.Name, Tutor_Time_Slot.Weekday, " .
+                                        "Tutor_Time_Slot.Time\n" .
+                                      "ORDER BY Student.Name, Tutor_Time_Slot.Weekday, " .
+                                        "Tutor_Time_Slot.Time");
       return $query;
     }
 
@@ -129,36 +188,9 @@
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
       $message .= 'Whole query: ' . $query;
-      die($message);
+      print($message);
     }
     return $result;
-  }
-
-  function formatCourseResult($result) {
-    print("<p>Results:<br/>");
-    $formattedResult = array();
-    while ($row = mysql_fetch_assoc($result)) {
-      $name = $row["Name"];
-      $email = $row["Email"];
-      $profRating = $row["Avg_Prof_Rating"];
-      $numProf = $row["Num_Professors"];
-      $studentRating = $row["Avg_Student_Rating"];
-      $numStudent = $row["Num_Students"];
-
-      $pos = strrpos($name, " ");
-      $firstName = substr($name, 0, $pos);
-      $lastName = substr($name, $pos);
-      array_push($formattedResult, array("First" => $firstName,
-                                         "Last" => $lastName,
-                                         "Email" => $email,
-                                         "ProfRating" => $profRating,
-                                         "NumProf" => $numProf,
-                                         "StudentRating" => $studentRating,
-                                         "NumStudent" => $numStudent));
-      print(implode(", ", $row) . "<br/>");
-    }
-    print("</p></body></html>");
-    return $formattedResult;
   }
 
   function formatTutorResult($result) {

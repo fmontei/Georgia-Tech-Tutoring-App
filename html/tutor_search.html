@@ -145,13 +145,13 @@
                 if ($courseResults != null) {
                   foreach ($courseResults as $results) { ?>
                   <tr>
-                    <td><?php echo $results["First"] ?></td>
-                    <td><?php echo $results["Last"] ?></td>
+                    <td><?php echo $results["FirstName"] ?></td>
+                    <td><?php echo $results["LastName"] ?></td>
                     <td><?php echo $results["Email"] ?></td>
-                    <td><?php echo $results["ProfRating"] ?></td>
-                    <td><?php echo $results["NumProf"] ?></td>
-                    <td><?php echo $results["StudentRating"] ?></td>
-                    <td><?php echo $results["NumStudent"] ?></td>
+                    <td><?php echo $results["Avg_Prof_Rating"] ?></td>
+                    <td><?php echo $results["Num_Professors"] ?></td>
+                    <td><?php echo $results["Avg_Student_Rating"] ?></td>
+                    <td><?php echo $results["Num_Students"] ?></td>
                   </tr>
                 <?php } ?>
               <?php } ?>
@@ -178,8 +178,6 @@
             if (array_key_exists("tutorSearchResults", $_SESSION)) { ?>
               <div class="alert alert-info" style="display: inline-block">
                 <p>
-                  <?php echo "(Number of Results: " . count($_SESSION["tutorSearchResults"]) . ")"; ?>
-                  <br />
                   Note: Click on 'Schedule a Tutor' to see all the available time slots.
                 </p>
               </div>
