@@ -12,7 +12,7 @@
   $semester = "FALL";
   $weekday = trim($_GET["tutorDaySelection"]);
 
-  checkForRedundantTime($school, $number, $user_gtid, $time, $semester, $weekday);
+  checkForRedundantTime($school, $number, $user_gtid, $tutor_gtid, $time, $semester, $weekday);
 
   $query = sprintf ("INSERT INTO Hires(GTID_Undergraduate, GTID_Tutor, " .
                      "School, Number, Time, Semester, Weekday) " .
@@ -41,11 +41,13 @@
     die();
   }
 
-  function checkForRedundantTime($school, $number, $user_gtid, $time, $semester,
+  function checkForRedundantTime($school, $number, $user_gtid, $tutor_gtid, $time, $semester,
     $weekday) {
     $query = sprintf("SELECT School, Number, Time, Semester, Weekday FROM HIRES\n" .
-                     "WHERE GTID_Undergraduate = '%s'",
-                     mysql_real_escape_string($user_gtid));
+                     "WHERE GTID_Undergraduate = '%s' AND GTID_Tutor = '%s'",
+                     mysql_real_escape_string($user_gtid),
+					 mysql_real_escape_string($tutor_gtid));
+					 
 
     $result = mysql_query($query);
     while ($row = mysql_fetch_assoc($result)) {
@@ -74,9 +76,10 @@
       $row_time = $row["Time"];
       $row_semester = $row["Semester"];
       $row_weekday = $row["Weekday"];
+	  $row_tutor_gtid = $row["GTID_Tutor"];
       if ($school === $row_school and $number === $row_number and
           $semester === $row_semester and $time == $row_time and
-          $weekday === $row_weekday) {
+          $weekday === $row_weekday and $row_tutor_gtid === $tutor_gtid) {
         displayRepeatedUndergradError($school, $number, $semester, $weekday,
           $time);
         return;
