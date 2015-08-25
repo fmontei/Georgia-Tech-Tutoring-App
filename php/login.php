@@ -4,8 +4,8 @@
   $gtid = htmlspecialchars($_POST["user_gtid"]);
   $password = htmlspecialchars($_POST["password"]);
 
-  $database = "4400_project_db";
-  $con = mysql_connect("localhost", "root", "mysql");
+  $database = "GT-Tutor-App";
+  $con = mysql_connect("Georgia-Tech-Tutoring-A-sczjmed2px.elasticbeanstalk.com", "admin", "13prometheu~31");
   @mysql_select_db($database) or die("Unable to select database");
 
   $name_query = sprintf("SELECT Student.Name FROM Student\n" .
