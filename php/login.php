@@ -1,6 +1,4 @@
 <?php
-  echo "HELLO WORLD!"
-  die();
   session_start();
   // Gather login credentials
   $gtid = htmlspecialchars($_POST["user_gtid"]);
