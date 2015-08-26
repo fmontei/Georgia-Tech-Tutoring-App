@@ -113,9 +113,9 @@
               <option data-username="000000009" data-password="000000009">Tutor 6</option>
             </select>
             <input class="form-control" style="margin-bottom: 15px; width: 200px !important;" type="hidden"
-                   id="user-gtid-input" name="user_gtid" placeholder="GTID" required="required" /><br />
+                   id="user-gtid-input" name="user_gtid" placeholder="GTID" /><br />
             <input class="form-control" style="margin-bottom: 15px; width: 200px !important;" type="hidden"
-                   id="password-input" name="password" placeholder="Password" required="required"/>
+                   id="password-input" name="password" placeholder="Password" />
             <div class="alert alert-info">
               <span class="glyphicon glyphicon-asterisk"></span>&nbsp;The login credentials have been pre-filled above to make using this app easier.
             </div>
@@ -134,16 +134,14 @@
   
   <script>
     $(document).ready(function() {
-      $('#prefilled-login-select option').each(function() {
-        var option = $(this);
-        option.click(function() {
-          var username = $(this).attr('data-username');
-          var password = $(this).attr('data-password');
-          $('#user-gtid-input').val(username);
-          $('#password-input').val(password);
-          alert('Updated GTID/password');
-        });
-      }); 
+      $('#prefilled-login-select').change(function() {
+        var usernameInput = $('#user-gtid-input'),
+            passwordInput = $('#password-input');
+        var username = $(this).find(':selected').attr('data-username');
+        var password = $(this).find(':selected').attr('data-password');
+        usernameInput.val(username);
+        passwordInput.val(password);
+      });
     });
   </script>
 </body>
