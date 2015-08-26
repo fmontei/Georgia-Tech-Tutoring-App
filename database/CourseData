@@ -1,6 +1,0 @@
-INSERT INTO Course (School, Number) VALUES
-('ECE', 1000),
-('ECE', 2000),
-('ECE', 3000),
-('ECE', 4000),
-('ECE', 5000);
