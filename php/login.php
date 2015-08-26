@@ -1,12 +1,12 @@
 <?php
+  include 'globals.php';
+
   session_start();
   // Gather login credentials
   $gtid = htmlspecialchars($_POST["user_gtid"]);
   $password = htmlspecialchars($_POST["password"]);
 
-  $database = "GT-Tutor-App";
-  $con = mysql_connect("georgia-tech-tutor-app.cijyhxa0crol.us-east-1.rds.amazonaws.com:3306", "admin", "13prometheu~31");
-  @mysql_select_db($database) or die("Unable to select database");
+  db_connect(); // From globals.php
 
   $name_query = sprintf("SELECT Student.Name FROM Student\n" .
                         "WHERE Student.GTID = '%s'",
