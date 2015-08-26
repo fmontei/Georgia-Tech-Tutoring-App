@@ -139,9 +139,9 @@
         option.click(function() {
           var username = $(this).attr('data-username');
           var password = $(this).attr('data-password');
-          $('user-gtid-input').val(username);
-          $('password-input').val(password);
-          console.log('Updated GTID/password');
+          $('#user-gtid-input').val(username);
+          $('#password-input').val(password);
+          alert('Updated GTID/password');
         });
       }); 
     });
