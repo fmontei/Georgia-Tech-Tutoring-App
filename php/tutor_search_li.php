@@ -1,14 +1,13 @@
 <?php
-	//inputs for test
+	include 'globals.php';
+
 	$school = 'ECE';
 	$courseNumber = '5000';
 	$preferredDays = 'Thursday';
 	$preferredTimes = '9am';
 	$currentSemester = 'FALL';
-	//connect to the database
-	$database = "4400_project_db";
-	$con = mysql_connect("localhost", "root", "mysql");
-	@mysql_select_db($database) or die("Unable to select database");
+
+	db_connect(); // From globals.php
 	
 	//query
 	$sql_tutors = sprintf("SELECT Student.GTID, Student.Name, Student.Email

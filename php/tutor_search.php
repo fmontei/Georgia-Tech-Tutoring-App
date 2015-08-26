@@ -1,4 +1,6 @@
 <?php
+  include 'globals.php'
+
   session_start();
   $school = htmlspecialchars($_GET["schoolName"]);
   $courseNumber = htmlspecialchars($_GET["courseNumber"]);
@@ -46,9 +48,7 @@
 
   function fetchAllAvailableTimeSlots($schoolName, $courseNumber, $dayArray,
       $timeArray) {
-    $database = "4400_project_db";
-    $con = mysql_connect(localhost, "root", "mysql");
-    @mysql_select_db($database) or die("Unable to select database");
+    db_connect(); // From globals.php
 
     $currentSemester = "FALL";
     $tutors_query = sprintf("SELECT Student.GTID, Student.Name, Student.Email

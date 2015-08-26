@@ -1,10 +1,10 @@
 <?php
+  include 'globals.php';
+
 	//IMPORTANT: CAN ONLY ENTER PHP IF AT LEAST ONE SEMESTER IS CHOSEN
 	session_start();
 	
-	$database = "4400_project_db";
-	$con = mysql_connect("localhost", "root", "mysql");
-	@mysql_select_db($database) or die("Unable to select database");
+	db_connect(); // From globals.php
 
 	//obtain semester's desired from user
 	$semesterSelection = array();

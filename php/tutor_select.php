@@ -1,8 +1,9 @@
 <?php
+  include 'globals.php';
+
   session_start();
-  $database = "4400_project_db";
-  $con = mysql_connect(localhost, "root", "mysql");
-  @mysql_select_db($database) or die("Unable to select database");
+
+  db_connect(); // From globals.php
 
   $user_gtid = trim($_SESSION['user_gtid']);
   $tutor_gtid = trim($_GET["tutorGTIDSelection"]);
