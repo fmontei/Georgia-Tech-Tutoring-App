@@ -134,11 +134,16 @@
   
   <script>
     $(document).ready(function() {
+      var firstOption = $('#prefilled-login-select option:first'),
+          usernameInput = $('#user-gtid-input'),
+          passwordInput = $('#password-input');
+      var username = firstOption.attr('data-username'),
+          password = firstOption.attr('data-password');
+      usernameInput.val(username);
+      usernameInput.val(password);
       $('#prefilled-login-select').change(function() {
-        var usernameInput = $('#user-gtid-input'),
-            passwordInput = $('#password-input');
-        var username = $(this).find(':selected').attr('data-username');
-        var password = $(this).find(':selected').attr('data-password');
+        username = $(this).find(':selected').attr('data-username');
+        password = $(this).find(':selected').attr('data-password');
         usernameInput.val(username);
         passwordInput.val(password);
       });
