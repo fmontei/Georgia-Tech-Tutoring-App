@@ -11,6 +11,7 @@
   <link href="../css/style.css" rel="stylesheet" type="text/css" />
 </head>
   <body>
+    <?php include_once('templates/nav-template.html'); ?>
     <div class="inner">
       <h1>Tutor Evaluation by Student</h1><br />
         <div class="container-fluid">
@@ -127,8 +128,9 @@
       </div>
     </div>
 
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    
     <script type="text/javascript">
       var tutorResultRows = document.getElementsByClassName("tutorResultRow");
       for (var i = 0; i < tutorResultRows.length; i++) {

@@ -4,24 +4,34 @@
 
 <!DOCTYPE html>
 <html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title>Find Tutor Schedule</title>
-  <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="../css/style.css" rel="stylesheet" type="text/css" />
-</head>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>Find Tutor Schedule</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css"
+  </head>
   <body>
-
+    <?php include_once('templates/nav-template.html'); ?>
     <div class="inner">
       <div class="container-fluid">
-        <h1>Look Up Tutor Schedule</h1><br />
+        <div class="row">
+          <div class="col col-sm-9 col-md-8">
+            <h1>Look Up Tutor Schedule</h1>
+          </div>
+          <div class="col col-sm-8 col-md-4">
+            <ul class="pagination" style="position: relative; bottom: -8px;">
+              <li><a href="../php/find_schedule.php?clear_results">&laquo;&nbsp;Back to Menu</a></li>
+            </ul>
+          </div>
+        </div><br />
         <form action = "../php/find_schedule.php" method="post" class="form-inline" role="form">
           <div class="row">
             <div class="col col-md-12" style="width: 930px">
               <?php if (array_key_exists("userType", $_SESSION)) { ?>
                 <?php if ($_SESSION["userType"] == "admin") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
-                  <input name="tutor_id" class="form-control" type="text" />
+                  <input id="admin-tutor-id-input" name="tutor_id" class="form-control" type="text" placeholder="000000000" />
                   <input class="form-control" name="find_schedule" type="submit" value="OK" />
                 <?php } else if ($_SESSION["userType"] == "tutor") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
@@ -95,17 +105,21 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col col-md-4" style="margin-top: 10px; margin-left: 15px">
-          <ul class="pagination">
-            <li><a href="../php/find_schedule.php?clear_results">&laquo; Back to Menu</a></li>
-          </ul>
-        </div>
-      </div>
     </div>
 
-
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    
+    <script>
+      $(document).ready(function() {
+        var availableTutorIDs = <?php echo json_encode($_SESSION['availableTutorIDs']); ?>;
+        $('#admin-tutor-id-input').autocomplete({
+          source: availableTutorIDs,
+          autoFocus: true,
+          minLength: 1
+        });
+      });
+    </script>
   </body>
 </html>
