@@ -29,7 +29,7 @@
           <li><a href="menu.html">&laquo; Back to Main Menu</a></li>
         </ul>
       </div>
-      <form action="/4400Project/php/tutor_search.php" method="get">
+      <form action="../php/tutor_search.php" method="get">
         <div class="row">
           <div class="col col-md-2">
             <h4>Course</h4>
@@ -202,7 +202,7 @@
             <?php echo $_SESSION["school"] . " " . $_SESSION["courseNumber"]; ?>
           </h4>
         </div>
-        <form action="/4400Project/php/tutor_select.php" method="get" accept-charset="UTF-8"
+        <form action="../php/tutor_select.php" method="get" accept-charset="UTF-8"
                 onsubmit="if (!confirm('Do you really want to add the selected row to your' +
                                   ' tutor schedule?')) { return false; }">
           <table class="table table-bordered" id="tutorResultTable"

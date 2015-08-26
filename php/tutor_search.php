@@ -2,6 +2,9 @@
   include 'globals.php'
 
   session_start();
+
+  db_connect(); // From globals.php
+
   $school = htmlspecialchars($_GET["schoolName"]);
   $courseNumber = htmlspecialchars($_GET["courseNumber"]);
   $preferredDays = htmlspecialchars($_GET["preferredDay"]);
@@ -48,8 +51,6 @@
 
   function fetchAllAvailableTimeSlots($schoolName, $courseNumber, $dayArray,
       $timeArray) {
-    db_connect(); // From globals.php
-
     $currentSemester = "FALL";
     $tutors_query = sprintf("SELECT Student.GTID, Student.Name, Student.Email
                     FROM Student, Tutors, Tutor_Time_Slot
@@ -181,9 +182,7 @@
     print("<html><body>");
     print("<h1>DEBUGGING MENU</h1>");
     print("<p>Query:<br/>" . $query . "</p>");
-    $database = "4400_project_db";
-    $con = mysql_connect(localhost, "root", "mysql");
-    @mysql_select_db($database) or die("Unable to select database");
+    
     $result = mysql_query($query);
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
