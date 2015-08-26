@@ -5,7 +5,7 @@
   $password = htmlspecialchars($_POST["password"]);
 
   $database = "GT-Tutor-App";
-  $con = mysql_connect("Georgia-Tech-Tutoring-A-sczjmed2px.elasticbeanstalk.com", "admin", "13prometheu~31");
+  $con = mysql_connect("georgia-tech-tutor-app.cijyhxa0crol.us-east-1.rds.amazonaws.com:3306", "admin", "13prometheu~31");
   @mysql_select_db($database) or die("Unable to select database");
 
   $name_query = sprintf("SELECT Student.Name FROM Student\n" .
