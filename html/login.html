@@ -59,7 +59,7 @@
             <h1>Georgia Tech Tutors Project</h1>
             <p>To get started, please login below.</p>
             <div style="display: inline-block">
-              <div class="btn-group" style="width: 900px">
+              <div class="row" style="width: 900px">
                 <button type="button" class="btn btn-default btn-lg"
                         data-toggle="modal" data-target="#myModal" role="button">
                   Login
@@ -134,12 +134,16 @@
   
   <script>
     $(document).ready(function() {
-      $('#prefilled-login-select option').click(function() {
-        var username = $(this).attr('data-username');
-        var password = $(this).attr('data-password');
-        $('user-gtid-input').val(username);
-        $('password-input').val(password);
-      });
+      $('#prefilled-login-select option').each(function() {
+        var option = $(this);
+        option.click(function() {
+          var username = $(this).attr('data-username');
+          var password = $(this).attr('data-password');
+          $('user-gtid-input').val(username);
+          $('password-input').val(password);
+          console.log('Updated GTID/password');
+        });
+      }); 
     });
   </script>
 </body>
