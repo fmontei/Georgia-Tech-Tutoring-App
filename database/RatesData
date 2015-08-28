@@ -1,7 +1,0 @@
-INSERT INTO Rates (GTID_Undergraduate, GTID_Tutor, School, Number, Num_Evaluation, Desc_Evaluation) VALUES
-('000000011', '000000004', 'ECE', 1000, 3, 'Nice guy.'),
-('000000012', '000000005', 'ECE', 2000, 1, 'Terrible.'),
-('000000013', '000000007', 'ECE', 3000, 2, 'Bad.'),
-('000000014', '000000008', 'ECE', 4000, 4, 'Very good.'),
-('000000015', '000000009', 'ECE', 5000, 1, 'Pretty Bad.'),
-('000000016', '000000010', 'ECE', 5000, 4, 'Excellent.');
