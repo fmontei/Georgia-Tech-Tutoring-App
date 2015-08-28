@@ -9,8 +9,10 @@
   <title>Georgia Tech Tutors Tutor Search</title>
   <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
   <link href="../css/style.css" rel="stylesheet" type="text/css" />
+  <link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+  <?php include_once('templates/nav-template.html'); ?>
   <div class="container-fluid" style="margin-bottom: 100px">
     <div class="inner">
       <div class="row">
@@ -39,17 +41,29 @@
               <thead>
                 <tr>
                   <th>School</th>
-                  <th>Number</th>
+                  <th class="hidden-col">Number</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><input class="form-control" type="text" name="schoolName"
-                             required="required" /></td>
-                  <td><input class="form-control" name="courseNumber"
-                             pattern="^[0-9]{4,4}$"
-                             title="Please enter a four-digit course number."
-                             required="required" /></td>
+                  <td>
+                    <select class="form-control" 
+                            id="school-name-select"
+                            name="schoolName" 
+                            type="text" 
+                            required="required">
+                      <option></option>
+                    </select>
+                  </td>
+                  <td class="hidden-col">
+                    <select class="form-control" 
+                            id="course-number-select" 
+                            name="courseNumber"
+                            pattern="^[0-9]{4,4}$"
+                            title="Please enter a four-digit course number."
+                            required="required">
+                    </select>
+                  </td>
                 </tr>
               </tbody>
               <tfoot>
@@ -115,7 +129,7 @@
         </div>
         <div class="row" style="margin-top: 20px">
           <div class="col-md-2">
-            <input class="btn btn-default" type="submit" name="submitDayTimeBtn" value="OK" />
+            <input class="btn btn-primary" type="submit" name="submitDayTimeBtn" value="Search" />
           </div>
         </div>
       </form>
@@ -257,38 +271,63 @@
     </div>
   </div>
 
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
   <script src="../js/bootstrap.min.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
+      var availableSchools = <?php echo json_encode($_SESSION['availableSchools']); ?>;
+      var availableCourses = <?php echo json_encode($_SESSION['availableCourses']); ?>;
+      var relevantCourses = [];
+      
+      availableSchools.forEach(function(school, i) {
+        $('#school-name-select').append('<option>' + school + '</option>');  
+      });
+      
+      /* Add autocomplete functionality to input fields */
+      $('#school-name-select').change(function() {
+        var selectedValue = $(this).find(':selected').val();
+        $('.hidden-col').show(); 
+        relevantCourses.length = 0;
+        $('#course-number-select').find('option').remove();
+        availableCourses.forEach(function(schoolCourse, i) {
+          if (schoolCourse.school === selectedValue) {
+            relevantCourses.push(schoolCourse.course);  
+          }
+        });
+        relevantCourses.forEach(function(course, i) {
+          $('#course-number-select').append('<option>' + course + '</option>');      
+        });
+      });
+      
       var newDayTimeBtn = document.getElementById("newDayTimeBtn");
-      newDayTimeBtn.addEventListener("click", function() {
-        var dayTimeTable = $("#dayTimeTable");
-        dayTimeTable.append('<tr><td>' +
-                '<select name="preferredDay" class="form-control" required="required">' +
-                '<option selected></option>' +
-                '<option>Monday</option>' +
-                '<option>Tuesday</option>' +
-                '<option>Wednesday</option>' +
-                '<option>Thursday</option>' +
-                '<option>Friday</option>' +
-                '<option>Saturday</option>' +
-                '<option>Sunday</option>' +
-                '</select>' +
-                '</td>' +
-                '<td>' +
-                '<select name="preferredTime" class="form-control" required="required">' +
-                '<option value="9am">9:00 AM</option>' +
-                '<option value="10am">10:00 AM</option>' +
-                '<option value="11am">11:00 AM</option>' +
-                '<option value="12pm">12:00 AM</option>' +
-                '<option value="1pm">1:00 PM</option>' +
-                '<option value="2pm">2:00 PM</option>' +
-                '<option value="3pm">3:00 PM</option>' +
-                '<option value="4pm">4:00 PM</option>' +
-                '</select>' +
-                '</td></tr>)');
+        newDayTimeBtn.addEventListener("click", function() {
+          var dayTimeTable = $("#dayTimeTable");
+          dayTimeTable.append('<tr><td>' +
+                  '<select name="preferredDay" class="form-control" required="required">' +
+                  '<option selected></option>' +
+                  '<option>Monday</option>' +
+                  '<option>Tuesday</option>' +
+                  '<option>Wednesday</option>' +
+                  '<option>Thursday</option>' +
+                  '<option>Friday</option>' +
+                  '<option>Saturday</option>' +
+                  '<option>Sunday</option>' +
+                  '</select>' +
+                  '</td>' +
+                  '<td>' +
+                  '<select name="preferredTime" class="form-control" required="required">' +
+                  '<option value="9am">9:00 AM</option>' +
+                  '<option value="10am">10:00 AM</option>' +
+                  '<option value="11am">11:00 AM</option>' +
+                  '<option value="12pm">12:00 AM</option>' +
+                  '<option value="1pm">1:00 PM</option>' +
+                  '<option value="2pm">2:00 PM</option>' +
+                  '<option value="3pm">3:00 PM</option>' +
+                  '<option value="4pm">4:00 PM</option>' +
+                  '</select>' +
+                  '</td></tr>)');
       });
 
       var removeDayTimeBtn = document.getElementById("removeDayTimeBtn");

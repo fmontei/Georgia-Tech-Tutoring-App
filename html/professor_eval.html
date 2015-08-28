@@ -9,8 +9,10 @@
   <title>Georgia Tech Tutors Tutor Search</title>
   <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
   <link href="../css/style.css" rel="stylesheet" type="text/css" />
-</head>
+  <link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+ </head>
 <body>
+  <?php include_once('templates/nav-template.html'); ?>
   <div class="inner">
     <h1>Tutor Evaluation by Professor</h1><br />
     <div class="container-fluid">
@@ -18,8 +20,8 @@
         <div class="col col-md-10" style="margin-left: 15px">
         <?php
            $error = "";
-           if (array_key_exists("duplicate_recommendation_error", $_SESSION)) {
-             $error = $_SESSION["duplicate_recommendation_error"];
+           if (array_key_exists("recommendation_error", $_SESSION)) {
+             $error = $_SESSION["recommendation_error"];
            }
            if ($error !== "") { ?>
             <div class="row">
@@ -39,7 +41,7 @@
                 <input type="text" class="form-control"
                        id="gtid_input"
                        name="tutorGTIDSelection"
-                       placeholder="Student GTID"
+                       placeholder="e.g. 000000000"
                        maxlength="9" required="required"
                        title="Please enter a valid GTID."
                        style="width: 180px" />
@@ -124,10 +126,43 @@
     </div>
   </div>
 
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
   <script src="../js/bootstrap.min.js"></script>
 
   <script type="text/javascript">
+    $(document).ready(function() {
+      var availableTutorIDs = <?php echo json_encode($_SESSION['availableTutorIDs']); ?>;
+      $('#gtid_input').autocomplete({
+        source: availableTutorIDs,
+        autoFocus: true,
+        minLength: 1,
+        select: function(event, ui) {
+          $.ajax({
+            type: 'GET',
+            url: '../php/professor_recommend.php?get_recommendation',
+            data: {tutorID: ui.item.value},
+            success: function(resp) {
+              var respObj = JSON.parse(resp);
+              $('#desc_eval').val(respObj.desc_evaluation);
+              $('.num_eval_input').each(function() {
+                $(this).prop('checked', false);  
+              });
+              $('#final_num_eval_input').val('');
+              $('.num_eval_input').each(function() {
+                var checkbox = $(this);
+                if (checkbox.val() === respObj.num_evaluation) {
+                  checkbox.prop('checked', true);
+                  $('#final_num_eval_input').val(respObj.num_evaluation);
+                  return;
+                }
+              });
+            }
+          });     
+        }
+      });
+    });
+    
     var num_eval_inputs = document.getElementsByClassName("num_eval_input");
     var final_num_eval_input = document.getElementById("final_num_eval_input");
     for (var i = 0; i < num_eval_inputs.length; i++) {

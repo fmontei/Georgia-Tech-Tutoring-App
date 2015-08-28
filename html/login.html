@@ -11,68 +11,37 @@
   <link href="../css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+  <?php include_once('templates/nav-template.html'); ?>
+  <div class="container-fluid">
+    <div class="jumbotron" style="width: 100%; height: 400px; background-color: rgb(3, 48, 81); color: rgb(204, 153, 0)">
       <div class="row">
-        <div class="col-md-12">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-              Georgia Tech Tutors Project
-            </a>
-          </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown">
-                <a class="dropdown-toggle" href="#" data-toggle="dropdown">Login<strong class="caret"></strong></a>
-                <div class="dropdown-menu" style="padding: 15px;">
-                  <!--Login form-->
-                  <form action="../php/login.php" method="post" accept-charset="UTF-8">
-                    <input class="form-control" id="user_gtid" style="margin-bottom: 15px; width: 170px" type="text"
-                           name="user_gtid" size="30" placeholder="GTID" required="required"/>
-                    <input class="form-control" id="user_password" style="margin-bottom: 15px; width: 170px" type="password"
-                           name="password" size="30" placeholder="Password" required="required"/>
-                    <input class="btn btn-primary" style="clear: left; width: 170px; height: 32px; font-size: 13px;"
-                           type="submit" name="loginButton" value="Login" />
-                  </form>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><br /><br />
-
-  <div class="container jumbotron"
-       style="width: 100%; padding: 10px; height: 300px; background-color: rgb(3, 48, 81); color: rgb(204, 153, 0)">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-2" style="margin-right: 50px"></div>
-        <div class="col-md-8">
-          <div style="margin-top: 50px">
-            <h1>Georgia Tech Tutors Project</h1>
-            <p>To get started, please login below.</p>
-            <div style="display: inline-block">
-              <div class="row" style="width: 900px">
-                <button type="button" class="btn btn-default btn-lg"
-                        data-toggle="modal" data-target="#myModal" role="button">
-                  Login
-                </button>
-                <?php if (isset($_SESSION['loginError'])) { ?>
-                  <div class="custom-alert">
-                    <span><?php echo $_SESSION['loginError']; ?></span>
-                  </div>
-                <?php } ?>
-              </div>
+        <div class="col col-md-12">
+          <div class="row">
+            <div class="col col-md-7 col-md-push-3">
+              <h1>Georgia Tech Tutors Project</h1>
+              <p>To get started, please login below.</p>
             </div>
           </div>
-        </div>
+          <div class="row">
+            <div class="col col-md-7 col-md-push-3">
+              <button type="button" class="btn btn-default btn-lg"
+                      data-toggle="modal" data-target="#myModal" role="button">
+                Login
+              </button>
+            </div>
+          </div>
+          <br />
+          <br />
+          <div class="row">
+            <div class="col col-md-12 text-center">
+              <?php if (isset($_SESSION['loginError'])) { ?>
+                <div class="alert alert-danger" style="display: inline-block">
+                  <span class="glyphicon glyphicon-alert"></span>&nbsp;<?php echo $_SESSION['loginError']; ?>
+                </div>
+              <?php } ?>
+            </div>
+          </div>
+        </div> <!-- ./col col-md-12 -->
       </div>
     </div>
   </div>
@@ -88,36 +57,9 @@
         <form action="../php/login.php" method="post" accept-charset="UTF-8">
           <div class="modal-body">
             <label>Username:</label>
-            <select class="form-control" id="prefilled-login-select" required="required">
-              <option data-username="000000000" data-password="000000000">Admin</option>
-              <option data-username="000000021" data-password="000000021">Professor 1</option>
-              <option data-username="000000022" data-password="000000022">Professor 2</option>
-              <option data-username="000000023" data-password="000000023">Professor 3</option>
-              <option data-username="000000024" data-password="000000024">Professor 4</option>
-              <option data-username="000000006" data-password="000000006">Undergrad 1</option>
-              <option data-username="000000007" data-password="000000007">Undergrad 2</option>
-              <option data-username="000000008" data-password="000000008">Undergrad 3</option>
-              <option data-username="000000009" data-password="000000009">Undergrad 4</option>
-              <option data-username="000000010" data-password="000000010">Undergrad 5</option>
-              <option data-username="000000011" data-password="000000011">Undergrad 6</option>
-              <option data-username="000000001" data-password="000000001">Grad 1</option>
-              <option data-username="000000002" data-password="000000002">Grad 2</option>
-              <option data-username="000000003" data-password="000000003">Grad 3</option>
-              <option data-username="000000004" data-password="000000004">Grad 4</option>
-              <option data-username="000000005" data-password="000000005">Grad 5</option>
-              <option data-username="000000004" data-password="000000004">Tutor 1</option>
-              <option data-username="000000005" data-password="000000005">Tutor 2</option>
-              <option data-username="000000006" data-password="000000006">Tutor 3</option>
-              <option data-username="000000007" data-password="000000007">Tutor 4</option>
-              <option data-username="000000008" data-password="000000008">Tutor 5</option>
-              <option data-username="000000009" data-password="000000009">Tutor 6</option>
-            </select>
-            <input class="form-control" style="margin-bottom: 15px; width: 200px !important;" type="hidden"
-                   id="user-gtid-input" name="user_gtid" placeholder="GTID" /><br />
-            <input class="form-control" style="margin-bottom: 15px; width: 200px !important;" type="hidden"
-                   id="password-input" name="password" placeholder="Password" />
+            <?php include('templates/login-select-template.html'); ?>
             <div class="alert alert-info">
-              <span class="glyphicon glyphicon-asterisk"></span>&nbsp;The login credentials have been pre-filled above to make using this app easier.
+              <span class="glyphicon glyphicon-info"></span>&nbsp;The login credentials have been pre-filled above to make using this app easier.
             </div>
           </div>
           <div class="modal-footer">
@@ -129,23 +71,26 @@
     </div>
   </div>
 
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <script src="../js/jquery.min.js"></script>
   <script src="../js/bootstrap.min.js"></script>
   
   <script>
     $(document).ready(function() {
-      var firstOption = $('#prefilled-login-select option:first'),
-          usernameInput = $('#user-gtid-input'),
-          passwordInput = $('#password-input');
-      var username = firstOption.attr('data-username'),
-          password = firstOption.attr('data-password');
-      usernameInput.val(username);
-      passwordInput.val(password);
-      $('#prefilled-login-select').change(function() {
-        username = $(this).find(':selected').attr('data-username');
-        password = $(this).find(':selected').attr('data-password');
+      $('.prefilled-login-select').each(function() {
+        var select = $(this);
+        var firstOption = select.find('option:first'),
+            usernameInput = select.parent().find('.user-gtid-input'),
+            passwordInput = select.parent().find('.password-input');
+        var username = firstOption.attr('data-username'),
+            password = firstOption.attr('data-password');
         usernameInput.val(username);
         passwordInput.val(password);
+        select.change(function() {
+          username = $(this).find(':selected').attr('data-username');
+          password = $(this).find(':selected').attr('data-password');
+          usernameInput.val(username);
+          passwordInput.val(password);
+        });
       });
     });
   </script>

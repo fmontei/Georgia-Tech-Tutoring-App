@@ -1,12 +1,12 @@
 <?php
   include 'globals.php';
 
-	//IMPORTANT: CAN ONLY ENTER PHP IF AT LEAST ONE SEMESTER IS CHOSEN
+	// IMPORTANT: CAN ONLY ENTER PHP IF AT LEAST ONE SEMESTER IS CHOSEN
 	session_start();
 	
 	db_connect(); // From globals.php
 
-	//obtain semester's desired from user
+	// Obtain semesters desired from user
 	$semesterSelection = array();
 	$fall_checkbox = $spring_checkbox = $summer_checkbox = "";
 	if (isset($_GET["fall_checkbox"])) {
@@ -20,31 +20,31 @@
 	}
 	$numSemesters = count($semesterSelection);
 	
-	//Find course school and number of semesters with graduate tutors
-	if( $numSemesters == 1 ) {
+	// Find course, school, and number of semesters with graduate tutors
+	if($numSemesters == 1) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
-					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID "  .
-					"AND Tutor_time_slot.Semester = '%s';",
+					"FROM Tutor_Time_Slot, Tutors, Graduate " .
+					"WHERE Tutor_Time_Slot.GTID = Tutors.GTID_Tutor AND Tutors.GTID_Tutor = Graduate.GTID "  .
+					"AND Tutor_Time_Slot.Semester = '%s';",
 					mysql_real_escape_string($semesterSelection[0]));	
 	}
 	
-	else if( $numSemesters == 2 ) {
+	else if($numSemesters == 2) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
-					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID "  .
-					"AND (Tutor_time_slot.Semester = '%s' " .
-					"OR Tutor_time_slot.Semester = '%s') ",
+					"FROM Tutor_Time_Slot, Tutors, Graduate " .
+					"WHERE Tutor_Time_Slot.GTID = Tutors.GTID_Tutor AND Tutors.GTID_Tutor = Graduate.GTID "  .
+					"AND (Tutor_Time_Slot.Semester = '%s' " .
+					"OR Tutor_Time_Slot.Semester = '%s') ",
 					mysql_real_escape_string($semesterSelection[0]),	
 					mysql_real_escape_string($semesterSelection[1]));
 	}
 	else {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
-					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID "  .
-					"AND (Tutor_time_slot.Semester = '%s' " .
-					"OR Tutor_time_slot.Semester = '%s' " .
-					"OR Tutor_time_slot.Semester = '%s') ",
+					"FROM Tutor_Time_Slot, Tutors, Graduate " .
+					"WHERE Tutor_Time_Slot.GTID = Tutors.GTID_Tutor AND Tutors.GTID_Tutor = Graduate.GTID "  .
+					"AND (Tutor_Time_Slot.Semester = '%s' " .
+					"OR Tutor_Time_Slot.Semester = '%s' " .
+					"OR Tutor_Time_Slot.Semester = '%s') ",
 					mysql_real_escape_string($semesterSelection[0]),
 					mysql_real_escape_string($semesterSelection[1]),
 					mysql_real_escape_string($semesterSelection[2]));
@@ -68,12 +68,12 @@
 		while($i < $numSemesters) {
 			if(isSemesterValid($semesterSelection[$i], $school, $number)) {
 				
-				$query = sprintf("SELECT COUNT( DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
+				$query = sprintf("SELECT COUNT(DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
 						"FROM Tutors, Rates, Graduate, Tutor_Time_Slot\n" .
 						"WHERE Tutors.GTA = 1 AND Tutors.GTID_Tutor = Graduate.GTID " .
 						"AND Tutors.school = '%s' AND Rates.school = '%s' " .
 						"AND Tutors.number = '%s' AND Rates.number = '%s'  " .
-						"AND Tutor_time_slot.Semester = '%s';",
+						"AND Tutor_Time_Slot.Semester = '%s';",
 						mysql_real_escape_string($school),
 						mysql_real_escape_string($school),
 						mysql_real_escape_string($number),
@@ -91,12 +91,12 @@
 					$AvgTA = $AvgTA + $avgRatingGTA;
 				}
 				
-				$query = sprintf("SELECT COUNT( DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
+				$query = sprintf("SELECT COUNT(DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
 						"FROM Tutors, Rates, Graduate, Tutor_Time_Slot\n" .
 						"WHERE Tutors.GTA = 0 AND Tutors.GTID_Tutor = Graduate.GTID " .
 						"AND Tutors.school = '%s' AND Rates.school = '%s' " .
 						"AND Tutors.number = '%s' AND Rates.number = '%s'  " .
-						"AND Tutor_time_slot.Semester = '%s';",
+						"AND Tutor_Time_Slot.Semester = '%s';",
 						mysql_real_escape_string($school),
 						mysql_real_escape_string($school),
 						mysql_real_escape_string($number),
@@ -156,13 +156,11 @@
   header("Location: ../html/admin_summary_report.html");
   die();
 	
-	//Check if there are courses return for semester
-	//Return true if yes, else false
 	function isSemesterValid($semesterSelection, $school, $number) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
-					"FROM Tutor_time_slot, Tutors, Graduate " .
-					"WHERE (Tutor_time_slot.GTID = Tutors.GTID_tutor AND Tutors.GTID_tutor = Graduate.GTID) "  .
-					"AND Tutor_time_slot.Semester = '%s';",
+					"FROM Tutor_Time_Slot, Tutors, Graduate " .
+					"WHERE (Tutor_Time_Slot.GTID = Tutors.GTID_Tutor AND Tutors.GTID_Tutor = Graduate.GTID) "  .
+					"AND Tutor_Time_Slot.Semester = '%s';",
 					mysql_real_escape_string($semesterSelection));	
 		$resultSem = mysql_query($query);
 		

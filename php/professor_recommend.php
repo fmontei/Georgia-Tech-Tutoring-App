@@ -5,58 +5,104 @@
 	
 	db_connect(); // From globals.php
 
-  if (strpos($_SERVER["QUERY_STRING"], "clear_recommendation") !== false) {
+  $user_gtid = $_SESSION['user_gtid'];
+
+  // Clear recommendation if user clicks 'Cancel'
+  if (strpos($_SERVER['QUERY_STRING'], 'clear_recommendation') !== false) {
     clear_recommendation();
     return;
-  }
-
-  $user_gtid = $_SESSION['user_gtid'];
-  $tutor_gtid = trim($_GET["tutorGTIDSelection"]);
-  $desc_eval = trim($_GET["desc_eval"]);
-  $num_eval = trim($_GET["final_num_eval_input"]);
-
-  print("<h1>Debugging for Professor Recommend</h1>");
-  print("<ul><li>user_gtid: " . $user_gtid . "</li>" .
-        "<li>tutor_gtid: " . $tutor_gtid . "</li>" .
-        "<li>desc_eval: " . $desc_eval . "</li>" .
-        "<li>user_gtid: " . $num_eval . "</li></ul>");
-
-  //check if valid GTID
-  $query = sprintf("SELECT Tutor.GTID \n" .
-          "FROM Tutor \n" .
-          "WHERE Tutor.GTID = '%s';",
-          mysql_real_escape_string($tutor_gtid));
-
-  $result = mysql_query($query);
-  $count = 0;
-  while ($row = mysql_fetch_assoc($result)) $count++;
-  if ($count === 0) {
-    $_SESSION["duplicate_recommendation_error"] =
-          "Error: Invalid GTID provided.";
-    header("Location: ../html/professor_eval.html");
+  } else if (strpos($_SERVER['QUERY_STRING'], 'fetch_tutors') !== false) {
+    $result = fetchAllTutorIDs();
+    storeAllTutorIDs($result);
+    header('Location: ../html/professor_eval.html');
     die();
+  } else if ($_GET['tutorID'] !== null) {
+    get_prev_recommendation($_SESSION['user_gtid'], trim($_GET['tutorID']));
+    die();
+  } else {
+    create_new_recommendation($user_gtid);
   }
 
-  $query = sprintf("INSERT INTO Recommends(GTID_Tutor, GTID_Professor,\n" .
-      "Num_Evaluation, Desc_Evaluation)\n" .
-      "VALUES('%s', '%s', '%s', '%s');",
+  function fetchAllTutorIDs() {
+    $query = sprintf('SELECT GTID FROM Tutor');
+    $result = mysql_query($query);
+    return $result;
+  }
+
+  function storeAllTutorIDs($tutorIDs) {
+    $availableTutorIDs = [];
+    while ($row = mysql_fetch_assoc($tutorIDs)) {
+      array_push($availableTutorIDs, $row['GTID']);
+    }
+    $_SESSION['availableTutorIDs'] = $availableTutorIDs;  
+  }
+
+  // Recommendation already exists
+  function get_prev_recommendation($user_gtid, $tutor_gtid) {
+    $prev_recommendation_query = sprintf('SELECT Num_Evaluation, Desc_Evaluation ' .
+      'FROM Recommends ' .
+      'WHERE GTID_TUTOR = "%s" AND ' .
+      'GTID_Professor = "%s";',
       mysql_real_escape_string($tutor_gtid),
-      mysql_real_escape_string($user_gtid),
-      mysql_real_escape_string($num_eval),
-      mysql_real_escape_string($desc_eval));
-  $result = mysql_query($query);
+      mysql_real_escape_string($user_gtid));
+    $prev_recommendation_result = mysql_query($prev_recommendation_query);
+    $prev_recommendation = new stdClass();
+    while ($row = mysql_fetch_assoc($prev_recommendation_result)) {
+      $prev_recommendation->num_evaluation = $row['Num_Evaluation'];
+      $prev_recommendation->desc_evaluation = $row['Desc_Evaluation'];
+      break;
+    }
+    $_SESSION['prev_recommendation_exists'] = true;
+    echo json_encode($prev_recommendation);
+  }
 
-  if (!$result) {
-    $_SESSION["duplicate_recommendation_error"] =
-      "Error: You cannot submit another recommendation for the same student.";
+  function create_new_recommendation($user_gtid) {
+    $tutor_gtid = trim($_GET["tutorGTIDSelection"]);
+    $desc_eval = trim($_GET["desc_eval"]);
+    $num_eval = trim($_GET["final_num_eval_input"]);
+    
+    $query = sprintf("SELECT Tutor.GTID \n" .
+            "FROM Tutor \n" .
+            "WHERE Tutor.GTID = '%s';",
+            mysql_real_escape_string($tutor_gtid));
+
+    $result = mysql_query($query);
+    $count = 0;
+    while ($row = mysql_fetch_assoc($result)) $count++;
+    if ($count === 0) {
+      $_SESSION["recommendation_error"] =
+            "Error: Invalid GTID provided.";
+      header("Location: ../html/professor_eval.html");
+      die();
+    }
+    
+    if ($_SESSION['prev_recommendation_exists']) {
+      $query = sprintf("UPDATE Recommends\n" .
+                       "SET Num_Evaluation = '%s', Desc_Evaluation = '%s'\n" .
+                       "WHERE GTID_Tutor = '%s' AND GTID_Professor = '%s';",
+          mysql_real_escape_string($num_eval),
+          mysql_real_escape_string($desc_eval),
+          mysql_real_escape_string($tutor_gtid),
+          mysql_real_escape_string($user_gtid));
+      $result = mysql_query($query);
+    } else {
+      $query = sprintf("INSERT INTO Recommends(GTID_Tutor, GTID_Professor,\n" .
+          "Num_Evaluation, Desc_Evaluation)\n" .
+          "VALUES('%s', '%s', '%s', '%s');",
+          mysql_real_escape_string($tutor_gtid),
+          mysql_real_escape_string($user_gtid),
+          mysql_real_escape_string($num_eval),
+          mysql_real_escape_string($desc_eval));
+      $result = mysql_query($query);
+    }
+    
+    unset($_SESSION["recommendation_error"]);
     header("Location: ../html/professor_eval.html");
     die();
   }
-
-  clear_recommendation();
 
   function clear_recommendation() {
-    unset($_SESSION["duplicate_recommendation_error"]);
+    unset($_SESSION["recommendation_error"]);
     header("Location: ../html/menu.html");
     die();
   }

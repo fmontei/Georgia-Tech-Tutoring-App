@@ -11,31 +11,7 @@
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Georgia Tech Tutors</a>
-        </div>
-        <ul class="nav navbar-nav navbar-right">
-          <?php
-            $gradType = $userType = "";
-            if (array_key_exists("gradType", $_SESSION)) {
-              $gradType = $_SESSION["gradType"];
-            }
-            if (array_key_exists("userType", $_SESSION)) {
-              $userType = $_SESSION["userType"];
-            }
-            if ($userType === "admin") {
-          ?>
-              <li><a>Welcome Admin</a></li>
-            <?php } else if ($userType === "professor") { ?>
-              <li><a>Welcome Professor</a></li>
-            <?php } else if ($gradType !== "") { ?>
-              <li><a>Welcome <?php echo $_SESSION["user_name"]; ?></a></li>
-            <?php } ?>
-        </ul>
-      </div>
-    </div>
+    <?php include_once('templates/nav-template.html'); ?>
 
     <div class="about">
       <div class="well">
@@ -60,16 +36,14 @@
       <div class="inner">
         <div class="row">
           <h1>Academic Year 2014</h1>
-          <ul class="pagination">
-            <li><a href="../php/logout.php">&laquo; Back to Login</a></li>
-          </ul>
+          <a class="btn btn-default" href="../php/logout.php">&laquo;&nbsp;Back to Login</a>
         </div>
         <?php if ($gradType == 'undergrad' or
           ($gradType == 'undergrad' and $userType == 'tutor')) { ?>
         <div class="row">
           <h3>Student Options</h3>
           <ul class="pagination">
-            <li><a href="tutor_search.html">Search/Schedule Tutor</a></li>
+            <li><a href="../php/tutor_search.php?init">Search/Schedule Tutor</a></li>
             <li><a href="../php/student_eval.php?populate_table">Rate a Tutor</a></li>
           </ul>
         </div>
@@ -85,7 +59,7 @@
               <li><a href="../html/tutor_schedule.html">Find My Schedule</a></li>
             <?php } ?>
             <?php if ($userType == 'admin') { ?>
-              <li><a href="../html/tutor_schedule.html">Find a Tutor's Schedule</a></li>
+              <li><a href="../php/tutor_schedule.php">Find a Tutor's Schedule</a></li>
             <?php } ?>
           </ul>
         </div>
@@ -94,7 +68,7 @@
         <div class="row">
           <h3>Professor Options</h3>
           <ul class="pagination">
-            <li><a href="../html/professor_eval.html">Add Recommendation</a></li>
+            <li><a href="../php/professor_recommend.php?fetch_tutors">Add Recommendation</a></li>
           </ul>
         </div>
         <?php } ?>
@@ -110,7 +84,7 @@
       </div>
     </div>
 
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
   </body>
 </html>

@@ -1,35 +1,61 @@
 <?php
-  include 'globals.php'
+  include 'globals.php';
 
   session_start();
 
   db_connect(); // From globals.php
 
-  $school = htmlspecialchars($_GET["schoolName"]);
-  $courseNumber = htmlspecialchars($_GET["courseNumber"]);
-  $preferredDays = htmlspecialchars($_GET["preferredDay"]);
-  $preferredTimes = htmlspecialchars($_GET["preferredTime"]);
+  if (strpos($_SERVER["QUERY_STRING"], "init") !== false) {
+    populateInputFields();
+  } else if ($_GET["submitDayTimeBtn"] !== null) {
+    $school = htmlspecialchars($_GET["schoolName"]);
+    $courseNumber = htmlspecialchars($_GET["courseNumber"]);
+    $preferredDays = htmlspecialchars($_GET["preferredDay"]);
+    $preferredTimes = htmlspecialchars($_GET["preferredTime"]);
 
-  $query  = explode('&', $_SERVER['QUERY_STRING']);
-  $params = array();
-  foreach($query as $param) {
-    list($name, $value) = explode('=', $param);
-    $params[urldecode($name)][] = urldecode($value);
+    $query  = explode('&', $_SERVER['QUERY_STRING']);
+    $params = array();
+    foreach($query as $param) {
+      list($name, $value) = explode('=', $param);
+      $params[urldecode($name)][] = urldecode($value);
+    }
+
+    $preferredDayArray = findDays($params);
+    $preferredTimeArray = findTimes($params);
+
+    $formattedCourseResult = fetchAllAvailableTimeSlots($school, $courseNumber,
+      $preferredDayArray, $preferredTimeArray);
+    $tutorQuery = getAvailableTutors($school, $courseNumber, $preferredDayArray,
+      $preferredTimeArray);
+
+    $tutorResult = executeQuery($tutorQuery);
+    $formattedTutorResult = formatTutorResult($tutorResult);
+
+    redirectBack($formattedCourseResult, $formattedTutorResult, $school,
+      $courseNumber);
   }
 
-  $preferredDayArray = findDays($params);
-  $preferredTimeArray = findTimes($params);
-
-  $formattedCourseResult = fetchAllAvailableTimeSlots($school, $courseNumber,
-    $preferredDayArray, $preferredTimeArray);
-  $tutorQuery = getAvailableTutors($school, $courseNumber, $preferredDayArray,
-    $preferredTimeArray);
-
-  $tutorResult = executeQuery($tutorQuery);
-  $formattedTutorResult = formatTutorResult($tutorResult);
-
-  redirectBack($formattedCourseResult, $formattedTutorResult, $school,
-    $courseNumber);
+  function populateInputFields() {
+    $courseQuery = 'SELECT * FROM Course';
+    $schoolResult = mysql_query($courseQuery);
+    $availableSchools = array();
+    $availableCourses = array();
+    while ($row = mysql_fetch_assoc($schoolResult)) {
+      if (!in_array($row['School'], $availableSchools)) {
+        array_push($availableSchools, $row['School']);    
+      }
+      $schoolCourse = new stdClass;
+      $schoolCourse->school = $row['School'];
+      $schoolCourse->course = $row['Number'];
+      if (!in_array($schoolCourse, $availableSchools)) {
+        array_push($availableCourses, $schoolCourse);    
+      }
+    }
+    $_SESSION['availableSchools'] = $availableSchools;
+    $_SESSION['availableCourses'] = $availableCourses;
+    header("Location: ../html/tutor_search.html");
+    die();               
+  }
 
   function findDays($params) {
     $dayArray = array();
