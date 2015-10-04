@@ -1,0 +1,9 @@
+<project name="GT-Tutoring-App" basedir=".">
+  <property name="src.dir" value="${basedir}"/>  
+  <property name="dest.dir" value="C:\xampp\htdocs\GT-Tutoring-App"/>
+  <target name="deploy" description="deploy files to htdocs">
+    <copy todir="${dest.dir}" >  
+      <fileset dir="${src.dir}" includes="**"/>  
+    </copy>
+  </target>
+</project>

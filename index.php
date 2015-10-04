@@ -1,5 +1,10 @@
 <?php
+	include 'php/globals.php';
 
-  header("Location: html/login.html");
+	$db = dbConnect();
+	initAppTables($db);
+	populateTables($db);
+	
+  header('Location: views/login_view.php');
 
 ?>

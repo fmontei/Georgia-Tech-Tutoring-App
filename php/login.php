@@ -3,45 +3,44 @@
 
   session_start();
   // Gather login credentials
-  $gtid = htmlspecialchars($_POST["user_gtid"]);
-  $password = htmlspecialchars($_POST["password"]);
+  $gtid = htmlspecialchars($_POST['user_gtid']);
+  $password = htmlspecialchars($_POST['password']);
 
-  db_connect(); // From globals.php
+  $db = dbConnect();
 
   $name_query = sprintf("SELECT Student.Name FROM Student\n" .
-                        "WHERE Student.GTID = '%s'",
-                        mysql_real_escape_string($gtid));
-  $name_result = mysql_query($name_query);
+                        "WHERE Student.GTID = '%s'", $gtid);
+  $name_result = $db->query($name_query);
+  queryErrorHandler($db, $name_result);
   $name = "";
-  while ($row = mysql_fetch_assoc($name_result)) {
+  while ($row = $name_result->fetch(PDO::FETCH_ASSOC)) {
     $name = $row["Name"];
     break;
   }
 
-  $count = getProfessorByGTID($gtid, $password);
-  if ($count == 0) $count = getAdministratorByGTID($gtid, $password);
-  if ($count == 0) $count = getTutorByGTID($gtid, $password);
-  if ($count == 0) $count = getUndergradByGTID($gtid, $password);
-  if ($count == 0) $count = getGradByGTID($gtid, $password);
+  $count = getProfessorByGTID($db, $gtid, $password);
+  if ($count == 0) $count = getAdministratorByGTID($db, $gtid, $password);
+  if ($count == 0) $count = getTutorByGTID($db, $gtid, $password);
+  if ($count == 0) $count = getUndergradByGTID($db, $gtid, $password);
+  if ($count == 0) $count = getGradByGTID($db, $gtid, $password);
   if ($count == 0) createLoginErrorMsg();
   else redirectToMenu($gtid, $name);
 
-  function getProfessorByGTID($gtid, $password) {
+  function getProfessorByGTID($db, $gtid, $password) {
     $query = sprintf("SELECT GTID, Password FROM Professor AS P " .
                      "WHERE P.GTID = '%s' AND P.Password = '%s'",
-                     mysql_real_escape_string($gtid),
-                     mysql_real_escape_string($password));
+                     $gtid, $password);
 
-    $result = mysql_query($query);
-
+    $result = $db->query($query);
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
       $message .= 'Whole query: ' . $query;
+      queryErrorHandler($db, $name_result);
       die($message);
     }
 
     $rowCount = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       $rowCount = $rowCount + 1;
     }
 
@@ -49,22 +48,21 @@
     return $rowCount;
   }
 
-  function getAdministratorByGTID($gtid, $password) {
+  function getAdministratorByGTID($db, $gtid, $password) {
     $query = sprintf("SELECT GTID, Password FROM Administrator AS A " .
                      "WHERE A.GTID = '%s' AND A.Password = '%s'",
-                     mysql_real_escape_string($gtid),
-                     mysql_real_escape_string($password));
+                     $gtid, $password);
 
-    $result = mysql_query($query);
-
+    $result = $db->query($query);
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
       $message .= 'Whole query: ' . $query;
+      queryErrorHandler($db, $name_result);
       die($message);
     }
 
     $rowCount = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       $rowCount = $rowCount + 1;
     }
 
@@ -72,22 +70,21 @@
     return $rowCount;
   }
 
-  function getTutorByGTID($gtid, $password) {
+  function getTutorByGTID($db, $gtid, $password) {
     $query = sprintf("SELECT GTID, Password FROM Tutor AS T " .
                      "WHERE T.GTID = '%s' AND T.Password = '%s'",
-                     mysql_real_escape_string($gtid),
-                     mysql_real_escape_string($password));
+                     $gtid, $password);
 
-    $result = mysql_query($query);
-
+    $result = $db->query($query);
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
       $message .= 'Whole query: ' . $query;
+      queryErrorHandler($db, $name_result);
       die($message);
     }
 
     $rowCount = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       $rowCount = $rowCount + 1;
     }
 
@@ -100,23 +97,22 @@
     return $rowCount;
   }
 
-  function getUndergradByGTID($gtid, $password) {
+  function getUndergradByGTID($db, $gtid, $password) {
     $query = sprintf("SELECT GTID, Password\n" .
                       "FROM Undergraduate AS U\n" .
                       "WHERE U.GTID = '%s' AND U.Password = '%s';",
-                      mysql_real_escape_string($gtid),
-                      mysql_real_escape_string($password));
+                      $gtid, $password);
 
-    $result = mysql_query($query);
-
+    $result = $db->query($query);
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
       $message .= 'Whole query: ' . $query;
+      queryErrorHandler($db, $name_result);
       die($message);
     }
 
     $rowCount = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       $rowCount = $rowCount + 1;
     }
 
@@ -124,23 +120,22 @@
     return $rowCount;
   }
 
-  function getGradByGTID($gtid, $password) {
+  function getGradByGTID($db, $gtid, $password) {
     $query = sprintf("SELECT GTID, Password\n" .
                      "FROM Graduate AS G\n" .
                      "WHERE G.GTID = '%s' AND G.Password = '%s';",
-                     mysql_real_escape_string($gtid),
-                     mysql_real_escape_string($password));
+                     $gtid, $password);
 
-    $result = mysql_query($query);
-
+    $result = $db->query($query);
     if (!$result) {
       $message  = 'Invalid query: ' . mysql_error() . "\n";
       $message .= 'Whole query: ' . $query;
+      queryErrorHandler($db, $name_result);
       die($message);
     }
 
     $rowCount = 0;
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       $rowCount = $rowCount + 1;
     }
 
@@ -151,7 +146,7 @@
   function createLoginErrorMsg() {
     $_SESSION['loginError'] = "User does not exist or authentication" .
                               " failed. Please try again.";
-    header("Location: ../html/login.html");
+    header("Location: ../views/login_view.php");
     die();
   }
 
@@ -159,7 +154,7 @@
     unset($_SESSION['loginError']);
     $_SESSION['user_gtid'] = $gtid;
     $_SESSION['user_name'] = $name;
-    header("Location: ../html/menu.html");
+    header("Location: ../views/menu_view.php");
     die();
   }
 ?>
