@@ -3,15 +3,15 @@
 
   session_start();
 
-  db_connect(); // From globals.php
+  $db = dbConnect(); // From globals.php
 
   if (strpos($_SERVER["QUERY_STRING"], "populate_table") !== false) {
-    populateTable();
+    populateTable($db);
   } else if (strpos($_SERVER["QUERY_STRING"], "submit_review") !== false) {
-    processReview();
+    processReview($db);
   }
 
-  function populateTable() {
+  function populateTable($db) {
     $gtid = $_SESSION['user_gtid'];
 
     $query = sprintf("SELECT DISTINCT Hires.School, Hires.Number, Student.Name, " .
@@ -21,19 +21,19 @@
                      "Hires.GTID_Tutor = Student.GTID;",
                      mysql_real_escape_string($gtid));
 
-    $result = mysql_query($query);
-    if (!$result) {
-      $message  = 'Invalid query: ' . mysql_error() . "\n";
-      $message .= 'Whole query: ' . $query;
+    $result = $db->query($query);
+    $retval = queryErrorHandler($db, $result);
+    if (!$retval) {
+      $message = 'Invalid query: ' . $query;
       die($message);
     }
 
     $formattedResult = array();
-    while ($row = mysql_fetch_assoc($result)) {
-      $tutor_gtid = $row["GTID"];
-      $school = $row["School"];
-      $courseNumber = $row["Number"];
-      $tutorName = $row["Name"];
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+      $tutor_gtid = $row["gtid"];
+      $school = $row["school"];
+      $courseNumber = $row["number"];
+      $tutorName = $row["name"];
 
       array_push($formattedResult, array("TutorGTID" => $tutor_gtid,
                                          "School" => $school,
@@ -43,11 +43,11 @@
     }
 
     $_SESSION["courseRatingArray"] = $formattedResult;
-    header("Location: ../html/student_eval.html");
+    header("Location: ../views/student_eval_view.php");
     die();
   }
 
-  function processReview() {
+  function processReview($db) {
     $user_gtid = $_SESSION['user_gtid'];
     $tutor_gtid = $_GET["tutorGTIDSelection"];
     $tutor_name = $_GET["tutorNameSelection"];
@@ -61,13 +61,13 @@
       mysql_real_escape_string($user_gtid), mysql_real_escape_string($tutor_gtid),
       mysql_real_escape_string($school), mysql_real_escape_string($courseNum),
       mysql_real_escape_string($num_eval), mysql_real_escape_string($desc_eval));
-    $result = mysql_query($query);
-    if (!$result) {
-      $message  = 'Invalid query: ' . mysql_error() . "\n";
-      $message .= 'Whole query: ' . $query;
+    $result = $db->query($query);
+  	$retval = queryErrorHandler($db, $result);
+    if (!$retval) {
+      $message = 'Invalid query: ' . $query;
       die($message);
     } else {
-      header("Location: ../html/menu.html");
+      header("Location: ../views/menu_view.php");
       die();
     }
   }

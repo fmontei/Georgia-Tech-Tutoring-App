@@ -188,16 +188,6 @@
                style="margin-left: 20px; border-radius: 4px">Cancel</a>
           </div>
         </div>
-        <div class="col col-md-6">
-          <?php
-            if (array_key_exists("tutorSearchResults", $_SESSION)) { ?>
-              <div class="alert alert-info" style="display: inline-block">
-                <p>
-                  Note: Click on 'Schedule a Tutor' to see all the available time slots.
-                </p>
-              </div>
-            <?php } ?>
-        </div>
       </div>
     </div>
   </div>
@@ -252,7 +242,7 @@
           </table>
           <div class="row">
             <div class="col-md-7">
-              <div class="alert alert-warning" style="display: inline-block; margin-left: 9%">
+              <div class="alert alert-info" style="display: inline-block; margin-left: 9%">
                 Note: Only 1 row in the above table may be selected.
               </div>
             </div>

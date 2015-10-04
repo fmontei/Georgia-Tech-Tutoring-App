@@ -3,7 +3,7 @@
 
   session_start();
 
-  db_connect(); // From globals.php
+  $db = dbConnect();
 
   $user_gtid = trim($_SESSION['user_gtid']);
   $tutor_gtid = trim($_GET["tutorGTIDSelection"]);
@@ -13,7 +13,7 @@
   $semester = "FALL";
   $weekday = trim($_GET["tutorDaySelection"]);
 
-  checkForRedundantTime($school, $number, $user_gtid, $tutor_gtid, $time, $semester, $weekday);
+  checkForRedundantTime($db, $school, $number, $user_gtid, $tutor_gtid, $time, $semester, $weekday);
 
   $query = sprintf ("INSERT INTO Hires(GTID_Undergraduate, GTID_Tutor, " .
                      "School, Number, Time, Semester, Weekday) " .
@@ -26,11 +26,10 @@
                      mysql_real_escape_string($semester),
                      mysql_real_escape_string($weekday));
 
-  $result = mysql_query($query);
-
-  if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "<br/>";
-    $message .= 'Whole query: ' . $query . "<br/>";
+  $result = $db->query($query);
+  $retval = queryErrorHandler($db, $result);
+  if (!$retval) {
+    $message = 'Invalid query: ' . $query . "<br/>";
     die($message);
   } else {
     unset($_SESSION['school']);
@@ -38,25 +37,24 @@
     unset($_SESSION['courseSearchResults']);
     unset($_SESSION['tutorSearchResults']);
     unset($_SESSION["redundant_time_error"]);
-    header("Location: ../html/menu.html");
+    header("Location: ../views/menu_view.php");
     die();
   }
 
-  function checkForRedundantTime($school, $number, $user_gtid, $tutor_gtid, $time, $semester,
+  function checkForRedundantTime($db, $school, $number, $user_gtid, $tutor_gtid, $time, $semester,
     $weekday) {
     $query = sprintf("SELECT School, Number, Time, Semester, Weekday FROM HIRES\n" .
                      "WHERE GTID_Undergraduate = '%s' AND GTID_Tutor = '%s'",
                      mysql_real_escape_string($user_gtid),
-					 mysql_real_escape_string($tutor_gtid));
+					 					 mysql_real_escape_string($tutor_gtid));
 					 
-
-    $result = mysql_query($query);
-    while ($row = mysql_fetch_assoc($result)) {
-      $row_school = $row["School"];
-      $row_number = $row["Number"];
-      $row_time = $row["Time"];
-      $row_semester = $row["Semester"];
-      $row_weekday = $row["Weekday"];
+    $result = $db->query($query);
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+      $row_school = $row["school"];
+      $row_number = $row["number"];
+      $row_time = $row["time"];
+      $row_semester = $row["semester"];
+      $row_weekday = $row["weekday"];
       if ($time === $row_time and $semester === $row_semester and
           $weekday === $row_weekday) {
         displayRepeatedTimeSlotError($time, $semester, $weekday);
@@ -69,15 +67,15 @@
     }
 
     $next_query = ("SELECT * FROM HIRES;");
-    $next_result = mysql_query($next_query);
-    while ($row = mysql_fetch_assoc($next_result)) {
+    $next_result = $db->query($next_query);
+    while ($row = $next_result->fetch(PDO::FETCH_ASSOC)) {
       print(implode(", ", $row) . "<br/>");
-      $row_school = $row["School"];
-      $row_number = $row["Number"];
-      $row_time = $row["Time"];
-      $row_semester = $row["Semester"];
-      $row_weekday = $row["Weekday"];
-	  $row_tutor_gtid = $row["GTID_Tutor"];
+      $row_school = $row["school"];
+      $row_number = $row["number"];
+      $row_time = $row["time"];
+      $row_semester = $row["semester"];
+      $row_weekday = $row["weekday"];
+	  $row_tutor_gtid = $row["gtid_tutor"];
       if ($school === $row_school and $number === $row_number and
           $semester === $row_semester and $time == $row_time and
           $weekday === $row_weekday and $row_tutor_gtid === $tutor_gtid) {
@@ -95,7 +93,7 @@
     unset($_SESSION['courseNumber']);
     unset($_SESSION['courseSearchResults']);
     unset($_SESSION['tutorSearchResults']);
-    header("Location: ../html/tutor_search.html");
+    header("Location: ../views/tutor_search_view.php");
     die();
   }
 
@@ -107,13 +105,12 @@
     unset($_SESSION['courseNumber']);
     unset($_SESSION['courseSearchResults']);
     unset($_SESSION['tutorSearchResults']);
-    header("Location: ../html/tutor_search.html");
+    header("Location: ../views/tutor_search_view.php");
     die();
   }
 
   function displayRepeatedUndergradError($school, $number, $semester, $weekday,
     $time) {
-    print("HI");
     $_SESSION["redundant_time_error"] = "Error: another student has already registered" .
       " for the following course: " . $school . " " . $number . " during the " .
       " the following time: " . $semester . " " . $weekday . " " . $time . ".";
@@ -122,7 +119,7 @@
     unset($_SESSION['courseNumber']);
     unset($_SESSION['courseSearchResults']);
     unset($_SESSION['tutorSearchResults']);
-    header("Location: ../html/tutor_search.html");
+    header("Location: ../views/tutor_search_view.php");
     die();
   }
 ?>

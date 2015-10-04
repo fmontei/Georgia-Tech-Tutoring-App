@@ -121,7 +121,7 @@
             <ul class="pagination">
               <li><a href="javascript:void(0)" id="submitFormBtn"
                      style="margin-right: 15px">Submit Review</a></li>
-              <li><a href="menu.html">&laquo; Back to Menu</a></li>
+              <li><a href="menu_view.php">&laquo; Back to Menu</a></li>
             </ul>
           </div>
         </div>

@@ -53,7 +53,7 @@
           <h3>Tutor Options</h3>
           <ul class="pagination">
             <?php if ($userType == 'tutor') { ?>
-              <li><a href="../views/application.php">Apply</a></li>
+              <li><a href="../views/application_view.php">Apply</a></li>
             <?php } ?>
             <?php if ($userType == 'tutor') { ?>
               <li><a href="../views/tutor_schedule_view.php">Find My Schedule</a></li>

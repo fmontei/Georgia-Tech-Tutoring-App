@@ -14,7 +14,7 @@
   queryErrorHandler($db, $name_result);
   $name = "";
   while ($row = $name_result->fetch(PDO::FETCH_ASSOC)) {
-    $name = $row["Name"];
+    $name = $row["name"];
     break;
   }
 
@@ -90,8 +90,8 @@
 
     if ($rowCount != 0) {
       $_SESSION['userType'] = 'tutor';
-      $count = getUndergradByGTID($gtid, $password);
-      if ($count == 0) getGradByGTID($gtid, $password);
+      $count = getUndergradByGTID($db, $gtid, $password);
+      if ($count == 0) getGradByGTID($db, $gtid, $password);
     }
 
     return $rowCount;

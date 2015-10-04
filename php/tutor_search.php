@@ -3,17 +3,17 @@
 
   session_start();
 
-  db_connect(); // From globals.php
+  $db = dbConnect();
 
   if (strpos($_SERVER["QUERY_STRING"], "init") !== false) {
-    populateInputFields();
+    populateInputFields($db);
   } else if ($_GET["submitDayTimeBtn"] !== null) {
     $school = htmlspecialchars($_GET["schoolName"]);
     $courseNumber = htmlspecialchars($_GET["courseNumber"]);
     $preferredDays = htmlspecialchars($_GET["preferredDay"]);
     $preferredTimes = htmlspecialchars($_GET["preferredTime"]);
 
-    $query  = explode('&', $_SERVER['QUERY_STRING']);
+    $query = explode('&', $_SERVER['QUERY_STRING']);
     $params = array();
     foreach($query as $param) {
       list($name, $value) = explode('=', $param);
@@ -23,37 +23,37 @@
     $preferredDayArray = findDays($params);
     $preferredTimeArray = findTimes($params);
 
-    $formattedCourseResult = fetchAllAvailableTimeSlots($school, $courseNumber,
+    $formattedCourseResult = fetchAllAvailableTimeSlots($db, $school, $courseNumber,
       $preferredDayArray, $preferredTimeArray);
-    $tutorQuery = getAvailableTutors($school, $courseNumber, $preferredDayArray,
+    $tutorQuery = getAvailableTutors($db, $school, $courseNumber, $preferredDayArray,
       $preferredTimeArray);
 
-    $tutorResult = executeQuery($tutorQuery);
+    $tutorResult = executeQuery($db, $tutorQuery);
     $formattedTutorResult = formatTutorResult($tutorResult);
 
     redirectBack($formattedCourseResult, $formattedTutorResult, $school,
       $courseNumber);
   }
 
-  function populateInputFields() {
+  function populateInputFields($db) {
     $courseQuery = 'SELECT * FROM Course';
-    $schoolResult = mysql_query($courseQuery);
+    $schoolResult = $db->query($courseQuery);
     $availableSchools = array();
     $availableCourses = array();
-    while ($row = mysql_fetch_assoc($schoolResult)) {
-      if (!in_array($row['School'], $availableSchools)) {
-        array_push($availableSchools, $row['School']);    
+    while ($row = $schoolResult->fetch(PDO::FETCH_ASSOC))  {
+      if (!in_array($row['school'], $availableSchools)) {
+        array_push($availableSchools, $row['school']);    
       }
       $schoolCourse = new stdClass;
-      $schoolCourse->school = $row['School'];
-      $schoolCourse->course = $row['Number'];
+      $schoolCourse->school = $row['school'];
+      $schoolCourse->course = $row['number'];
       if (!in_array($schoolCourse, $availableSchools)) {
         array_push($availableCourses, $schoolCourse);    
       }
     }
     $_SESSION['availableSchools'] = $availableSchools;
     $_SESSION['availableCourses'] = $availableCourses;
-    header("Location: ../html/tutor_search.html");
+    header("Location: ../views/tutor_search_view.php");
     die();               
   }
 
@@ -75,7 +75,7 @@
     return $timeArray;
   }
 
-  function fetchAllAvailableTimeSlots($schoolName, $courseNumber, $dayArray,
+  function fetchAllAvailableTimeSlots($db, $schoolName, $courseNumber, $dayArray,
       $timeArray) {
     $currentSemester = "FALL";
     $tutors_query = sprintf("SELECT Student.GTID, Student.Name, Student.Email
@@ -103,21 +103,21 @@
                                         mysql_real_escape_string($timeArray[$i]));
     }
 
-    $result = mysql_query($tutors_query);
-    if (!$result) {
-      $message  = 'Invalid query: ' . mysql_error() . "\n";
-      $message .= 'Whole query: ' . $query;
-      print($message);
+    $result = $db->query($tutors_query);
+    $retval = queryErrorHandler($db, $result);
+    if (!$retval) {
+      $message = 'Whole query: ' . $query;
+      die($message);
     }
 
     $tutors = array();
-    while ($row = mysql_fetch_assoc($result)) {
-      $GTID = $row['GTID'];
-      $name = $row['Name'];
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+      $GTID = $row['gtid'];
+      $name = $row['name'];
       $pos = strrpos($name, " ");
       $firstName = substr($name, 0, $pos);
       $lastName = substr($name, $pos);
-      $email = $row['Email'];
+      $email = $row['email'];
       array_push($tutors, array("GTID" => $GTID,
                                 "FirstName" => $firstName,
                                 "LastName" => $lastName,
@@ -129,13 +129,17 @@
       $sql_prof_eval = sprintf("SELECT R.GTID_Tutor, AVG(R.Num_Evaluation) AS Avg_Prof_Rating,
                        COUNT(R.Num_Evaluation) AS Num_Professors
                        FROM Recommends R
-                       WHERE R.GTID_Tutor = '%s';",
+                       WHERE R.GTID_Tutor = '%s' GROUP BY R.GTID_Tutor;",
                        mysql_real_escape_string($GTID));
-      $result = mysql_query($sql_prof_eval);
-      while ($row = mysql_fetch_assoc($result)) {
+      $result = $db->query($sql_prof_eval);
+      $retval = queryErrorHandler($db, $result);
+      if (!$retval) {
+      	die('Failed query: ' . $sql_prof_eval);
+      }
+      while ($row = $result->fetch(PDO::FETCH_ASSOC))  {
         $tutors[$i] = array_merge($tutors[$i],
-                                  array('Avg_Prof_Rating' => $row['Avg_Prof_Rating'],
-                                  'Num_Professors' => $row['Num_Professors']));
+                                  array('Avg_Prof_Rating' => $row['avg_prof_rating'],
+                                  'Num_Professors' => $row['num_professors']));
       }
     }
 
@@ -144,14 +148,17 @@
     	$sql_student_eval = sprintf("SELECT R.GTID_Tutor, AVG(R.Num_Evaluation) AS Avg_Student_Rating,
     							COUNT(R.Num_Evaluation) AS Num_Students
     							FROM Rates R
-    							WHERE R.GTID_Tutor = '%s';",
+    							WHERE R.GTID_Tutor = '%s' GROUP BY R.GTID_Tutor;",
     							mysql_real_escape_string($GTID));
-
-    	$result = mysql_query($sql_student_eval);
-    	while ($row = mysql_fetch_assoc($result)) {
+    	$result = $db->query($sql_student_eval);
+    	$retval = queryErrorHandler($db, $result);
+    	if (!$retval) {
+    		die('Failed query: ' . $sql_student_eval);
+    	}
+    	while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     		$tutors[$i] = array_merge($tutors[$i],
-                      array('Avg_Student_Rating' => $row['Avg_Student_Rating'],
-                            'Num_Students' => $row['Num_Students']));
+                      array('Avg_Student_Rating' => $row['avg_student_rating'],
+                            'Num_Students' => $row['num_students']));
     	}
     }
 
@@ -168,7 +175,7 @@
     return $formatted_tutors;
   }
 
-  function getAvailableTutors($schoolName, $courseNumber, $dayArray,
+  function getAvailableTutors($db, $schoolName, $courseNumber, $dayArray,
         $timeArray) {
       $currentSemester = "FALL";
       $query = sprintf("SELECT Student.Name, Student.Email, Student.GTID, " .
@@ -197,23 +204,23 @@
                                       "Recommends.GTID_Tutor = Student.GTID AND\n" .
                                       "Rates.GTID_Tutor = Student.GTID AND\n" .
                                       "Tutors.GTID_Tutor = Student.GTID\n" .
-                                      "GROUP BY Student.Name, Tutor_Time_Slot.Weekday, " .
+                                      "GROUP BY Student.Name, Student.Email, Student.GTID, Tutor_Time_Slot.Weekday, " .
                                         "Tutor_Time_Slot.Time\n" .
                                       "ORDER BY Student.Name, Tutor_Time_Slot.Weekday, " .
                                         "Tutor_Time_Slot.Time");
       return $query;
     }
 
-  function executeQuery($query) {
+  function executeQuery($db, $query) {
     print("<html><body>");
     print("<h1>DEBUGGING MENU</h1>");
     print("<p>Query:<br/>" . $query . "</p>");
     
-    $result = mysql_query($query);
-    if (!$result) {
-      $message  = 'Invalid query: ' . mysql_error() . "\n";
-      $message .= 'Whole query: ' . $query;
-      print($message);
+    $result = $db->query($query);
+    $retval = queryErrorHandler($db, $result);
+    if (!$retval) {
+      $message = 'Whole query: ' . $query;
+      die($message);
     }
     return $result;
   }
@@ -221,12 +228,12 @@
   function formatTutorResult($result) {
       print("<p>Results:<br/>");
       $formattedResult = array();
-      while ($row = mysql_fetch_assoc($result)) {
-        $name = $row["Name"];
-        $email = $row["Email"];
-        $day = $row["Weekday"];
-        $time = $row["Time"];
-        $tutor_gtid = $row["GTID"];
+      while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $name = $row["name"];
+        $email = $row["email"];
+        $day = $row["weekday"];
+        $time = $row["time"];
+        $tutor_gtid = $row["gtid"];
 
         $pos = strrpos($name, " ");
         $firstName = substr($name, 0, $pos);
@@ -249,7 +256,7 @@
     $_SESSION["tutorSearchResults"] = $formattedTutorResult;
     $_SESSION["school"] = $school;
     $_SESSION["courseNumber"] = $courseNumber;
-    header("Location: ../html/tutor_search.html");
+    header("Location: ../views/tutor_search_view.php");
     die();
   }
 ?>

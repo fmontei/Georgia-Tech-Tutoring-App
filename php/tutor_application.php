@@ -3,7 +3,7 @@
 
 	session_start();
 
-  db_connect(); // From globals.php
+  $db = dbConnect(); // From globals.php
 
   $query_string = $_SERVER["QUERY_STRING"];
   if (strpos($query_string, "populate_form") !== false) {
@@ -14,14 +14,14 @@
     if (isset($_SESSION["gradType"])) {
       $grad_type = $_SESSION["gradType"];
     }
-    populate_form($tutor_gtid, $grad_type);
+    populate_form($db, $tutor_gtid, $grad_type);
   } else if (strpos($query_string, "clear_form") !== false) {
     clear_form();
   } else if (strpos($query_string, "submit_tutor_app") !== false) {
-    parse_form();
+    parse_form($db);
   }
 
-  function populate_form($tutor_gtid, $grad_type) {
+  function populate_form($db, $tutor_gtid, $grad_type) {
     $tutor_query = sprintf("SELECT DISTINCT Student.GTID, Email, Name, Phone, GPA, GTA\n" .
                     "FROM Student, Tutor, Tutors\n" .
                     "WHERE Student.GTID = '%s' AND\n" .
@@ -29,63 +29,59 @@
                     "Student.GTID = Tutors.GTID_Tutor;",
                      mysql_real_escape_string($tutor_gtid));
 
-    $course_query = "SELECT * From Tutors";
-
-    print("Query:<br/>" . $tutor_query . "<br/>");
-    $tutor_result = mysql_query($tutor_query);
-    if (!$tutor_result) {
-      $message  = 'Invalid query: ' . mysql_error() . "\n";
-      $message .= 'Whole Tutor Query: ' . $tutor_query;
+    $tutor_result = $db->query($tutor_query);
+ 		$retval = queryErrorHandler($db, $tutor_result);
+    if (!$retval) {
+      $message = 'Invalid query: ' . $tutor_query;
       die($message);
     }
 
     $tutor_app_info;
-    while($row = mysql_fetch_assoc($tutor_result)) {
-      $gtid = trim($row["GTID"]);
-      $email = trim($row["Email"]);
-      $name = trim($row["Name"]);
+    while ($row = $tutor_result->fetch(PDO::FETCH_ASSOC))  {
+      $gtid = trim($row["gtid"]);
+      $email = trim($row["email"]);
+      $name = trim($row["name"]);
       $pos = strrpos($name, " ");
       $first_name = trim(substr($name, 0, $pos));
       $last_name = trim(substr($name, $pos));
-      $phone = trim($row["Phone"]);
-      $gpa = trim($row["GPA"]);
-      $gta = trim($row["GTA"]);
+      $phone = trim($row["phone"]);
+      $gpa = trim($row["gpa"]);
+      $gta = trim($row["gta"]);
 
       $tutor_app_info = array("GTID" => $gtid, "Email" => $email,
         "FirstName" => $first_name, "LastName" => $last_name, "Phone" => $phone,
         "GPA" => $gpa, "GTA" => $gta, "GradType" => $grad_type);
       break;
     }
-    print("<br />Tutor Array:<br />" . implode(", ", $row) . "<br />");
-
-    print("<br/>Course Array:<br />");
-    $course_result = mysql_query($course_query);
+    
+    $course_query = "SELECT * From Tutors";
+    $course_result = $db->query($course_query);
     $tutor_course_info = array();
-    while($row = mysql_fetch_assoc($course_result)) {
+    while ($row = $course_result->fetch(PDO::FETCH_ASSOC))  {
       if (trim($row["GTID_Tutor"]) === $tutor_gtid) {
         $count = 0;
         foreach ($tutor_course_info as $prev_row) {
-          if ($prev_row["School"] === $row["School"]
-            and $prev_row["Number"] === $row["Number"]) {
+          if ($prev_row["School"] === $row["school"] &&
+          		$prev_row["Number"] === $row["number"]) {
             $count++;
           }
         }
         if ($count === 0)
-          array_push($tutor_course_info, array("School" => $row["School"],
-                                                       "Number" => $row["Number"],
-                                                       "GTA" => $row["GTA"]));
+          array_push($tutor_course_info, array("School" => $row["school"],
+                                                       "Number" => $row["number"],
+                                                       "GTA" => $row["gta"]));
       } else {
         $count = 0;
         foreach ($tutor_course_info as $prev_row) {
-          if ($prev_row["School"] === $row["School"]
-            and $prev_row["Number"] === $row["Number"]) {
+          if ($prev_row["School"] === $row["school"]
+            and $prev_row["Number"] === $row["number"]) {
             $count++;
           }
         }
         if ($count === 0)
-          array_push($tutor_course_info, array("School" => $row["School"],
-                                                       "Number" => $row["Number"],
-                                                       "GTA" => "0"));
+          array_push($tutor_course_info, array("School" => $row["school"],
+                                               "Number" => $row["number"],
+                                               "GTA" => "0"));
       }
     }
 
@@ -95,27 +91,17 @@
 
     $_SESSION["tutor_app_info"] = $tutor_app_info;
     $_SESSION["tutor_course_info"] = $tutor_course_info;
-    header("Location: ../html/application.html");
+    header("Location: ../views/application_view.php");
     die();
   }
-
-  function insert_row($tutor_course_info, $row) {
-    foreach ($tutor_course_info as $prev_row) {
-      print("curr: " . $row["School"] . " prev: " . $prev_row["School"] . "<br/>");
-      if ($prev_row["School"] === $row["School"]) return;
-    }
-    array_push($tutor_course_info, array("School" => $row["School"],
-                                                 "Number" => $row["Number"],
-                                                 "GTA" => "0"));
-  }
-
+  
   function clear_form() {
     unset($_SESSION["tutor_app_info"]);
-    header("Location: ../html/menu.html");
+    header("Location: ../views/menu_view.php");
     die();
   }
 
-  function parse_form() {
+  function parse_form($db) {
     $query = explode('&', $_SERVER['QUERY_STRING']);
     $params = array();
     foreach($query as $param) {
@@ -138,7 +124,8 @@
       else if ($index === "gta")         $gta         = $param[0];
     }
 
-    $days = array(); $times = array();
+    $days = array(); 
+    $times = array();
     parseDayAndTime($params, $days, $times);
     $courses = array();
     parseCourses($params, $courses);
@@ -149,10 +136,10 @@
     }
 
     $semester = "FALL";
-    insertTutorTimeSlotTable($gtid, $semester, $days, $times);
-    insertTutorsTable($gtid, $courses);
-    updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa);
-    header("Location: ../html/menu.html");
+    insertTutorTimeSlotTable($db, $gtid, $semester, $days, $times);
+    insertTutorsTable($db, $gtid, $courses);
+    updateTutorTables($db, $gtid, $first_name, $last_name, $email, $phone, $gpa);
+    header("Location: ../views/menu_view.php");
     die();
   }
 
@@ -197,7 +184,7 @@
     }
   }
 
-  function updateTutorTables($gtid, $first_name, $last_name, $email, $phone, $gpa) {
+  function updateTutorTables($db, $gtid, $first_name, $last_name, $email, $phone, $gpa) {
     print("<h2>Tutor Queries</h2>");
     $tutor_query = sprintf("UPDATE Tutor\n" .
       "SET Phone = '%s', GPA = '%s'\n" .
@@ -205,7 +192,7 @@
       mysql_real_escape_string($phone),
       mysql_real_escape_string($gpa),
       mysql_real_escape_string($gtid));
-    mysql_query($tutor_query);
+    $db->query($tutor_query);
     print("Update tutor query: " . $tutor_query . "<br/>");
 
     $student_query = sprintf("Update Student\n" .
@@ -214,11 +201,11 @@
       mysql_real_escape_string($email),
       mysql_real_escape_string(trim($first_name . " " . $last_name)),
       mysql_real_escape_string($gtid));
-    mysql_query($student_query);
+    $db->query($student_query);
     print("Update tutor query: " . $student_query);
   }
 
-  function insertTutorsTable($gtid, $courses) {
+  function insertTutorsTable($db, $gtid, $courses) {
     print("<h2>Tutors Slot Queries</h2>");
     $i = 0;
     foreach($courses as $course) {
@@ -228,12 +215,12 @@
         mysql_real_escape_string($course["School"]),
         mysql_real_escape_string($course["Number"]),
         mysql_real_escape_string($course["GTA"]));
-        mysql_query($query);
+        $db->query($query);
         print("Query " . $i++ . ": " . $query . "<br/>");
     }
   }
 
-  function insertTutorTimeSlotTable($gtid, $semester, $dayArray, $timeArray) {
+  function insertTutorTimeSlotTable($db, $gtid, $semester, $dayArray, $timeArray) {
     print("<h2>Tutor Time Slot Queries</h2>");
     for ($i = 0; $i < count($dayArray); $i++) {
       $query = sprintf("INSERT INTO Tutor_Time_Slot(GTID, Time, Semester, Weekday)\n" .
@@ -242,7 +229,7 @@
         mysql_real_escape_string(trim($timeArray[$i])),
         mysql_real_escape_string(trim($semester)),
         mysql_real_escape_string(trim($dayArray[$i])));
-      mysql_query($query);
+      $db->query($query);
       print("Query " . $i . ": " . $query . "<br/>");
     }
   }
