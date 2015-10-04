@@ -1,10 +1,9 @@
 <?php
   include 'globals.php';
 
-	// IMPORTANT: CAN ONLY ENTER PHP IF AT LEAST ONE SEMESTER IS CHOSEN
 	session_start();
 	
-	db_connect(); // From globals.php
+	$db = dbConnect();
 
 	// Obtain semesters desired from user
 	$semesterSelection = array();
@@ -50,13 +49,13 @@
 					mysql_real_escape_string($semesterSelection[2]));
 	}
 	
-	$result = mysql_query($query);
+	$result = $db->query($query);
 	$row1 = array();
 	$formattedResult = array();
-	while($row = mysql_fetch_assoc($result)) {
+	while($row = $result->fetch(PDO::FETCH_ASSOC)) {
 	  print(implode(", ", $row) . "<br/>");
-		$school = $row["School"];
-		$number = $row["Number"];
+		$school = $row["school"];
+		$number = $row["number"];
 		$course = $school . " " . $number;
 		$temp = $course;
 		$AvgTA = 0;
@@ -66,23 +65,27 @@
 		
 		$i = 0;
 		while($i < $numSemesters) {
-			if(isSemesterValid($semesterSelection[$i], $school, $number)) {
+			if(isSemesterValid($db, $semesterSelection[$i], $school, $number)) {
 				
 				$query = sprintf("SELECT COUNT(DISTINCT Tutors.GTA) as NUM_GTA, AVG(Rates.Num_Evaluation) as AVG_Eval\n" .
 						"FROM Tutors, Rates, Graduate, Tutor_Time_Slot\n" .
-						"WHERE Tutors.GTA = 1 AND Tutors.GTID_Tutor = Graduate.GTID " .
-						"AND Tutors.school = '%s' AND Rates.school = '%s' " .
-						"AND Tutors.number = '%s' AND Rates.number = '%s'  " .
+						"WHERE Tutors.GTA = '1' AND Tutors.GTID_Tutor = Graduate.GTID " .
+						"AND Tutors.School = '%s' AND Rates.School = '%s' " .
+						"AND Tutors.Number = '%s' AND Rates.Number = '%s'  " .
 						"AND Tutor_Time_Slot.Semester = '%s';",
 						mysql_real_escape_string($school),
 						mysql_real_escape_string($school),
 						mysql_real_escape_string($number),
 						mysql_real_escape_string($number),
 						mysql_real_escape_string($semesterSelection[$i]));
-				$resultGTA = mysql_query($query);
-				$row1 = mysql_fetch_assoc($resultGTA);
-				$numGTA = $row1["NUM_GTA"];
-				$avgRatingGTA = $row1["AVG_Eval"];
+				$resultGTA = $db->query($query);
+				$retval = queryErrorHandler($db, $resultGTA);
+				if ($retval === false) {
+					die('Query: ' . $query . '<br />');
+				}
+				$row1 = $resultGTA->fetch(PDO::FETCH_ASSOC);
+				$numGTA = $row1["num_gta"];
+				$avgRatingGTA = $row1["avg_eval"];
 				if(is_null($avgRatingGTA)){
 					$avgRatingGTA = "N/A";
 				}
@@ -102,10 +105,10 @@
 						mysql_real_escape_string($number),
 						mysql_real_escape_string($number),
 						mysql_real_escape_string($semesterSelection[$i]));
-				$resultGTA = mysql_query($query);
+				$resultGTA = $db->query($query);
 				$row1 = mysql_fetch_assoc($resultGTA);
-				$numTA = $row1["NUM_GTA"];
-				$avgRatingTA = $row1["AVG_Eval"];
+				$numTA = $row1["num_gta"];
+				$avgRatingTA = $row1["avg_eval"];
 				if(is_null($avgRatingTA)){
 					$avgRatingTA = "N/A";
 				}	
@@ -153,19 +156,19 @@
     print(implode(", ", $row) . "<br />");
   }
 
-  header("Location: ../html/admin_summary_report.html");
+  header("Location: ../views/admin_summary_view.php");
   die();
 	
-	function isSemesterValid($semesterSelection, $school, $number) {
+	function isSemesterValid($db, $semesterSelection, $school, $number) {
 		$query = sprintf("SELECT DISTINCT Tutors.School, Tutors.Number	" .
 					"FROM Tutor_Time_Slot, Tutors, Graduate " .
 					"WHERE (Tutor_Time_Slot.GTID = Tutors.GTID_Tutor AND Tutors.GTID_Tutor = Graduate.GTID) "  .
 					"AND Tutor_Time_Slot.Semester = '%s';",
 					mysql_real_escape_string($semesterSelection));	
-		$resultSem = mysql_query($query);
+		$resultSem = $db->query($query);
 		
-		while($row = mysql_fetch_assoc($resultSem)) {
-			if($row["School"] == $school AND $row["Number"] == $number) {
+		while($row = $resultSem->fetch(PDO::FETCH_ASSOC)) {
+			if($row["school"] == $school AND $row["number"] == $number) {
 				return true;
 			}
 		}

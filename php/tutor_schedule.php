@@ -2,23 +2,23 @@
   include 'globals.php';
 
   session_start();
-  db_connect(); // From globals.php
+  $db = dbConnect();
 
-  $tutorIDs = fetchAllTutorIDs();
+  $tutorIDs = fetchAllTutorIDs($db);
   storeAllTutorIDs($tutorIDs);
-  header('Location: ../html/tutor_schedule.html');
+  header('Location: ../views/tutor_schedule_view.php');
   die();
 
-  function fetchAllTutorIDs() {
-    $query = sprintf('SELECT GTID FROM Tutor');
-    $result = mysql_query($query);
+  function fetchAllTutorIDs($db) {
+    $query = 'SELECT DISTINCT gtid FROM Tutor ORDER BY gtid ASC';
+    $result = $db->query($query);
     return $result;
   }
 
   function storeAllTutorIDs($tutorIDs) {
     $availableTutorIDs = [];
-    while ($row = mysql_fetch_assoc($tutorIDs)) {
-      array_push($availableTutorIDs, $row['GTID']);
+    while ($row = $tutorIDs->fetch(PDO::FETCH_ASSOC)) {
+      array_push($availableTutorIDs, $row['gtid']);
     }
     $_SESSION['availableTutorIDs'] = $availableTutorIDs;  
   }

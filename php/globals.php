@@ -316,7 +316,7 @@
   		print_r($errorInfo);
   		echo '<br />';
   		return false;
-  	} 
+  	}
   	return true;
   }
 ?>

@@ -3,16 +3,16 @@
 
 	session_start();
 
-	db_connect(); // From globals.php
+	$db = dbConnect();
 
   $query_string = $_SERVER["QUERY_STRING"];
 	if (strpos($query_string, "clear_results") !== false) {
 		clear_results();
 	} else {
-		retrieveSchedule();
+		retrieveSchedule($db);
 	}
 	
-	function retrieveSchedule() {
+	function retrieveSchedule($db) {
 		$GTID = htmlspecialchars($_POST["tutor_id"]);
 		$formattedResult = array();
 	  
@@ -23,7 +23,7 @@
 						"Hires.GTID_Undergraduate = Student.GTID ",
 						mysql_real_escape_string($GTID));
 						   
-		$result = mysql_query($query);
+		$result = $db->query($query);
 		if (!$result) {
 			$message  = 'Invalid query: ' . mysql_error() . "<br/>";
 			$message .= 'Whole query: ' . $query . "<br/>";
@@ -33,13 +33,13 @@
 		print('<h1>Tutor Schedule Results for GTID = ' . $GTID . '</h1>');
 
 		$formattedResult = array();
-		while($row = mysql_fetch_assoc($result)) {
-			$name = $row["Name"];
-			$email = $row["Email"];
-			$day = $row["Weekday"];
-			$time = $row["Time"];
-			$school = $row["School"];
-			$number = $row["Number"];
+		while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+			$name = $row["name"];
+			$email = $row["email"];
+			$day = $row["weekday"];
+			$time = $row["time"];
+			$school = $row["school"];
+			$number = $row["number"];
 			$pos = strrpos($name, " ");
 			$firstName = substr($name, 0, $pos);
 			$lastName = substr($name, $pos);
@@ -57,23 +57,23 @@
     $name_query = sprintf("SELECT Student.Name FROM Student\n" .
                           "WHERE Student.GTID = '%s'",
                           mysql_real_escape_string($GTID));
-    $name_result = mysql_query($name_query);
+    $name_result = $db->query($name_query);
     $tutor_schedule_name = "";
-    while ($row = mysql_fetch_assoc($name_result)) {
-      $tutor_schedule_name = $row["Name"];
+    while ($row = $name_result->fetch(PDO::FETCH_ASSOC)) {
+      $tutor_schedule_name = $row["name"];
       break;
     }
 
     $_SESSION["tutor_schedule"] = $formattedResult;
     $_SESSION["tutor_schedule_name"] = $tutor_schedule_name;
-    header("Location: ../html/tutor_schedule.html");
+    header("Location: ../views/tutor_schedule_view.php");
     die();
   }
 	  
   function clear_results() {
     unset($_SESSION["tutor_schedule"]);
     unset($_SESSION["tutor_schedule_name"]);
-    header("Location: ../html/menu.html");
+    header("Location: ../views/menu_view.php");
     die();
   }
 ?>

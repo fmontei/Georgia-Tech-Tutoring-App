@@ -11,7 +11,7 @@
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <?php include_once('templates/nav-template.html'); ?>
+    <?php include_once('templates/nav_template.php'); ?>
     <div class="inner">
       <div class="container-fluid">
         <h1 style="margin-bottom: 50px">Tutor Course List for Academic Year 2014</h1>

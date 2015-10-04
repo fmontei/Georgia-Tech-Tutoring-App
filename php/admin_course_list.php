@@ -5,7 +5,7 @@
 
   if ($_SERVER["QUERY_STRING"] === "clear_report") {
     unset($_SESSION["admin_course_list"]);
-    header("Location: ../html/menu.html");
+    header("Location: ../views/menu_view.php");
     die();
   }
 
@@ -24,31 +24,31 @@
             "COUNT(DISTINCT Hires.GTID_Undergraduate) As NumStudent, Count(DISTINCT Hires.GTID_Tutor) As NumTutor\n" .
             "from Hires NATURAL JOIN Course\n" .
             "where Hires.Semester = '" . $fall_checkbox . "'\n" .
-            "GROUP BY Hires.School, Hires.Number)\n" .
+            "GROUP BY Hires.School, Hires.Number, Hires.Semester)\n" .
             "UNION\n" .
             "(SELECT Hires.School, Hires.Number, Hires.Semester, " .
             "COUNT(DISTINCT Hires.GTID_Undergraduate) As NumStudent, Count(DISTINCT Hires.GTID_Tutor) As NumTutor\n" .
             "from Hires NATURAL JOIN Course\n" .
             "where Hires.Semester = '" . $spring_checkbox . "'\n" .
-            "GROUP BY Hires.School, Hires.Number)\n" .
+            "GROUP BY Hires.School, Hires.Number, Hires.Semester)\n" .
             "UNION\n" .
             "(SELECT Hires.School, Hires.Number, Hires.Semester, " .
             "COUNT(DISTINCT Hires.GTID_Undergraduate) As NumStudent, Count(DISTINCT Hires.GTID_Tutor) As NumTutor\n" .
             "from Hires NATURAL JOIN Course\n" .
             "where Hires.Semester = '" . $summer_checkbox . "'\n" .
-            "GROUP BY Hires.School, Hires.Number)\n" .
+            "GROUP BY Hires.School, Hires.Number, Hires.Semester)\n" .
             "ORDER BY School, Number, Semester;";
 
   print("<html><body>");
   print("<h1>Summary Report Debugging Menu</h1>");
   print("<p>Query:<br/>" . $query . "</p>");
 
-  db_connect(); // From globals.php
+  $db = dbConnect();
 
-  $result = mysql_query($query);
-  if (!$result) {
-    $message  = 'Invalid query: ' . mysql_error() . "\n";
-    $message .= 'Whole query: ' . $query;
+  $result = $db->query($query);
+  $retval = queryErrorHandler($db, $result);
+  if ($retval === false) {
+    $message = 'Whole query: ' . $query;
     die($message);
   }
 
@@ -56,14 +56,14 @@
   $num_student_grand_total = $num_tutor_grand_total = 0;
   $num_student_total = array();
   $num_tutor_total = array();
-  while ($row = mysql_fetch_assoc($result)) {
+  while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     print(implode(", ", $row) . "<br />");
-    $school = $row["School"];
-    $number = $row["Number"];
+    $school = $row["school"];
+    $number = $row["number"];
     $course = $school . " " . $number;
-    $semester = $row["Semester"];
-    $num_student = $row["NumStudent"];
-    $num_tutor = $row["NumTutor"];
+    $semester = $row["semester"];
+    $num_student = $row["numstudent"];
+    $num_tutor = $row["numtutor"];
 
     $formattedRow = array("Course" => $course,
                          "Semester" => strtoupper($semester),
@@ -152,6 +152,6 @@
   }
 
   $_SESSION["admin_course_list"] = $sexyResult;
-  header("Location: ../html/admin_course_list.html");
+  header("Location: ../views/admin_course_list_view.php");
   die();
 ?>

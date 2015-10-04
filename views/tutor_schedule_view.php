@@ -12,7 +12,7 @@
     <link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <?php include_once('templates/nav-template.html'); ?>
+    <?php include_once('templates/nav_template.php'); ?>
     <div class="inner">
       <div class="container-fluid">
         <div class="row">
@@ -31,11 +31,7 @@
               <?php if (array_key_exists("userType", $_SESSION)) { ?>
                 <?php if ($_SESSION["userType"] == "admin") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;
-<<<<<<< HEAD
                   <input id="admin-tutor-id-input" name="tutor_id" class="form-control" type="text" placeholder="e.g. 000000000" />
-=======
-                  <input id="admin-tutor-id-input" name="tutor_id" class="form-control" type="text" placeholder="000000000" />
->>>>>>> fb54b36a0d342229504c94c3df20475aa33636bf
                   <input class="form-control" name="find_schedule" type="submit" value="OK" />
                 <?php } else if ($_SESSION["userType"] == "tutor") { ?>
                   <span style="font-size: 16px">Enter Tutor GTID</span>&nbsp;&nbsp;

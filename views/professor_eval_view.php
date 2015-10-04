@@ -12,7 +12,7 @@
   <link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
  </head>
 <body>
-  <?php include_once('templates/nav-template.html'); ?>
+  <?php include_once('templates/nav_template.php'); ?>
   <div class="inner">
     <h1>Tutor Evaluation by Professor</h1><br />
     <div class="container-fluid">

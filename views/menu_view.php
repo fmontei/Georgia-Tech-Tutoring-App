@@ -11,7 +11,7 @@
     <link href="../css/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <?php include_once('templates/nav-template.html'); ?>
+    <?php include_once('templates/nav_template.php'); ?>
 
     <div class="about">
       <div class="well">
@@ -53,10 +53,10 @@
           <h3>Tutor Options</h3>
           <ul class="pagination">
             <?php if ($userType == 'tutor') { ?>
-              <li><a href="../html/application.html">Apply</a></li>
+              <li><a href="../views/application.php">Apply</a></li>
             <?php } ?>
             <?php if ($userType == 'tutor') { ?>
-              <li><a href="../html/tutor_schedule.html">Find My Schedule</a></li>
+              <li><a href="../views/tutor_schedule_view.php">Find My Schedule</a></li>
             <?php } ?>
             <?php if ($userType == 'admin') { ?>
               <li><a href="../php/tutor_schedule.php">Find a Tutor's Schedule</a></li>
@@ -76,8 +76,8 @@
         <div class="row">
           <h3>Administrator Options</h3>
           <ul class="pagination">
-            <li><a href="../html/admin_course_list.html">Tutor Course List</a></li>
-            <li><a href="admin_summary_report.html">Tutor Summary Data</a></li>
+            <li><a href="../views/admin_course_list_view.php">Tutor Course List</a></li>
+            <li><a href="admin_summary_view.php">Tutor Summary Data</a></li>
           </ul>
         </div>
         <?php } ?>
