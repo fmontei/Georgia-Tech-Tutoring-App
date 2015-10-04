@@ -84,7 +84,7 @@
         <div class="row">
           <div class="col col-md-4" style="margin-left: 5px; margin-top: 20px">
             <ul class="pagination">
-              <li><a href="menu.html">&laquo; Back to Menu</a></li>
+              <li><a href="menu_view.php">&laquo; Back to Menu</a></li>
             </ul>
           </div>
         </div>
